@@ -4,16 +4,35 @@ const Schema = mongoose.Schema;
 const StoreSchema = new Schema({
     storename : {
         type : String,
+        required : true,
+        unique : true
+    },
+    phone:{
+        type : String,
+        required : true,
+        unique : true
+    },
+    rating : String,
+    picture : [{type : String}],
+    type : [{type : String}],
+    pricing : [{type : Number}], // [1, 0, 0] or [0, 2, 0] or [0, 0, 3]
+    location : {
+        type : String,
+        required : true,
+    },
+    address : {
+        type : String,
+        required : true,
+        unique : true
+    },
+    lowestPrice : {
+        type : Number,
         required : true
     },
-    phone:{type : String},
-    rating : {type : Number},
-    picture : [{type : String}],
-    type : {type : String},
-    location : {type : String},
-    address : {type : String},
-    lowestPrice : {type : Number},
-    highestPrice : {type : Number},
+    highestPrice : {
+        type : Number,
+        required : true
+    },
     comments : [{
         username : String,
         content : String,
