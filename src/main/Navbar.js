@@ -1,7 +1,8 @@
 function Navbar(){
     return(
         <nav>
-            <Link to="/"><Button className="button1"></Button>
+            <Link to="/"/>
+            <Button className="button1"></Button>
             <span>
             <Select className="location"></Select>
             <Select className="pricing"></Select>
