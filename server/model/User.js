@@ -8,7 +8,7 @@ const UserSchema = new Schema({
         unigue : true,
         required : true
     },
-    // favorites : [ObjectId('Store')]
+    favorites : [{ store_id : Schema.Types.ObjectId }]
 })
 const User = mongoose.model('User', UserSchema)
 module.exports = User

@@ -7,14 +7,15 @@ const cors = require('cors')
 // const Websocket = require('ws')
 
 const router = require('./routes/stores')
+const multer = require('multer')
 const app = express();
-const server = http.createServer(app);
 // const wss = new Websocket.Server({server})
 
 //middleware
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 app.use(cors())
+
 app.use('/stores', router)
 
 const port = process.env.PORT || 4000
