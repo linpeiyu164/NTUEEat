@@ -1,19 +1,80 @@
-import logo from './logo.svg';
-import './App.css';
-import Main from './main/Main';
-import Login from './main/Login';
-import { BrowserRouter as Router} from 'react-router-dom'  
+import { useEffect, useState} from 'react'
+const axios = require('axios')
+const instance = axios.create({baseURL : "http://localhost:4000"})
+
 
 function App() {
-  const [login, setLogin] = useState(false);
-  const [username, setUsername] = useState('');
-  function Login(){
+  let [previewSource, setPreviewSource] = useState('');
+  let [selectedFiles, setSelectedFiles] = useState([]);
+  let [encodedFiles, setEncodedFiles] = useState([]);
+
+  const handleFileInputChange= async (e) =>　{
+    const fileList = e.target.files;
+    const files = Array.from(fileList);
+    const array = [];
+    previewFiles(files, array);
+    setSelectedFiles(files);
+    setPreviewSource(array);
   }
+
+  const previewFiles = (files, array) => {
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+          setPreviewSource(prev => [...prev, reader.result])
+        }
+      })
+  }
+  
+  const handleSubmitFiles = (e) => {
+    e.preventDefault();
+    if(!selectedFiles) return;
+    selectedFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setEncodedFiles(files => [...files, reader.result]);
+      }
+    })
+  }
+
+  useEffect( () => {
+    if(selectedFiles.length === encodedFiles.length 
+      && encodedFiles.length !== 0){
+      uploadImages();
+    }
+  }, [encodedFiles])
+
+  const uploadImages = async () => {
+    const res = await instance.post('/stores/addstore', 
+    { images : encodedFiles }, // encodedFiles is an array of JSON.strigifys
+    { headers : {'Content-Type' : 'application/json'} })
+    setPreviewSource('');
+  }
+
   return (
-      <Router>
-          <Route path="/" render={() => <Main username={username}/>}/>
-          <Route path="/login" render={() =>  <Login setLogin={Login} setUsername={setUsername}/>}/>
-      </Router>
+    <>
+      <form onSubmit={handleSubmitFiles}>
+        <input 
+          type="file" 
+          name="images" 
+          multiple
+          onChange={e => {handleFileInputChange(e)}} 
+        />
+        <button type="submit">Submit</button>
+      </form>
+      { previewSource ? previewSource.map(
+        src => {
+          return (<img key={src} src={src} 
+            alt="chosen" 
+            style={{ height : '300px'}}/>
+          )
+        }
+      )
+        : null
+      }
+    </>
   )
 }
 

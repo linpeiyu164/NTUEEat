@@ -1,89 +1,36 @@
 // 4000
+require('dotenv').config();
 const mongoose = require('mongoose')
 const express = require('express');
 const Store = require('../model/Store');
 const User = require('../model/User')
 const router = express.Router();
 const multer = require('multer');
-const { getNodeText } = require('@testing-library/react');
 
-const storage = multer.diskStorage({
-    destination : function(req, file, cb){
-        cb(null, '../uploads/');
-    },
-    filename : function(req, file, cb){
-        cb(null, new Date().toISOString() + file.originalname);
-    }
-})
+let cloudinary = require('cloudinary').v2
 
-const fileFilter = (req, file, cb) => {
-    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
-        cb(null, true) // accept
-    }else{
-        cb(new Error('please make sure the file is in jpeg or png format')) // reject
-    }
-}
-const upload = multer({
-    storage : storage,
-    limits : {
-        fileSize : 1024 * 1024 * 1
-    },
-    fileFilter : fileFilter
+cloudinary.config({
+    cloud_name : process.env.CLOUD_NAME,
+    api_key : process.env.CLOUD_API_KEY,
+    api_secret : process.env.CLOUD_API_SECRET
 })
 
 router.route('/')
 .get(async (req,res) => {
-    //在首頁一開始跟我拿全部的店家資料(還沒filter之前)
-    //storename , rating, _id
     try{
         const allStores = await Store.find({}, 'storename rating _id');
         res.json(allStores);
-        // allStores = [{storename : , rating : , _id : }]
     }catch(err){
         res.status(400).json({ msg : 'could not retrieve restaurant data' })
     }
 })
 .post(async (req, res) => {
-    // 這邊要給我你的filter object
-    // { location : String , pricing : Number(1最貴 3最便宜), preferences : String }
     const filteredArray = await Store.find({ 
         location : location, 
         pricing : pricing, 
         preferences : preferences
     }, 'storename rating _id')
     res.json(filteredArray)
-})
-
-router.route('/favorite')
-.post(async (req,res) => {
-    //這邊你要給我被按愛心的店家的id，還有這個人的username
-    //然後我會把他加進他的最愛
-    //可以直接用body傳給我
-    const user = await User.find({username : req.body.username})
-    const newfavorite = { store_id : req.body.store_id }
-    user.favorites.push(newfavorite);
-    user.save()
-    .then( user => {
-        res.json(user) //回傳user給你所以應該可以拿到他的favorites
-    })
-    .catch(err => {
-        res.status(400);
-    })
-})
-.delete((req,res)=> {
-    //這邊你要給我被拿掉愛心的店家的id，還有這個人的username
-    //然後我會把他刪掉
-    //可以用query給我
-    const user = await User.find({username : req.body.username})
-    const removefavorite = { store_id : req.body.store_id }
-    user.favorites = user.favorites.filter(fav => fav.store_id !== req.body.store_id)
-    user.save()
-    .then( user => {
-        res.json(user) //回傳user給你所以應該可以拿到他的favorites
-    })
-    .catch(err => {
-        res.status(400);
-    })
 })
 
 router.route('/store/:id')
@@ -128,19 +75,13 @@ router.route('/store/:id')
 
 router
 .route('/addstore')
-.post(upload.array('storeImage', 3), async(req,res) => {
-    let files = req.files
-    if(!files){
-        const error = new Error('please upload a file')
-        res.status(400).json({ err : 'no files exist'})
-    }else{
-        
-    }
+.post( async (req, res) => {
+    // text information
     let checked = checkPrice(req.body.lowestPrice, req.body.highestPrice)
-    const newStore = new Store({
+    let newStore = new Store({
         storename : req.body.storename,
         phone : req.body.phone,
-        picture : req.files.path,
+        picture : [] ,
         type : req.body.type,
         location : req.body.location,
         address : req.body.address,
@@ -148,6 +89,20 @@ router
         highestPrice : req.body.highestPrice,
         comments : [],
         pricing : checked
+    })
+    // image uploading
+    const fileStrArray = req.body.images;
+    fileStrArray.forEach(async fileStr => {
+        try{
+            const res = await cloudinary.uploader.upload(fileStr, {
+                upload_preset : 'ml_default',
+            })
+            // console.log(res);
+            newStore.picture.push(res.url);
+        }catch(err){
+            console.log(err)
+            res.status(500).json({message : 'image failed to upload from server side'})
+        }
     })
     await newStore.save();  
     res.redirect('/');
