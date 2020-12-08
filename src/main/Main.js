@@ -1,7 +1,8 @@
 import { Select } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Navbar from './Navbar'
-function Main() {
+import { BrowserRouter as Router, Route} from 'react';
+function Main(props) {
     return (
         <div className="App">
           <Navbar />
@@ -17,3 +18,5 @@ function Main() {
         </div>
       );
 }
+
+export default Main;
