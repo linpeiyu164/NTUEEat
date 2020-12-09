@@ -1,3 +1,7 @@
+const express = require('express');
+const router = express.Router();
+const User = require('../model/User')
+
 router.route('/favorite')
 .post(async (req,res) => {
     //這邊你要給我被按愛心的店家的id，還有這個人的username
@@ -29,3 +33,5 @@ router.route('/favorite')
         res.status(400);
     })
 })
+
+module.exports = router

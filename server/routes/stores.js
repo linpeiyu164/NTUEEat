@@ -2,10 +2,8 @@
 require('dotenv').config();
 const mongoose = require('mongoose')
 const express = require('express');
-const Store = require('../model/Store');
-const User = require('../model/User')
 const router = express.Router();
-const multer = require('multer');
+const Store = require('../model/Store');
 
 let cloudinary = require('cloudinary').v2
 
