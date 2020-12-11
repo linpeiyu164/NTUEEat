@@ -4,13 +4,13 @@ const Schema = mongoose.Schema;
 const StoreSchema = new Schema({
     storename : {
         type : String,
-        required : true,
-        unique : true
+        unique : true,
+        required : true
     },
     phone:{
         type : String,
-        required : true,
-        unique : true
+        unique : true,
+        required : true
     },
     rating : String,
     picture : [{type : String}],
@@ -18,19 +18,22 @@ const StoreSchema = new Schema({
     pricing : [{type : Number}], // [1, 0, 0] or [0, 2, 0] or [0, 0, 3]
     location : {
         type : String,
-        required : true,
+        unique : true,
+        required : true
     },
     address : {
         type : String,
-        required : true,
-        unique : true
+        unique : true,
+        required : true
     },
     lowestPrice : {
         type : Number,
+        unique : true,
         required : true
     },
     highestPrice : {
         type : Number,
+        unique : true,
         required : true
     },
     comments : [{

@@ -1,11 +1,12 @@
 // 4000
 require('dotenv').config();
-const mongoose = require('mongoose')
 const express = require('express');
 const router = express.Router();
 const Store = require('../model/Store');
-
+const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2
+
+const { checkPrice, calculateAverageRating } = functions
 
 cloudinary.config({
     cloud_name : process.env.CLOUD_NAME,
@@ -23,12 +24,29 @@ router.route('/')
     }
 })
 .post(async (req, res) => {
+    // console.log(req.body)
+    let price = [];
+    switch(req.body.pricing){
+        case "$" :
+            price = [1, 0, 0]
+            break;
+        case "$$" : 
+            price = [0, 1, 0]
+            break;
+        case "$$$" : 
+            price = [0, 0, 1]
+            break;
+    }
     const filteredArray = await Store.find({ 
-        location : location, 
-        pricing : pricing, 
-        preferences : preferences
+        location : req.body.location, 
+        pricing : price, 
+        preferences : req.body.preferences
     }, 'storename rating _id')
-    res.json(filteredArray)
+    if(filteredArray.length !== 0){
+        res.json(filteredArray)
+    }else{
+        res.json({msg : "restaurant not found"})
+    }
 })
 
 router.route('/store/:id')
@@ -75,7 +93,9 @@ router
 .route('/addstore')
 .post( async (req, res) => {
     // text information
+    // console.log(req.body)
     let checked = checkPrice(req.body.lowestPrice, req.body.highestPrice)
+    console.log(checked);
     let newStore = new Store({
         storename : req.body.storename,
         phone : req.body.phone,
@@ -106,25 +126,5 @@ router
     res.redirect('/');
 })
 
-function checkPrice(low, high){
-    let avg = Math.round((low + high)/2)
-    let array = []
-    if(avg > 200){ array[3] = 3 }
-    else if(avg < 200 && avg > 100){ array[2] = 2 }
-    else{ array[1] = 1 }
-    return array
-}
 
-function calculateAverageRating(store){
-    let avg = 0
-    store.comments.forEach(comment => {
-        avg += comment.rating
-    })
-    avg = avg/(store.comments.length)
-    avg = toString(avg)
-    if(avg.length > 3){
-        avg = `${avg[0]}+${avg[1]}+${avg[2]}`
-    }
-    return avg;
-}
 module.exports = router;
