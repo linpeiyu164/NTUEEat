@@ -28,12 +28,10 @@ const StoreSchema = new Schema({
     },
     lowestPrice : {
         type : Number,
-        unique : true,
         required : true
     },
     highestPrice : {
         type : Number,
-        unique : true,
         required : true
     },
     comments : [{
