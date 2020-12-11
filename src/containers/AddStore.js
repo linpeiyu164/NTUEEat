@@ -1,58 +1,27 @@
-import { useEffect, useState } from 'react';
+import { Component } from 'react';
 import { TextField, MenuItem, FormLabel, Button, IconButton, makeStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { regions, avgPrice, cuisines } from './Constants';
-
-function useUrl (event) {
-    const [ url, setUrl ] = useState();
-    const file = event.target.files[0]
-    useEffect(() => {
-        setUrl(URL.createObjectURL(file))
-    }, [file]);
-
-    return url;
-}
-
-function useUrls () {
-    const [ urls, setUrls ] = useState([]);
-    useEffect(() => {
-        setUrls(...urls)
-    })
-
-    return urls;
-}
-
-function uploaderGenerator () {
-    const inputPointer = <input name="file" type="file" accept="image/" required/>
-    return [
-        <div id={Date.now()}>
-            {inputPointer}
-            <IconButton aria-label="delete" color="primary"><DeleteIcon/></IconButton>
-            <br></br>
-        </div>, inputPointer
-    ]
-}
-
-
+import { regions, avgPrice, cuisines } from '../Constants';
 
 // Required: TextField, Select 
-function AddStore (props) {
-    
-    const [ uploaders, setUploaders ] = useState([
-        
-            
-        
-        
-    ])
-    const handleAddClick = () => {
-        const urls = useUrls();
+class AddStore extends Component {
+    constructor(props){
+        super(props);
+        this.state = {urls: []}
     }
 
+    handleChange = event => {
+        const files = [];
+        for (let file of event.target.files){
+            files.push(file);
+        }
+        const urls = files.map(file => URL.createObjectURL(file));
+        this.setState({urls: urls});
+    }
 
-
-
-    return (
-        <form >
+    render() {
+        return (
+            <form >
             <br></br>
             <TextField label="餐廳名稱" variant="outlined" required/> {'\u00A0'}
             <TextField label="電話" variant="outlined"/>
@@ -71,15 +40,17 @@ function AddStore (props) {
             <div className="upload-block">
                 <div className="uploaders">
                     <FormLabel>上傳至少一張菜單圖片ㄅ～{'\u00A0'}</FormLabel>
-                    <Button onClick={addImgUploader} variant="outlined" color="primary">新增圖片</Button>
                     <br></br>
-                    <input name="file" type="file" onChange={previewMenus} multiple="true" accept="image/" required/>
+                    <input name="file" type="file" onChange={this.handleChange} multiple="true" accept="image/" required/>
                 </div>
                 <br></br>
-                <Menus />
+                <div className="menus">
+                    {this.state.urls.map(menu => <div className="menu-frame" id={Date.now()}><img className="menu" src={menu}/></div>)}
+                </div>
             </div>
         </form>
-    )
+        )
+    }
 }
 
 export default AddStore;

@@ -4,7 +4,7 @@ import Main from './main/Main';
 import Login from './main/Login.js/Login';
 import { BrowserRouter as Router, Route} from 'react-router-dom'  
 import { useState } from 'react';
-import AddStore from './main/addStore';
+import AddStore from './containers/AddStore';
 
 function App() {
   const [login, setLogin] = useState(false);

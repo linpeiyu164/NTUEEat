@@ -1,55 +1,33 @@
 import { useEffect, useState } from 'react';
 import { TextField, MenuItem, FormLabel, Button, IconButton, makeStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { regions, avgPrice, cuisines } from './Constants';
+import { regions, avgPrice, cuisines } from '../public/Constants';
 
-function useUrl (event) {
-    const [ url, setUrl ] = useState();
-    const file = event.target.files[0]
-    useEffect(() => {
-        setUrl(URL.createObjectURL(file))
-    }, [file]);
-
-    return url;
-}
-
-function useUrls () {
-    const [ urls, setUrls ] = useState([]);
-    useEffect(() => {
-        setUrls(...urls)
-    })
-
-    return urls;
-}
-
-function uploaderGenerator () {
-    const inputPointer = <input name="file" type="file" accept="image/" required/>
-    return [
-        <div id={Date.now()}>
-            {inputPointer}
-            <IconButton aria-label="delete" color="primary"><DeleteIcon/></IconButton>
-            <br></br>
-        </div>, inputPointer
-    ]
-}
-
-
-
-// Required: TextField, Select 
 function AddStore (props) {
-    
-    const [ uploaders, setUploaders ] = useState([
-        
-            
-        
-        
-    ])
-    const handleAddClick = () => {
-        const urls = useUrls();
+    const [menus, setMenus] = useState([]);
+
+    const previewMenus = (event, menus) => {
+        console.log('menus', menus)
+        setMenus([...menus, URL.createObjectURL(event.target.files[0])]);
     }
 
+    const [imgUploaders, setImgUploaders] = useState([<div><input name="file" type="file" onChange={previewMenus} accept="image/" required/><br></br></div>]);
 
+    const removeImgUploader = index => {
+        setImgUploaders(imgUploaders.filter(loader => loader.index !== index));
+    }
 
+    const addImgUploader = () => {
+        const index = imgUploaders.length;
+        setImgUploaders(
+            [...imgUploaders, 
+            <div index={index}>
+                <input name="file" type="file" onChange={previewMenus} accept="image" required/>
+                <IconButton aria-label="delete" color="primary" onClick={() => removeImgUploader(index)}><DeleteIcon/></IconButton>
+                <br></br>
+            </div>
+        ]);
+    }
 
     return (
         <form >
@@ -73,7 +51,7 @@ function AddStore (props) {
                     <FormLabel>上傳至少一張菜單圖片ㄅ～{'\u00A0'}</FormLabel>
                     <Button onClick={addImgUploader} variant="outlined" color="primary">新增圖片</Button>
                     <br></br>
-                    <input name="file" type="file" onChange={previewMenus} multiple="true" accept="image/" required/>
+                    {imgUploaders.map(uploader => uploader)}
                 </div>
                 <br></br>
                 <Menus />
