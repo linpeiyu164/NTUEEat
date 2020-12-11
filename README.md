@@ -34,4 +34,6 @@
 
 ### `routes`
 + stores.js
+    
+    我comments的部分還沒弄完～
 + users.js
