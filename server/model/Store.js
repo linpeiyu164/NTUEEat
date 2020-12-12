@@ -37,7 +37,11 @@ const StoreSchema = new Schema({
     comments : [{
         username : String,
         content : String,
-        rating : Number
+        rating : Number,
+        // replies : [{
+        //     username : String,
+        //     content : String
+        // }]
     }],
 })
 

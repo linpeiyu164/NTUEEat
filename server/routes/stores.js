@@ -6,7 +6,7 @@ const Store = require('../model/Store');
 const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2
 
-const { checkPrice, calculateAverageRating } = functions
+const { checkPrice } = functions
 
 cloudinary.config({
     cloud_name : process.env.CLOUD_NAME,
@@ -17,7 +17,15 @@ cloudinary.config({
 router.route('/')
 .get(async (req,res) => {
     try{
-        const allStores = await Store.find({}, 'storename rating _id');
+        let allStores = await Store.find({}, 'storename rating _id');
+        // return higher ranking restaurants at the front of the array
+        allStores.sort((a, b) => {
+            if(parseFloat(a.rating) > parseFloat(b.rating)){
+                return -1 // 回傳值小於0 a 會排在 b 前面
+            }else{
+                return 1 
+            }
+        })
         res.json(allStores);
     }catch(err){
         res.status(400).json({ msg : 'could not retrieve restaurant data' })
@@ -54,39 +62,6 @@ router.route('/store/:id')
     //這邊我會給你單一一個店家的「詳細」資料
     const store = await Store.findOne({ _id : req.params.id})
     res.json(store);
-})
-.post( async(req,res) => {
-    // 這邊你要給我一則評論
-    // {
-    //     username : String,
-    //     content : String,
-    //     rating : Number
-    // }
-    const newComment = {
-        username : req.body.username, 
-        content : req.body.content, 
-        rating : req.body.rating
-    }
-    // new comment
-    const store = await Store.findOne({_id : req.params.id})
-    store.comments.push(newComment)
-    await store.save()
-    // new rating
-    let newRating = calculateAverageRating(store);
-    store.rating = newRating
-    await store.save();
-
-    res.redirect(`/store/${req.params.id}`);
-    // 會直接接到這個url的get request
-    // 所以畫面會更新
-})
-.put((req,res) => {
-    //我還沒想好
-    //這邊要改留言
-})
-.delete((req,res) => {
-    //我還沒想好
-    //這邊要刪留言
 })
 
 router

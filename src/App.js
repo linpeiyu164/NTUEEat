@@ -1,9 +1,10 @@
 import React from 'react'
 import ImageForm from './ImageForm'
+import StoreMap from './StoreMap'
 function App(){
   return(
     <>
-      <ImageForm />
+      <StoreMap storename="新馬辣" coordinates={[25, 121]} location={"100台北市中正區汀州路三段295號"} rating={"4.3"}/>
     </>
   )
 }
