@@ -1,4 +1,4 @@
-## `backend`
+## `Backend`
 
 ### `ImageForm`
 這個是我之前在測後端的時候做的前端～
@@ -35,5 +35,19 @@
 ### `routes`
 + stores.js
     
-    我comments的部分還沒弄完～
+    ***comments部分改去index.js裡面做（利用websocket)***
 + users.js
+
+## `FrontEnd`
++ Map.css 
++ StoreMap.js
+
+    單一店家右側的地圖，目前只會顯示該店家的
+    1. location : 地址
+    2. coordinates : [longtitude, latitude]
+    3. storename : 店家名稱
+
+    都是當作props傳進去。
+    目前測試傳進去固定的東西是成功的，變動的props沒有測試過。
+
+    + 然後用CircleMarker是因為Marker不能用，可能是因為他剛剛更新版本，有些東西爛掉ㄌ
