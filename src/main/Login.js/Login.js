@@ -14,7 +14,7 @@ const LoginStyle=makeStyles((theme)=>({
         height:"100vh"
     },
     image:{
-        backgroundImage="./Image/LoginImage.jpg",
+        backgroundImage:"./Image/LoginImage.jpg",
         backgroundRepeat:"no-repeat",
         backgroundColor:
         theme.palette==="light" ?theme.palette.gray[50] :theme.palette.grey[900],
@@ -39,7 +39,7 @@ const LoginStyle=makeStyles((theme)=>({
         margin:theme.spacing(3,0,2),
     },
 }));
-function Login(props) {
+export function Login(props) {
     const classes=LoginStyle();
     function submitInfo () {
 

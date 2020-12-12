@@ -1,12 +1,26 @@
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem'
 import React, { useState } from "react";
 import { FormControl, InputLabel, makeStyles } from '@material-ui/core';
-import Login from "./Login.js";
+import { 
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+    } from 'react-router-dom'  
+// import Login from "./Login.js";
 const navstyle=makeStyles((theme)=>({
     FormControl:{
         margin:theme.spacing(0),
         minWidth:200,
+    },
+    Button:{
+        margin:theme.spacing(2),
+        fullWidth:true,
+        href:"http://localhost:3000",
+        size:"large"
+
     }
 }))
 function Navbar(){
@@ -23,9 +37,9 @@ function Navbar(){
     const handleChangeprefer=e=>{
         setPrefer(e.target.value)
     };
-    const Login=()=>{
+    // const Login=()=>{
 
-    };
+    // };
     return(
         <nav>
             <Link to="/"/>
@@ -38,7 +52,7 @@ function Navbar(){
                 id="location-select"
                 displayEmpty
                 value={location}
-                handleChange={handleChangelocal}
+                onChange={handleChangelocal}
                 >
                     <MenuItem value="">Empty</MenuItem>
                     <MenuItem value={"118"}>118</MenuItem>
@@ -52,7 +66,7 @@ function Navbar(){
                 id="price-select"
                 displayEmpty
                 value={price}
-                handleChange={handleChangeprice}
+                onChange={handleChangeprice}
                 >
                     <MenuItem value={""}>Empty</MenuItem>
                     <MenuItem value={"$"}>$</MenuItem>
@@ -67,7 +81,7 @@ function Navbar(){
                 id="prefer-select"
                 displayEmpty
                 value={prefer}
-                handleChange={handleChangeprefer}
+                onChange={handleChangeprefer}
                 >
                     <MenuItem value={"韓式"}>韓式</MenuItem>
                     <MenuItem value={"壽司"}>壽司</MenuItem>
@@ -77,8 +91,12 @@ function Navbar(){
                     <MenuItem value={"義大利麵"}>義大利麵</MenuItem>
                 </Select>
             </FormControl>
+            <Button id="searchButton">search</Button>
             </span>
-            <Button className="signin" onClick={Login}></Button>
+            {/* <link to="/Login">signin</link> */}
+            <Button className="signin" >Login</Button>
         </nav>
     )
 }
+
+export default Navbar;
