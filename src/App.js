@@ -1,5 +1,4 @@
 import React from 'react'
-import ImageForm from './ImageForm'
 import StoreMap from './StoreMap'
 function App(){
   return(
