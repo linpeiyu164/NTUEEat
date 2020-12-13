@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../model/User')
+const bcrypt = require('bcrypt')
 
 router.route('/favorite')
 .post(async (req,res) => {
@@ -34,4 +35,34 @@ router.route('/favorite')
     })
 })
 
+router.post('/register', async (req, res) => {
+    let { username , password } = req.body
+    let encrypt = bcrypt.hash(password, 10)
+    const user = await User.findOne({ username : username })
+    if(user){
+        res.json({ isUnique : false })
+    }else{
+        let newUser = new User({
+            username : username,
+            password : encrypt
+        })
+        newUser.save() // not awaiting
+        res.json({ isUnique : true })
+    }
+})
+
+router.post('/login', async (req, res) => {
+    let { username , password } = req.body
+    const user = await User.findOne({ username : username })
+    if(!user){
+        res.json({ userExists : false })
+    }else{
+        try{
+            let passWordIsValid = await bcrypt.compare(password, user.password)
+            res.json({ passWordIsValid : passWordIsValid })
+        }catch(err){
+            res.status(500)
+        }
+    }
+})
 module.exports = router
