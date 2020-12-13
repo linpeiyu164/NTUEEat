@@ -3,11 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -18,7 +14,7 @@ const LoginStyle=makeStyles((theme)=>({
         height:"100vh"
     },
     image:{
-        backgroundImage="./Image/LoginImage.jpg",
+        backgroundImage:"./Image/LoginImage.jpg",
         backgroundRepeat:"no-repeat",
         backgroundColor:
         theme.palette==="light" ?theme.palette.gray[50] :theme.palette.grey[900],
@@ -43,7 +39,7 @@ const LoginStyle=makeStyles((theme)=>({
         margin:theme.spacing(3,0,2),
     },
 }));
-function Login(props) {
+export function Login(props) {
     const classes=LoginStyle();
     function submitInfo () {
 

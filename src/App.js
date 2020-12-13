@@ -1,12 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
 import Main from './main/Main';
-import Login from './main/Login';
-import { BrowserRouter as Router} from 'react-router-dom'  
+import Login from './main/Login.js/Login';
+import react ,{ useState } from "react";
+import { 
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+  } from 'react-router-dom'  
 
 function App() {
   const [login, setLogin] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] =useState('');
   function Login(){
   }
   return (
