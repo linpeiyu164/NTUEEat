@@ -7,7 +7,10 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const Websocket = require('ws')
 const functions = require('./core/functions')
-const {calculateAverageRating } = functions
+const {calculateAverageRating} = functions
+
+const passport = require('passport')
+const initialize = require('./passport-config')
 
 const storeRouter = require('./routes/stores')
 const userRouter = require('./routes/users')
@@ -18,13 +21,20 @@ const app = express();
 const server = http.createServer(app)
 const wss = new Websocket.Server({server})
 
+//initializing passport config
+initialize(passport)
+
 //middleware
 app.use(cors())
 app.use(bodyParser.json({limit: '10mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
+app.use(passport.initialize()) // initialize passport
+app.use(passport.session()) // uses persistent login sessions
+
 app.use('/stores', storeRouter)
 app.use('/users', userRouter)
+
 
 const port = process.env.PORT || 4000
 server.listen(port, () => console.log(`listening on port ${port}`))
@@ -39,12 +49,10 @@ mongoose.connect(process.env.MONGO_URL,{
     poolSize: 10
 });
 
-const db=mongoose.connection;
+const db = mongoose.connection;
 db.on('open', () => {
     console.log('database connected!')
 })
-
-
 
 // websockets for comments
 wss.on('connection', ws => {
