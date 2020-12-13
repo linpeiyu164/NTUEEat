@@ -8,28 +8,28 @@ import axios from 'axios'
 const instance = axios.create( { baseURL : "http://localhost:4000/users" })
 
 function Register(){
-    let [userName , setUserName] = useState('');
-    let [passWord, setPassWord] = useState('');
-    let [userNameError, setUserNameError] = useState();
-    let [passWordError, setPassWordError] = useState();
+    let [username , setUsername] = useState('');
+    let [password, setPassword] = useState('');
+    let [usernameError, setUsernameError] = useState();
+    let [passwordError, setPasswordError] = useState();
     let [loginError, setLoginError] = useState();
     let [registered, setRegistered] = useState();
     let [loggedIn , setLoggedIn] = useState();
     const handleUsername = (e) => {
         let target = e.target
-        setUserName(target.value)
+        setUsername(target.value)
     }
     const handlePassword = (e) => {
         let target = e.target
-        setPassWord(target.value)
+        setPassword(target.value)
     }
     const handleRegister = async (e) => {
-        if(userName && passWord){
-            setUserNameError(null)
-            setPassWordError(null)
+        if(username && password){
+            setUsernameError(null)
+            setPasswordError(null)
             let res = await instance.post('/register', {
-                userName : userName,
-                passWord : passWord
+                username : username,
+                password : password
             })
             if(res.data.isUnique){
                 // redirect to home page with user info
@@ -37,46 +37,49 @@ function Register(){
                 setRegistered(true)
             }else{
                 // check for username uniqueness
-                setUserNameError('username has been used')
+                setUsernameError('username has been used')
             }
         }else{
-            if(!userName){
-                setUserNameError('Please enter a username')
+            if(!username){
+                setUsernameError('Please enter a username')
             }else{
-                setUserNameError(null)
+                setUsernameError(null)
             }
-            if(!passWord){
-                setPassWordError('Please enter a password')
+            if(!password){
+                setPasswordError('Please enter a password')
             }else{
-                setPassWordError(null);
+                setPasswordError(null);
             }
         }
     }
     const handleLogin = async (e) => {
-        if(userName && passWord){
-            setUserNameError(null)
-            setPassWordError(null)
+        if(username && password){
+            setUsernameError(null)
+            setPasswordError(null)
             let res = await instance.post('/login', {
-                userName : userName,
-                passWord : passWord
+                username : username,
+                password : password
             })
-            if(res.userExists && res.passWordIsValid){
-                // go on to the home page
-                console.log('successfully logged in')
-                setLoggedIn(true)
+            if(!res.data.userExists){
+                setUsernameError('Invalid username')
             }else{
-                setLoginError('Invalid username or password')
+                if(!res.data.passWordIsValid){
+                    setPasswordError('Invalid password')
+                }else{
+                    setLoggedIn(true);
+                    console.log('logged in successfully')
+                }
             }
         }else{
-            if(!userName){
-                setUserNameError('Please enter a username')
+            if(!username){
+                setUsernameError('Please enter a username')
             }else{
-                setUserNameError(null)
+                setUsernameError(null)
             }
-            if(!passWord){
-                setPassWordError('Please enter a password')
+            if(!password){
+                setPasswordError('Please enter a password')
             }else{
-                setPassWordError(null);
+                setPasswordError(null);
             }
         }
     }
@@ -97,7 +100,7 @@ function Register(){
                             ),
                         }}
                         onChange={handleUsername}
-                        helperText={ userNameError ? `${userNameError}` : null }
+                        helperText={ usernameError ? `${usernameError}` : null }
                     />
                 </div>
                 <div style={{ marginTop : 20, marginBottom : 20}}>
@@ -113,7 +116,7 @@ function Register(){
                         ),
                     }}
                     onChange={handlePassword}
-                    helperText={ passWordError ? `${passWordError}` : null }
+                    helperText={ passwordError ? `${passwordError}` : null }
                 />
                 </div>
             </CardContent>

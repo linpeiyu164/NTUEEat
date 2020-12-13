@@ -3,6 +3,45 @@ const router = express.Router();
 const User = require('../model/User')
 const bcrypt = require('bcrypt')
 
+router.post('/register', async (req, res) => {
+    let { username , password } = req.body
+    try{
+        const user = await User.findOne({ username : username })
+        const hashed = await bcrypt.hash( password, 10)
+        if(user){
+            res.json({ isUnique : false })
+        }else{
+            let newUser = new User({
+                username : username,
+                password : hashed
+            })
+            newUser.save() // not awaiting
+            res.json({ isUnique : true })
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.post('/login', async (req, res) => {
+    let { username , password } = req.body
+    try{
+        const user = await User.findOne({ username : username })
+        if(!user){
+            res.json({ userExists : false })
+        }else{
+            try{
+                let passWordIsValid = await bcrypt.compare(password, user.password)
+                res.json({ userExists : true, passWordIsValid : passWordIsValid })
+            }catch(err){
+                res.status(500)
+            }
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
+
 router.route('/favorite')
 .post(async (req,res) => {
     //這邊你要給我被按愛心的店家的id，還有這個人的username
@@ -35,34 +74,4 @@ router.route('/favorite')
     })
 })
 
-router.post('/register', async (req, res) => {
-    let { username , password } = req.body
-    let encrypt = bcrypt.hash(password, 10)
-    const user = await User.findOne({ username : username })
-    if(user){
-        res.json({ isUnique : false })
-    }else{
-        let newUser = new User({
-            username : username,
-            password : encrypt
-        })
-        newUser.save() // not awaiting
-        res.json({ isUnique : true })
-    }
-})
-
-router.post('/login', async (req, res) => {
-    let { username , password } = req.body
-    const user = await User.findOne({ username : username })
-    if(!user){
-        res.json({ userExists : false })
-    }else{
-        try{
-            let passWordIsValid = await bcrypt.compare(password, user.password)
-            res.json({ passWordIsValid : passWordIsValid })
-        }catch(err){
-            res.status(500)
-        }
-    }
-})
 module.exports = router
