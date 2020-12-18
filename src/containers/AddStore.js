@@ -1,6 +1,8 @@
 import { Component } from 'react';
+import { uploadStoreInfo } from '../routes';
 import { TextField, MenuItem, FormLabel, Button, IconButton, makeStyles } from '@material-ui/core';
 import { regions, avgPrice, cuisines } from '../Constants';
+import { FreeBreakfastOutlined, RedeemRounded } from '@material-ui/icons';
 
 // Required: TextField, Select 
 class AddStore extends Component {
@@ -8,6 +10,7 @@ class AddStore extends Component {
         super(props);
         this.state = {
             urls: [],
+            cacheImgFiles: null,
             restaurant: null,
             phone: null,
             dist: null,
@@ -20,14 +23,25 @@ class AddStore extends Component {
     }
 
     handleChange = event => {
-        const files = [];
-        
         if (event.target.files){
+            const files = Array.from(event.target.files);
+            /*
             for (let i=0; i< event.target.files.length; i++){
                 files.push(event.target.files.item(i));
             }
+            */
+           /*
+           files.forEach(file => {
+               reader.readAsDataURL(file);
+               reader.onloadend = () => {
+                   this.setState((prev) => ({
+                    urls: [...prev, reader.result]
+                   }))
+               }
+           });
+           */
             const urls = files.map(file => URL.createObjectURL(file));
-            this.setState({urls: urls});
+            this.setState({urls: urls, cacheImgFiles: files});
         }
         
     }
@@ -46,7 +60,57 @@ class AddStore extends Component {
         return `「${option}」是必填項目\n`
     }
 
-    handleValidation = () => {
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const sendData = () => {
+            // Parse img url
+            const parsedImg = []
+            const imgFiles = this.state.cacheImgFiles;
+            imgFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                    parsedImg.push(reader.result);
+                }
+            })
+            const parsedData = { images: parsedImg };
+            for (let [key, value] of Object.entries(this.state)) {
+                switch(key){
+                    case 'restaurant':
+                        parsedData.storename = value;
+                        break;
+                    case 'phone':
+                        parsedData.phone = value;
+                        break;
+                    case 'dist':
+                        parsedData.location = value;
+                        break;
+                    case 'address':
+                        parsedData.address = value;
+                        break;
+                    case 'min':
+                        if (value) parsedData.lowestPrice = value;
+                        break;
+                    case 'max':
+                        if (value) parsedData.highestPrice = value;
+                        break;
+                    case 'avg':
+                        parsedData.avgPrice = value;
+                        break;
+                    case 'cuisine':
+                        parsedData.type = value;
+                        break;
+                }
+
+            }
+            const res = await uploadStoreInfo(JSON.stringify(parsedData));
+
+            // Redirection!!!!!!!!!!!!!!!!!!!!!!!!
+            if (res) {
+                
+            }
+        }
+        // Validation
         let message  = "";
         for (let option of Object.keys(this.state)) {
             console.log("option: ", option)
@@ -69,13 +133,15 @@ class AddStore extends Component {
             message += "至少上傳一張菜單圖片"
             alert(message)
             return
-        }
+        }       
         
+        // Send
+        sendData();
     }
-
+        
     render() {
         return (
-            <form>
+            <form onSubmit={this.handleSubmit}>
                 <br></br>
                 <TextField label="餐廳名稱" variant="outlined" autoFocus={true} onChange={this.handleValueChange('restaurant')} required/> {'\u00A0'}
                 <TextField label="電話" variant="outlined" onChange={this.handleValueChange('phone')}/>
@@ -103,7 +169,7 @@ class AddStore extends Component {
                     </div>
                 </div>
                 <br></br>
-                <Button onClick={this.handleValidation} variant="outlined">送出</Button>
+                <Button type="submit" variant="outlined">送出</Button>
             </form>
         )
     }
