@@ -4,4 +4,5 @@ const instance = axios.create();
 
 
 instance.get()
+
 export default instance;

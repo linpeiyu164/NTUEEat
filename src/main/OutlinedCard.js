@@ -28,9 +28,9 @@ export default function OutlinedCard(props) {
   const [pricetag,setPriceTag]=useState("")
   if(props.pricing[0]==1){
     setPriceTag("$")
-  }else if(props.pricing[1]==2){
+  }else if(props.pricing[1]==1){
     setPriceTag("$$")
-  }else if(props.pricing[2]==3){
+  }else if(props.pricing[2]==1){
     setPriceTag("$$$")
   }
   

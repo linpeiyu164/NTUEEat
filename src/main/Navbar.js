@@ -123,6 +123,7 @@ export default function Navbar(){
     const Home=()=>{
 
     };
+    instance.post(/)
     return(
         // <div className=>
         <div className={classes.root}>
