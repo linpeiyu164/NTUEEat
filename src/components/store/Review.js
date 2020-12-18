@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { SendIcon, StarIcon, StarBorderIcon, FavoriteIcon, FavoriteBorderIcon } from '@material-ui/icons';
 
+const useStyles = makeStyles();
 function Review (props) {
-    function StarHeartBar () {
+    function StarHeartBar (props) {
         return (
             <div>
                 <div className="stars"></div>
@@ -31,7 +33,7 @@ function Review (props) {
         )
     }
 
-    function Comments () {
+    function Comments (props) {
         return (
             <div>
                 <List >

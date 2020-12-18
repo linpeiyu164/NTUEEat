@@ -13,12 +13,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 
-const LoginStyle=makeStyles((theme)=>({
+const LoginStyle = makeStyles((theme)=>({
     root:{
         height:"100vh"
     },
     image:{
-        backgroundImage="./Image/LoginImage.jpg",
+        backgroundImage: "./Image/LoginImage.jpg",
         backgroundRepeat:"no-repeat",
         backgroundColor:
         theme.palette==="light" ?theme.palette.gray[50] :theme.palette.grey[900],

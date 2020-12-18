@@ -1,7 +1,25 @@
-import {} from '../routes'
+import { fetchStoreData } from '../routes'
+import BasicInfo from '../components/store/BasicInfo';
+import Review from '../components/store/Review';
 
-function storeContainer () {
-    const getInfo = () => {
-
+function StoreContainer () {
+    const data = await fetchStoreData();
+    const basicInfo = {
+        storeName: data.storename,
+        address: data.address,
+        phone: data.phone,
+        menus: data.picture
     }
+    const review = {
+        rating: data.rating,
+        comments: data.comments
+    }
+    return (
+        <div>
+            <BasicInfo data={basicInfo}/>
+            <Review data={review}/>
+        </div>
+    )
 }
+
+export default StoreContainer;
