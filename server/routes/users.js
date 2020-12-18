@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../model/User')
+const Store = require('../model/Store')
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 
@@ -31,7 +32,10 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 router.post('/favorite', passport.authenticate('local') ,async (req,res) => {
     const user = await User.find({username : req.body.username})
     const newfavorite = { store_id : req.body.store_id }
+    const store = await Store.find({ _id : store_id })
+    store.favorites++;
     user.favorites.push(newfavorite);
+    await store.save();
     user.save()
     .then(user => {
         res.json(user) 

@@ -16,6 +16,7 @@ const storeRouter = require('./routes/stores')
 const userRouter = require('./routes/users')
 
 const Store = require('./model/Store')
+const User = require('./model/User')
 
 const app = express();
 const server = http.createServer(app)
@@ -66,7 +67,20 @@ wss.on('connection', ws => {
                 content : content, 
                 rating : rating
             }
-            store.comments.push(newComment)
+            let exists = false;
+            store.comments.forEach(comment => {
+                if(comment.username === username){
+                    comment = {
+                        username : newComment.username,
+                        content : newComment.content,
+                        rating : newComment.rating
+                    }
+                    exists = true;
+                }
+            })
+            if(!exists){
+                store.comments.push(newComment)
+            }
             await store.save()
 
             // new rating --> not real-time, only comments are real-time

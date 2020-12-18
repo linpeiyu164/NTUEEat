@@ -43,6 +43,7 @@ const StoreSchema = new Schema({
         //     content : String
         // }]
     }],
+    favorites : Number
 })
 
 const Store = mongoose.model('Store', StoreSchema);
