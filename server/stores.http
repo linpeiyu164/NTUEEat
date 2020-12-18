@@ -1,0 +1,31 @@
+GET http://localhost:4000/stores
+
+###
+POST http://localhost:4000/stores HTTP/1.1
+Content-Type: application/json
+
+{
+    "location" : "korean",
+    "pricing" : "$",
+    "preferences" : "韓式"
+}
+
+###
+GET http://localhost:4000/stores/store/:id HTTP/1.1
+
+###
+POST http://localhost:4000/stores/addstore HTTP/1.1
+Content-Type: application/json
+
+{
+    "storename" : "鍋in百元風味火鍋",
+    "phone" : "0223670672",
+    "picture" : [] ,
+    "type" : "火鍋",
+    "location" : "公館",
+    "address" : "100台北市中正區汀州路三段196號",
+    "comments" : [],
+    "highestPrice" : 160,
+    "lowestPrice" : 40
+}
+###

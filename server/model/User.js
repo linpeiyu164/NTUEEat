@@ -8,6 +8,10 @@ const UserSchema = new Schema({
         unigue : true,
         required : true
     },
+    password : {
+        type : String,
+        required : true
+    },
     favorites : [{ store_id : Schema.Types.ObjectId }]
 })
 const User = mongoose.model('User', UserSchema)

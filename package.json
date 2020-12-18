@@ -9,18 +9,18 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.0",
-    "cors": "^2.8.5",
-    "dotenv-defaults": "^2.0.1",
-    "express": "^4.17.1",
-    "mongoose": "^5.11.1",
-    "multer": "^1.4.2",
-    "nodemon": "^2.0.6",
+    "leaflet": "^1.7.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+<<<<<<< HEAD
+=======
+    "react-leaflet": "^3.0.2",
+>>>>>>> imageupload
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4",
-    "ws": "^7.4.0"
+    "ws": "^7.4.0",
+    "yarn": "^1.22.10"
   },
   "scripts": {
     "start": "react-scripts start",
