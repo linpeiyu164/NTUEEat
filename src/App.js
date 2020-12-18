@@ -9,18 +9,25 @@ import {
   Route,
   Link
   } from 'react-router-dom'  
+import { render } from 'ejs';
 
 function App() {
   const [login, setLogin] = useState(false);
   const [username, setUsername] =useState('');
   function Login(){
   }
+  
   return (
-      <Router>
-          <Route path="/" render={() => <Main username={username}/>}/>
-          <Route path="/login" render={() =>  <Login setLogin={Login} setUsername={setUsername}/>}/>
-      </Router>
+    <Router>
+      {/* <Switch> */}
+        <Route path="/" render={() => <Main username={username}/>}/>          
+        <Route path="/Login" render={() => <Login setLogin={login} setUsername={username}/>}/>
+        {/* <Route path="/AddStore" render={() => <Addstore username={username}/>}/> */}
+      {/* </Switch>       */}
+    </Router>
   )
+  
+  
 }
 
 export default App;
