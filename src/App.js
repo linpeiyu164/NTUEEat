@@ -10,13 +10,16 @@ import {
   Route,
   Link
   } from 'react-router-dom'  
+import { render } from 'ejs';
 
 function App() {
   const [login, setLogin] = useState(false);
   const [username, setUsername] =useState('');
   function Login(){
   }
+  
   return (
+<<<<<<< HEAD
       <Router>
           <Route path="/" render={() => <Main username={username}/>}/>
           <Route path="/login" render={() =>  <Login setLogin={Login} setUsername={setUsername}/>}/>
@@ -32,6 +35,17 @@ function App(){
       <Register />
     </>
 >>>>>>> imageupload
+=======
+    <Router>
+      {/* <Switch> */}
+        <Route path="/" render={() => <Main username={username}/>}/>          
+        <Route path="/Login" render={() => <Login setLogin={login} setUsername={username}/>}/>
+        {/* <Route path="/AddStore" render={() => <Addstore username={username}/>}/> */}
+      {/* </Switch>       */}
+    </Router>
+>>>>>>> 4b68cdcfbd19c371aa6404cd8ccef3dfcb762577
   )
+  
+  
 }
 export default App;

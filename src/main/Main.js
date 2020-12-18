@@ -1,6 +1,7 @@
-import { Select } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Navbar from './Navbar'
+import StoreList from "./StoreList"
+import Store from "./Store"
 import { 
   BrowserRouter as Router,
   Switch,
@@ -8,19 +9,20 @@ import {
   Link
 } from 'react-router-dom'  
 
-function Main() {
+export default function Main() {
     return (
         <div className="App">
           <Navbar />
           <Router className="down">
             <Route path="/stores">
               <div className="stores">
-                <div className="store"></div>
+                <StoreList className="storeList"/>
               </div>
             </Route>
+            
+            <Route path="/storedetail" render={() => <Store/>}/> 
            </Router>
         </div>
         
       );
 }
-export default Main;

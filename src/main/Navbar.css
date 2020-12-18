@@ -1,0 +1,23 @@
+.bg-img {
+    /* The image used */
+    background-image: linear-gradient(rgba(256, 256, 256, 0.5),rgba(256,256,256,0.8)),url("../Image/MainImage.jpg");
+  
+    min-height: 100px;
+  
+    /* Center and scale the image nicely */
+    background-position: center; 
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
+  
+    /* Needed to position the navbar */
+    /* position: relative;  */
+    transform: translate3d(); 
+    /* filter:contrast(25%) */
+  } 
+/* .select {
+    /* overflow: hidden; */
+    /* color: #fffffe;
+    border-color:#ffffff; */
+
+    /* filter:contrast(100%) */
+  /* } */
