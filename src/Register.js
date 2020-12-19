@@ -1,13 +1,31 @@
-import { TextField , Card, CardContent, CardActions, Button, InputAdornment} from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles'
+import { TextField , Card, CardContent, CardActions, Button, ButtonGroup, InputAdornment, Grid, Paper} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles'
 import { useState } from 'react'
-import logo from './Image/Unknown.jpeg'
+import logo from './Image/foodicon.png'
 import { AccountCircle } from '@material-ui/icons'
 import LockIcon from '@material-ui/icons/Lock';
 import axios from 'axios'
 const instance = axios.create( { baseURL : "http://localhost:4000/users" })
-
+const useStyle = makeStyles( theme => ({
+    root : {
+        minWidth: 275,
+    },
+    paper : {
+        margin : theme.spacing(2),
+        padding : theme.spacing(8),
+        maxWidth : 'lg',
+        minWidth: 'xs'
+    },
+    cardcontent : {
+        margin : theme.spacing(1),
+    },
+    button : {
+        padding : theme.spacing(1),
+        margin : theme.spacing(2)
+    }
+}))
 function Register(){
+    const classes = useStyle()
     let [username , setUsername] = useState('');
     let [password, setPassword] = useState('');
     let [usernameError, setUsernameError] = useState();
@@ -84,51 +102,60 @@ function Register(){
         }
     }
     return(
-        <Card>
-            <CardContent>
-                <img src={logo} />
-                <div style={{ marginTop : 20, marginBottom : 20}}>
+        <>
+        <Card className={classes.paper} justify="center" >
+            <Grid container 
+                justify="center" 
+                variant="outlined" 
+                alignItems="center"
+                direction="column"
+            >
+                <Grid item xs={8} className={classes.cardcontent}>
+                    <img src={logo}/>
+                </Grid>
+                <Grid item xs={8} className={classes.cardcontent}>
                     <TextField 
                         variant="outlined"
                         color="secondary"
                         label="Username"
                         InputProps={{
                             startAdornment: (
-                              <InputAdornment position="start">
+                            <InputAdornment position="start">
                                 <AccountCircle />
-                              </InputAdornment>
+                            </InputAdornment>
                             ),
                         }}
                         onChange={handleUsername}
                         helperText={ usernameError ? `${usernameError}` : null }
                     />
-                </div>
-                <div style={{ marginTop : 20, marginBottom : 20}}>
+                </Grid>
+                <Grid item xs={8} className={classes.cardcontent}>
                 <TextField
                     variant="outlined"
                     color="secondary"
                     label="Password"
                     InputProps={{
                         startAdornment: (
-                          <InputAdornment position="start">
+                        <InputAdornment position="start">
                             <LockIcon />
-                          </InputAdornment>
+                        </InputAdornment>
                         ),
                     }}
                     onChange={handlePassword}
                     helperText={ passwordError ? `${passwordError}` : null }
                 />
-                </div>
-            </CardContent>
-            <CardActions>
-                <Button variant="outlined" color="primary" onClick={handleRegister}>
-                    Register
-                </Button>
-                <Button variant="outlined" color="secondary" onClick={handleLogin}>
-                    Login
-                </Button>
-            </CardActions>
-        </Card>
+                </Grid>
+                <Grid item xs={8} className={classes.cardcontent}>
+                    <Button onClick={handleRegister} variant="text" color="secondary" className={classes.button}>
+                        Register
+                    </Button>
+                    <Button onClick={handleLogin} variant="text" color="secondary" className={classes.button}>
+                        Login
+                    </Button>
+                </Grid>
+            </Grid>
+            </Card>
+        </>
     )
 }
 export default Register
