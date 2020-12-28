@@ -1,18 +1,20 @@
-import { TextField , Card, CardContent, CardActions, Button, ButtonGroup, InputAdornment, Grid, Paper} from '@material-ui/core';
+import { TextField , Card, Button, InputAdornment, Grid, Typography} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import { useState } from 'react'
 import logo from './Image/foodicon.png'
 import { AccountCircle } from '@material-ui/icons'
 import LockIcon from '@material-ui/icons/Lock';
 import axios from 'axios'
-const instance = axios.create( { baseURL : "http://localhost:4000/users" })
+const instance = axios.create( { 
+    baseURL : "http://localhost:4000/users"
+})
 const useStyle = makeStyles( theme => ({
     root : {
         minWidth: 275,
     },
     paper : {
         margin : theme.spacing(2),
-        padding : theme.spacing(8),
+        padding : theme.spacing(4),
         maxWidth : 'lg',
         minWidth: 'xs'
     },
@@ -22,6 +24,10 @@ const useStyle = makeStyles( theme => ({
     button : {
         padding : theme.spacing(1),
         margin : theme.spacing(2)
+    },
+    toppic : {
+        width : '100%',
+        height : '100%'
     }
 }))
 function Register(){
@@ -30,7 +36,6 @@ function Register(){
     let [password, setPassword] = useState('');
     let [usernameError, setUsernameError] = useState();
     let [passwordError, setPasswordError] = useState();
-    let [loginError, setLoginError] = useState();
     let [registered, setRegistered] = useState();
     let [loggedIn , setLoggedIn] = useState();
     const handleUsername = (e) => {
@@ -78,15 +83,18 @@ function Register(){
                 username : username,
                 password : password
             })
-            if(!res.data.userExists){
+            console.log(res.data)
+            if(res.data.invalidUser){
                 setUsernameError('Invalid username')
-            }else{
-                if(!res.data.passWordIsValid){
-                    setPasswordError('Invalid password')
-                }else{
-                    setLoggedIn(true);
-                    console.log('logged in successfully')
-                }
+            }
+            if(res.data.invalidPassword){
+                setPasswordError('Invalid password')
+            }
+            if(!res.data.invalidUser && !res.data.invalidPassword){
+                setLoggedIn(true);
+                setUsernameError(null)
+                setPasswordError(null)
+                console.log(res.data, res.cookie)
             }
         }else{
             if(!username){
@@ -103,55 +111,65 @@ function Register(){
     }
     return(
         <>
-        <Card className={classes.paper} justify="center" >
-            <Grid container 
-                justify="center" 
-                variant="outlined" 
-                alignItems="center"
-                direction="column"
-            >
-                <Grid item xs={8} className={classes.cardcontent}>
-                    <img src={logo}/>
+        <Card className={classes.paper} alignItems="center" >
+            <Grid container direction="row" justify="center" >
+                <Grid item>
+                    <Typography variant="h1">NTUEEAT</Typography>
                 </Grid>
-                <Grid item xs={8} className={classes.cardcontent}>
-                    <TextField 
+                <Grid item container direction="column">
+                <Grid
+                    container  
+                    item
+                    alignItems="center"
+                    justify="center"  
+                    direction="column"
+                >
+                    <Grid item xs={8} className={classes.cardcontent}>
+                        <img src={logo}/>
+                    </Grid>
+                    <Grid item xs={8} className={classes.cardcontent}>
+                        <TextField 
+                            variant="outlined"
+                            color="secondary"
+                            label="Username"
+                            placeholder="Username"
+                            InputProps={{
+                                startAdornment: (
+                                <InputAdornment position="start">
+                                    <AccountCircle />
+                                </InputAdornment>
+                                ),
+                            }}
+                            onChange={handleUsername}
+                            helperText={ usernameError ? `${usernameError}` : null }
+                        />
+                    </Grid>
+                    <Grid item xs={8} className={classes.cardcontent}>
+                    <TextField
                         variant="outlined"
                         color="secondary"
-                        label="Username"
+                        placeholder="Password"
+                        label="Password"
                         InputProps={{
                             startAdornment: (
                             <InputAdornment position="start">
-                                <AccountCircle />
+                                <LockIcon />
                             </InputAdornment>
                             ),
                         }}
-                        onChange={handleUsername}
-                        helperText={ usernameError ? `${usernameError}` : null }
+                        onChange={handlePassword}
+                        helperText={ passwordError ? `${passwordError}` : null }
                     />
+                    </Grid>
+                    <Grid item xs={8} className={classes.cardcontent}>
+                        <Button onClick={handleRegister} variant="text" color="secondary" className={classes.button}>
+                            Register
+                        </Button>
+                        <Button onClick={handleLogin} variant="text" color="secondary" className={classes.button}>
+                            Login
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid item xs={8} className={classes.cardcontent}>
-                <TextField
-                    variant="outlined"
-                    color="secondary"
-                    label="Password"
-                    InputProps={{
-                        startAdornment: (
-                        <InputAdornment position="start">
-                            <LockIcon />
-                        </InputAdornment>
-                        ),
-                    }}
-                    onChange={handlePassword}
-                    helperText={ passwordError ? `${passwordError}` : null }
-                />
-                </Grid>
-                <Grid item xs={8} className={classes.cardcontent}>
-                    <Button onClick={handleRegister} variant="text" color="secondary" className={classes.button}>
-                        Register
-                    </Button>
-                    <Button onClick={handleLogin} variant="text" color="secondary" className={classes.button}>
-                        Login
-                    </Button>
                 </Grid>
             </Grid>
             </Card>

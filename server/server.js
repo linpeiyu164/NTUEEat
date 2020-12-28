@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const Websocket = require('ws')
+const cookieParser = require('cookie-parser')
 const functions = require('./core/functions')
 const {calculateAverageRating} = functions
 
@@ -29,7 +30,7 @@ initialize(passport)
 app.use(cors())
 app.use(bodyParser.json({limit: '10mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
-
+app.use(cookieParser('secret'))
 app.use(passport.initialize()) // initialize passport
 app.use(passport.session()) // uses persistent login sessions
 
@@ -57,7 +58,6 @@ db.on('open', () => {
 
 // websockets for comments
 wss.on('connection', ws => {
-
     ws.on('message', async (data) => {
         const {username, content, rating, storeId} = data;
         try{

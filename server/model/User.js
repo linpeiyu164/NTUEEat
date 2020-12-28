@@ -12,7 +12,10 @@ const UserSchema = new Schema({
         type : String,
         required : true
     },
-    favorites : [{ store_id : Schema.Types.ObjectId }]
+    favorites : [{ 
+        type : Schema.Types.ObjectId, 
+        ref : 'Store'
+    }]
 })
 const User = mongoose.model('User', UserSchema)
 module.exports = User

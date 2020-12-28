@@ -25,36 +25,42 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
-    res.json({ userExists : true, passWordIsValid : true})
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if(err) return next(err)
+        if(!user){
+            console.log(info.message)
+            if(info.message === "username"){
+                res.json({ invalidUser : true })
+            }else if(info.message === "password"){
+                res.json({ invalidPassword : true })
+            }
+        }else{
+            req.logIn(user, (err) => {
+                if (err) return next(err)
+                res.json(req.user)
+            });
+        }
+    })(req, res, next);
 })
 
-router.post('/favorite', passport.authenticate('local') ,async (req,res) => {
+router.post('/favorite', async (req,res) => {
     const user = await User.find({username : req.body.username})
-    const newfavorite = { store_id : req.body.store_id }
-    const store = await Store.find({ _id : store_id })
+    const store = await Store.find({ _id : req.body.store_id })
     store.favorites++;
-    user.favorites.push(newfavorite);
+    user.favorites.push(store);
     await store.save();
-    user.save()
-    .then(user => {
-        res.json(user) 
-    })
-    .catch(err => {
-        res.status(400).json({error : err});
-    })
+    await user.save()
+    await user.populate('favorites')
+    res.json(user)
 })
 
-router.delete('/favorite', passport.authenticate('local'), async(req,res)=> {
+router.delete('/favorite', async(req,res)=> {
     const user = await User.find({username : req.body.username})
-    user.favorites = user.favorites.filter(fav => fav.store_id !== req.body.store_id)
-    user.save()
-    .then( user => {
-        res.json(user) 
-    })
-    .catch(err => {
-        res.status(400).json({ error : err });
-    })
+    user.favorites = user.favorites.filter(fav => fav !== req.body.store_id)
+    await user.save()
+    await user.populate('favorites')
+    res.json(user)
 })
 
 module.exports = router
