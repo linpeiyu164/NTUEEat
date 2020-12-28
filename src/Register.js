@@ -1,10 +1,13 @@
 import { TextField , Card, Button, InputAdornment, Grid, Typography} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
-import { useState } from 'react'
+import { useState , useContext} from 'react'
 import logo from './Image/foodicon.png'
 import { AccountCircle } from '@material-ui/icons'
 import LockIcon from '@material-ui/icons/Lock';
 import axios from 'axios'
+import userContext from './userContext'
+import { Redirect } from 'react-router-dom'
+
 const instance = axios.create( { 
     baseURL : "http://localhost:4000/users"
 })
@@ -31,13 +34,14 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 function Register(){
+    let {user, setUser} = useContext(userContext)
     const classes = useStyle()
     let [username , setUsername] = useState('');
     let [password, setPassword] = useState('');
     let [usernameError, setUsernameError] = useState();
     let [passwordError, setPasswordError] = useState();
     let [registered, setRegistered] = useState();
-    let [loggedIn , setLoggedIn] = useState();
+    console.log(user)
     const handleUsername = (e) => {
         let target = e.target
         setUsername(target.value)
@@ -91,10 +95,9 @@ function Register(){
                 setPasswordError('Invalid password')
             }
             if(!res.data.invalidUser && !res.data.invalidPassword){
-                setLoggedIn(true);
+                setUser(res.data)
                 setUsernameError(null)
                 setPasswordError(null)
-                console.log(res.data, res.cookie)
             }
         }else{
             if(!username){
@@ -110,7 +113,8 @@ function Register(){
         }
     }
     return(
-        <>
+        (!user)?
+        (<>
         <Card className={classes.paper} alignItems="center" >
             <Grid container direction="row" justify="center" >
                 <Grid item>
@@ -126,6 +130,13 @@ function Register(){
                 >
                     <Grid item xs={8} className={classes.cardcontent}>
                         <img src={logo}/>
+                    </Grid>
+                    <Grid item xs={8} className={classes.cardcontent}>
+                        {
+                            registered ? (
+                                <Typography>Registration successful</Typography>
+                            ):null
+                        }
                     </Grid>
                     <Grid item xs={8} className={classes.cardcontent}>
                         <TextField 
@@ -174,6 +185,7 @@ function Register(){
             </Grid>
             </Card>
         </>
+        ): <Redirect to="/" />
     )
 }
 export default Register

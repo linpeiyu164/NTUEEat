@@ -25,6 +25,7 @@ function calculateAverageRating(store){
     }
     return avg;
 }
+
 const getRandom = async (Store) => {
     const total = await Store.countDocuments();
     let random = Math.floor(Math.random() * total)

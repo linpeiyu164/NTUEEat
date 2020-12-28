@@ -118,7 +118,6 @@ export default function Navbar(){
         setPrefer(e.target.value)
     };
     const Login=()=>{
-
     };
     const Home=()=>{
 
@@ -191,7 +190,7 @@ export default function Navbar(){
                     <Button className={classes.Button} variant="outlined" color="default" size="large">Signup</Button>
                 {/* </link> */}
                 
-                <Button className={classes.Button} variant="outlined" color="default" size="large">Login</Button>
+                <Link to="/login" style={{ textDecoration : "none"}}><Button className={classes.Button} variant="outlined" color="default" size="large">Login</Button></Link>
                 {/* <IconButton aria-label="display more actions" edge="end" color="inherit">
                 <MoreIcon />
                 </IconButton> */}
