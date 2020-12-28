@@ -25,5 +25,12 @@ function calculateAverageRating(store){
     }
     return avg;
 }
+const getRandom = async (Store) => {
+    const total = await Store.countDocuments();
+    let random = Math.floor(Math.random() * total)
+    const result = await Store.findOne().skip(random)
+    return result
+}
  module.exports.checkPrice = checkPrice;
  module.exports.calculateAverageRating = calculateAverageRating;
+ module.exports.getRandom = getRandom;
