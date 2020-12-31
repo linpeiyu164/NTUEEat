@@ -22,7 +22,7 @@ const fetchStoreData = async (storeId) => {
         const data = JSON.parse(res.data);
         response = data;
     })
-    .catch(err => {})
+    .catch(err => { response = "error" })
     return response;
 }
 

@@ -4,22 +4,25 @@ import Review from '../components/store/Review';
 
 function StoreContainer () {
     const data = await fetchStoreData();
-    const basicInfo = {
-        storeName: data.storename,
-        address: data.address,
-        phone: data.phone,
-        menus: data.picture
+    if (data !== "error"){
+        const basicInfo = {
+            storeName: data.storename,
+            address: data.address,
+            phone: data.phone,
+            menus: data.picture
+        }
+        const review = {
+            rating: data.rating,
+            comments: data.comments
+        }
+        return (
+            <div>
+                <BasicInfo data={basicInfo}/>
+                <Review data={review}/>
+            </div>
+        )
     }
-    const review = {
-        rating: data.rating,
-        comments: data.comments
-    }
-    return (
-        <div>
-            <BasicInfo data={basicInfo}/>
-            <Review data={review}/>
-        </div>
-    )
+    
 }
 
 export default StoreContainer;
