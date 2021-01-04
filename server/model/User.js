@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    // user id will be generated 
     username : {
         type : String,
         unigue : true,
@@ -15,6 +14,10 @@ const UserSchema = new Schema({
     favorites : [{ 
         type : Schema.Types.ObjectId, 
         ref : 'Store'
+    }],
+    comments : [{
+        type : Schema.Types.ObjectId,
+        ref : 'Comment'
     }]
 })
 const User = mongoose.model('User', UserSchema)

@@ -35,9 +35,8 @@ const StoreSchema = new Schema({
         required : true
     },
     comments : [{
-        username : String,
-        content : String,
-        rating : Number,
+        type : Schema.Types.ObjectId,
+        ref : 'Comment'
     }],
     favorites : Number
 })

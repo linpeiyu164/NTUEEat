@@ -191,6 +191,7 @@ export default function Navbar(){
                 {/* </link> */}
                 
                 <Link to="/login" style={{ textDecoration : "none"}}><Button className={classes.Button} variant="outlined" color="default" size="large">Login</Button></Link>
+                <Link to="/profile" style={{ textDecoration : "none"}}><Button className={classes.Button} variant="outlined" color="default" size="large">Profile</Button></Link>
                 {/* <IconButton aria-label="display more actions" edge="end" color="inherit">
                 <MoreIcon />
                 </IconButton> */}

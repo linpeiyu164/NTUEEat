@@ -59,42 +59,40 @@ db.on('open', () => {
 // websockets for comments
 wss.on('connection', ws => {
     ws.on('message', async (data) => {
-        const {username, content, rating, storeId} = data;
+        const { username, content, rating, storeId } = JSON.parse(data);
         try{
-            let store = await Store.find({ _id : storeId })
-            const newComment = {
-                username : username, 
-                content : content, 
-                rating : rating
-            }
-            let exists = false;
-            store.comments.forEach(comment => {
-                if(comment.username === username){
-                    comment = {
-                        username : newComment.username,
-                        content : newComment.content,
-                        rating : newComment.rating
-                    }
-                    exists = true;
+            let user = await User.find({ username : username }).populate('comments')
+            let previousComment = null
+            user.comments.forEach(comment => {
+                if(comment.store === storeId){
+                    previousComment = comment
                 }
             })
-            if(!exists){
+            if(!previousComment){
+                let store = await Store.find({ _id : storeId })
+                const newComment = {
+                    store : storeId,
+                    storename : store.storename,
+                    username : username,
+                    content : content, 
+                    rating : rating
+                }
+                await newComment.save()
                 store.comments.push(newComment)
+                await store.save()
+                let newRating = calculateAverageRating(store)
+                store.rating = newRating
+                await store.save()
+            }else{
+                ws.send(JSON.stringify({ data : previousComment, 
+                msg : "You've already reviewed this restaurant before"}))
             }
-            await store.save()
-
-            // new rating --> not real-time, only comments are real-time
-            let newRating = calculateAverageRating(store)
-            store.rating = newRating
-            await store.save()
-
             // broadcasting comments to all users connected
-            wss.clients.forEach( client => {
+            wss.clients.forEach(client => {
                 client.send(JSON.stringify(store.comments))
             })
-
-        }catch(err){
-            ws.send(JSON.stringify({msg : err}))
+        }catch(error){
+            ws.send(JSON.stringify({ msg : errror }))
         }
     })
 })

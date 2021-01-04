@@ -29,7 +29,6 @@ router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if(err) return next(err)
         if(!user){
-            console.log(info.message)
             if(info.message === "username"){
                 res.json({ invalidUser : true })
             }else if(info.message === "password"){
@@ -45,7 +44,7 @@ router.post('/login', (req, res, next) => {
 })
 
 router.post('/favorite', async (req,res) => {
-    const user = await User.find({username : req.body.username})
+    const user = await User.find({ username : req.body.username })
     const store = await Store.find({ _id : req.body.store_id })
     store.favorites++;
     user.favorites.push(store);
@@ -56,11 +55,32 @@ router.post('/favorite', async (req,res) => {
 })
 
 router.delete('/favorite', async(req,res)=> {
-    const user = await User.find({username : req.body.username})
-    user.favorites = user.favorites.filter(fav => fav !== req.body.store_id)
-    await user.save()
-    await user.populate('favorites')
+    try{
+        const user = await User.findOne({ _id : req.query.USERID }).populate('favorites', 'storename _id')
+        let newarray = user.favorites.filter(fav => {
+            if(fav._id.toString() !== req.query.STOREID){
+                return fav
+            }
+        })
+        user.favorites = [...newarray]
+        await user.save()
+
+        const store = await Store.findOne({ _id : req.query.STOREID })
+        store.favorites--;
+        store.save(); // not awaiting
+        res.json(user)
+    }catch(err){
+        console.log(err)
+    }
+})
+
+router.get('/comments/:id', async (req, res) => {
+    const user = await User.findOne({ _id : req.params.id }).populate('comments')
     res.json(user)
 })
 
+router.get('/favorites/:id', async (req,res)=>{
+    const user = await User.findOne({ _id : req.params.id}).populate('favorites', 'storename _id')
+    res.json(user)
+})
 module.exports = router

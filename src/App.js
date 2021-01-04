@@ -4,6 +4,7 @@ import Register from './Register'
 import Random from './main/Random'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Navbar from './main/Navbar'
+import Profile from './Profile'
 // import { Grid } from '@material-ui/core'
 import userContext from './userContext'
 
@@ -17,6 +18,7 @@ function App() {
             <Route path="/login" exact component={Register} />
             <Route path="/main" />
             <Route path="/random" exact component={Random} />
+            <Route path="/profile" exact component={Profile} />
         </userContext.Provider>
       </Router>
     </>
