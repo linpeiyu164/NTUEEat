@@ -18,6 +18,7 @@ const userRouter = require('./routes/users')
 
 const Store = require('./model/Store')
 const User = require('./model/User')
+const Comment = require('./model/Comment')
 
 const app = express();
 const server = http.createServer(app)
@@ -25,6 +26,15 @@ const wss = new Websocket.Server({server})
 
 //initializing passport config
 initialize(passport)
+
+//database connection
+mongoose.connect(process.env.MONGO_URL,{
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    auto_reconnect: true,
+    useUnifiedTopology: true,
+    poolSize: 10
+});
 
 //middleware
 app.use(cors())
@@ -37,19 +47,8 @@ app.use(passport.session()) // uses persistent login sessions
 app.use('/stores', storeRouter)
 app.use('/users', userRouter)
 
-
 const port = process.env.PORT || 4000
 server.listen(port, () => console.log(`listening on port ${port}`))
-
-
-//database connection
-mongoose.connect(process.env.MONGO_URL,{
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    auto_reconnect: true,
-    useUnifiedTopology: true,
-    poolSize: 10
-});
 
 const db = mongoose.connection;
 db.on('open', () => {

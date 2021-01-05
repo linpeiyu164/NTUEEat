@@ -1,13 +1,16 @@
 import { useState , useContext} from 'react'
 import userContext from './userContext'
-import { AppBar, Tabs, Tab , Typography, Avatar, Card, CardContent, CardActionArea , Button, IconButton} from '@material-ui/core'
+import { AppBar, Tabs, Tab , Typography, Avatar, Card, CardContent, CardActionArea , Box,Button, IconButton, TextField} from '@material-ui/core'
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
 import { blue } from "@material-ui/core/colors";
 import { Link } from 'react-router-dom'
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import axios from 'axios'
+import RateStar from './Ratestar'
 const instance = axios.create({ baseURL : "http://localhost:4000/users" })
+import DeleteIcon from '@material-ui/icons/Delete';
 const useStyle = makeStyles(theme => ({
     AppBar : {
         paddingTop : theme.spacing(6),
@@ -29,6 +32,31 @@ const useStyle = makeStyles(theme => ({
     Card : {
       margin : theme.spacing(3),
       padding : theme.spacing(4)
+    },
+    visit : {
+      margin : theme.spacing(2)
+    },
+    box1 : {
+      borderRadius:20,
+      padding : theme.spacing(1),
+    },
+    box2 : {
+      backgroundColor: "#D4E6F1",
+      borderRadius:20,
+      padding : theme.spacing(2)
+    },
+    box3 : {
+      backgroundColor: "#D4E6F1",
+      borderRadius:20,
+      width : '100%'
+    },
+    textfield : {
+      padding : theme.spacing(2),
+      borderRadius:20,
+      width : '95%'
+    },
+    button : {
+      margin : theme.spacing(2),
     }
 }))
 
@@ -47,7 +75,18 @@ const theme = createMuiTheme({
           color: blue[700],
         }
       }
-    }
+    },
+    typography: {
+      h1: {
+        fontSize: 18,
+      },
+      body1: {
+        fontWeight: 1000,
+      },
+      body2:{
+        fontWeight : 500
+      }
+    },
   });
 function User() {
     const classes = useStyle()
@@ -55,26 +94,55 @@ function User() {
     let [selectedTab, setSelectedTab] = useState(0)
     let [comments, setComments] = useState()
     let [favorites, setFavorites] = useState()
+    let [editComment, setEditComment] = useState()
+    let [updatedContent, setUpdatedContent] = useState()
+    let [updatedStar, setUpdatedStar] = useState()
 
     const handleChange = (event, newValue) => {
       setSelectedTab(newValue);
     };
 
     const getComments = async () => {
-      const {data} = await instance.get(`/comment/${user._id}`)
+      const {data} = await instance.get(`/comments/${user._id}`)
       setComments([...data.comments])
     }
-
     const getFavorites = async () => {
       const {data} = await instance.get(`/favorites/${user._id}`)
       setFavorites([...data.favorites])
     }
-    
     const handleRemoveFavorite = async (e) => {
-      // console.log(e.target.id)
-      // e.target.id is the icon inside the iconbutton
       const {data} = await instance.delete(`/favorite?USERID=${user._id}&STOREID=${e.target.id}`)
       setFavorites([...data.favorites])
+    }
+    const handleEditComment = (e) => {
+      setEditComment(e.target.id)
+    }
+    const handleDeleteComment = (e) => {
+      // delete comment from database
+    }
+    const handleSubmit = async () => {
+      // renew the comment
+      if(updatedStar && updatedContent){
+        // use the setEditComment to send the comment back
+        const {data} = await instance.post('/comments', {
+          _id : editComment,
+          content : updatedContent,
+          rating : updatedStar
+        })
+        setComments(prev => {
+          let newComments = prev.map(comment => {
+            if(comment._id === data._id){
+              comment.content = data.content
+              comment.rating = data.rating
+            }
+            return comment
+          })
+          return newComments
+        })
+      }
+      setEditComment(null)
+      setUpdatedContent('')
+      setUpdatedStar(null)
     }
     return(
         <MuiThemeProvider theme={theme}>
@@ -95,20 +163,49 @@ function User() {
               favorites.map(store => {
                 return(
                   <Card className={classes.Card}>
-                    <CardContent>{store.storename}</CardContent>
-                      <Link style={{textDecoration : "none"}}to={`/store/${store._id}`}><Button>Visit</Button></Link>
-                      <IconButton onClick={(e) => {handleRemoveFavorite(e)}}><RemoveCircleOutlineIcon id={store._id}></RemoveCircleOutlineIcon></IconButton>
+                    <CardContent>
+                      <Typography style={{ display: 'inline-block' }} >{store.storename}</Typography>
+                      <Link style={{textDecoration : "none"}}to={`/store/${store._id}`}>
+                        <Button className={classes.visit}variant="outlined">Visit</Button>
+                      </Link>
+                      <IconButton onClick={(e) => {handleRemoveFavorite(e)}}>
+                        <RemoveCircleOutlineIcon style={{ display: 'inline-block' }} id={store._id}></RemoveCircleOutlineIcon>
+                      </IconButton>
+                    </CardContent>
                   </Card>)
               })) : null}
             {(selectedTab === 1 && comments) ? (
               comments.map(comment => {
-                return(
-                  <Card>
+                if(editComment===comment._id){
+                  return(
+                    <>
+                    <Card className={classes.Card}>
                     <CardContent>
-                      {comment.storename}
-                      {comment.username}
-                      {comment.content}
-                      {comment.rating}
+                      <Box className={classes.box1}>
+                      <Typography variant="body1">{comment.storename}</Typography>
+                      <RateStar handleSelectRate={setUpdatedStar}/>
+                      </Box>
+                      <Box className={classes.box3}>
+                      <TextField  className={classes.textfield}value={updatedContent} onChange={(e)=>setUpdatedContent(e.target.value)}></TextField>
+                      <Button className={classes.button} onClick={handleSubmit}>Update</Button>
+                      </Box>
+                    </CardContent>
+                    </Card>
+                    </>
+                  )
+                }
+                return(
+                  <Card className={classes.Card}>
+                    <CardContent>
+                      <Box className={classes.box1}>
+                      <Typography variant="body1">{comment.storename}</Typography>
+                      <Typography style={{ display : 'inline-block'}} variant="body2">{`Rating : ${comment.rating}`}</Typography>
+                      <IconButton onClick={(e) => {handleEditComment(e)}}><EditIcon id={comment._id}></EditIcon></IconButton>
+                      <IconButton onClick={(e) => {handleDeleteComment(e)}}><DeleteIcon id={comment._id}></DeleteIcon></IconButton>
+                      </Box>
+                      <Box className={classes.box2}>
+                      <Typography style={{ display : 'block'}} variant="body2">{comment.content}</Typography>
+                      </Box>
                     </CardContent>
                   </Card>
                 )

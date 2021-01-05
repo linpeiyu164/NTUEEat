@@ -11,4 +11,4 @@ const commentSchema = new Schema({
     rating : Number
 })
 const Comment = mongoose.model('Comment', commentSchema)
-export default Comment;
+module.exports = Comment;

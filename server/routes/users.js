@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../model/User')
 const Store = require('../model/Store')
+const Comment = require('../model/Comment')
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 
@@ -82,5 +83,14 @@ router.get('/comments/:id', async (req, res) => {
 router.get('/favorites/:id', async (req,res)=>{
     const user = await User.findOne({ _id : req.params.id}).populate('favorites', 'storename _id')
     res.json(user)
+})
+
+router.post('/comments', async (req, res) => {
+    console.log(req.body)
+    const comment = await Comment.findOne({ _id : req.body._id})
+    comment.content = req.body.content
+    comment.rating = req.body.rating
+    await comment.save()
+    res.json(comment)
 })
 module.exports = router
