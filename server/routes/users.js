@@ -52,7 +52,7 @@ router.post('/favorite', async (req,res) => {
     await store.save();
     await user.save()
     await user.populate('favorites')
-    res.json(user)
+    res.json(user.favorites)
 })
 
 router.delete('/favorite', async(req,res)=> {
@@ -65,11 +65,10 @@ router.delete('/favorite', async(req,res)=> {
         })
         user.favorites = [...newarray]
         await user.save()
-
         const store = await Store.findOne({ _id : req.query.STOREID })
         store.favorites--;
         store.save(); // not awaiting
-        res.json(user)
+        res.json(user.favorites)
     }catch(err){
         console.log(err)
     }
@@ -77,20 +76,36 @@ router.delete('/favorite', async(req,res)=> {
 
 router.get('/comments/:id', async (req, res) => {
     const user = await User.findOne({ _id : req.params.id }).populate('comments')
-    res.json(user)
+    res.json(user.comments)
 })
 
 router.get('/favorites/:id', async (req,res)=>{
-    const user = await User.findOne({ _id : req.params.id}).populate('favorites', 'storename _id')
-    res.json(user)
+    const user = await User.findOne({ _id : req.params.id }).populate('favorites', 'storename _id')
+    res.json(user.favorites)
 })
 
 router.post('/comments', async (req, res) => {
-    console.log(req.body)
     const comment = await Comment.findOne({ _id : req.body._id})
     comment.content = req.body.content
     comment.rating = req.body.rating
     await comment.save()
     res.json(comment)
+})
+
+router.delete(`/comments`, async(req,res) => {
+    let user = await User.findOne({ _id : req.query.USERID }).populate('comments')
+    let newcomments = user.comments.filter(comment => {
+        if(comment._id.toString() !== req.query.COMMENTID){
+            return comment
+        }
+    })
+    user.comments = [...newcomments]
+    await user.save()
+    try{
+        await Comment.deleteOne({ _id : req.query.COMMENTID })
+    }catch(err){
+        console.log(err)
+    }
+    res.json(user.comments)
 })
 module.exports = router

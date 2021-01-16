@@ -90,7 +90,6 @@ router
             const res = await cloudinary.uploader.upload(fileStr, {
                 upload_preset : 'ml_default',
             })
-            // console.log(res);
             newStore.picture.push(res.url);
         }catch(err){
             console.log(err)
