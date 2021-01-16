@@ -4,6 +4,7 @@ import Review from '../components/store/Review';
 
 async function StoreContainer () {
     const data = await fetchStoreData();
+    console.log('data: ', data)
     if (data !== "error"){
         const basicInfo = {
             storeName: data.storename,

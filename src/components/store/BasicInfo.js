@@ -29,6 +29,11 @@ const useStyles = makeStyles(theme => (
         }
     }
 ));
+
+function TogglePic() {
+    //const [ open, setOpen ] = useState(false)
+    return useState(false);
+}
 // Backdrop
 function BasicInfo (props) {
     const classes = useStyles();
@@ -36,19 +41,19 @@ function BasicInfo (props) {
         return (
             <div className={classes.menuGrid}>
                 {props.data.menus.map(menu => {
-                    const [ open, setOpen ] = useState(false);
+                    const [ open, setOpen ] = TogglePic();
                     return (
                         <>
                             <ButtonBase
                                 key={Date.now()}
                                 className={classes.imageContainer}
                                 style=""
-                                onClick={setOpen(true)}
+                                onClick={() => setOpen(true)}
                             >
                                 <span className={classes.image} style={{backgroundImage: `url(${menu})`}}/>
                                 <span className={classes.imageBackdrop}/>
                             </ButtonBase>
-                            <Backdrop className={classes.backdrop} open={open} onClick={setOpen(false)}>
+                            <Backdrop className={classes.backdrop} open={open} onClick={() => setOpen(false)}>
                                 <img src={menu}/>
                             </Backdrop>
                         </>
