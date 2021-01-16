@@ -37,10 +37,6 @@ const StoreSchema = new Schema({
         username : String,
         content : String,
         rating : Number,
-        // replies : [{
-        //     username : String,
-        //     content : String
-        // }]
     }],
 })
 
