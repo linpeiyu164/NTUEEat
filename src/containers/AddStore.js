@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { uploadStoreInfo } from '../routes';
+import { uploadStoreInfo } from '../routes/routes';
 import { TextField, MenuItem, FormLabel, Button, IconButton, makeStyles } from '@material-ui/core';
 import { regions, avgPrice, cuisines } from '../Constants';
 import { FreeBreakfastOutlined, RedeemRounded } from '@material-ui/icons';
@@ -24,12 +24,6 @@ class AddStore extends Component {
     handleChange = event => {
         if (event.target.files){
             const files = Array.from(event.target.files);
-            /*
-            for (let i=0; i< event.target.files.length; i++){
-                files.push(event.target.files.item(i));
-            }
-            */
-           
            files.forEach(file => {
                const reader = new FileReader();
                reader.readAsDataURL(file);
@@ -39,9 +33,7 @@ class AddStore extends Component {
                    }))
                }
            });
-           
-            //const urls = files.map(file => URL.createObjectURL(file));
-            //this.setState({urls: files});
+          
         }
         
     }
@@ -59,18 +51,6 @@ class AddStore extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const sendData = async () => {
-            // Parse img url
-            /*
-            const parsedImg = []
-            const imgFiles = this.state.urls;
-            imgFiles.forEach(file => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onloadend = () => {
-                    parsedImg.push(reader.result);
-                }
-            })
-            */
             const parsedData = { images: this.state.urls };
             for (let [key, value] of Object.entries(this.state)) {
                 switch(key){
@@ -93,6 +73,7 @@ class AddStore extends Component {
                         if (value) parsedData.highestPrice = value;
                         break;
                     case 'avg':
+
                         parsedData.avgPrice = value;
                         break;
                     case 'cuisine':
@@ -101,46 +82,15 @@ class AddStore extends Component {
                 }
 
             }
+            console.log("data: ", parsedData)
             const res = await uploadStoreInfo(JSON.stringify(parsedData));
+            console.log("res: ", res)
 
             // Redirection!!!!!!!!!!!!!!!!!!!!!!!!
-            if (res !== 'error') {
-                
-            }
-            alert('系統出了一點問題QAQ 拜託再試一次Orz');
-        }
-        // Validation
-        /*
-        const hintMessage = option => {
-            return `「${option}」是必填項目\n`
-        }
-        let message  = "";
-        for (let option of Object.keys(this.state)) {
-            console.log("option: ", option)
-            if (this.state[option] === null){
-                if (option === 'restaurant'){
-                    message += this.hintMessage("餐廳名稱")
-                } else if (option === 'dist') {
-                    message += this.hintMessage("區域")
-                } else if (option === 'address') {
-                    message += this.hintMessage("地址")
-                } else if (option === 'avg') {
-                    message += this.hintMessage("平均價位")
-                } else if (option === 'cuisine') {
-                    message += this.hintMessage("類別")
-                }
+            if (res == 'error') {
+                alert('系統出了一點問題QAQ 拜託再試一次Orz')
             }
         }
-        
-        
-        if (this.state.urls.length === 0) {
-            message += "至少上傳一張菜單圖片"
-            alert(message)
-            return
-        }   
-        */    
-        
-        // Send
         sendData();
     }
         

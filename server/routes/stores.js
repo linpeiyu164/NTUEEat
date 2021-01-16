@@ -90,13 +90,14 @@ router
             const res = await cloudinary.uploader.upload(fileStr, {
                 upload_preset : 'ml_default',
             })
-            // console.log(res);
+            console.log(res.url);
             newStore.picture.push(res.url);
         }catch(err){
             console.log(err)
             res.status(500).json({message : 'image failed to upload from server side'})
         }
     })
+    res.json(newStore)
     await newStore.save();  
     res.redirect('/');
 })

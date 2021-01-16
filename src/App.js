@@ -3,7 +3,7 @@ import './App.css';
 //import Main from './main/Main';
 //import Login from './main/Login.js/Login';
 import { useState } from 'react';
-//import AddStore from './containers/AddStore';
+import AddStore from './containers/AddStore';
 import { 
   BrowserRouter as Router,
   Switch,
@@ -20,7 +20,7 @@ function App() {
   }
 
   return (
-    <Store/>
+    <AddStore/>
   )
   /*
   return (
