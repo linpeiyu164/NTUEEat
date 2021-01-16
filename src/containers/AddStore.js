@@ -32,10 +32,8 @@ class AddStore extends Component {
                     urls: [...prev.urls, reader.result]
                    }))
                }
-           });
-          
+           }); 
         }
-        
     }
 
     handleValueChange = cap => {
@@ -51,7 +49,9 @@ class AddStore extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const sendData = async () => {
-            const parsedData = { images: this.state.urls };
+            const parsedData = { 
+                images: this.state.urls 
+            };
             for (let [key, value] of Object.entries(this.state)) {
                 switch(key){
                     case 'restaurant':
