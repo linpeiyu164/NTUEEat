@@ -18,7 +18,6 @@ const StoreSchema = new Schema({
     pricing : [{type : Number}], // [1, 0, 0] or [0, 1, 0] or [0, 0, 1]
     location : {
         type : String,
-        unique : true,
         required : true
     },
     address : {
