@@ -154,7 +154,6 @@ function Register(){
                                 ),
                             }}
                             onChange={handleUsername}
-                            // helperText={ usernameError ? `${usernameError}` : null }
                         />
                     </Grid>
                     <Grid item xs={8} className={classes.cardcontent}>
@@ -171,7 +170,6 @@ function Register(){
                             ),
                         }}
                         onChange={handlePassword}
-                        // helperText={ passwordError ? `${passwordError}` : null }
                     />
                     </Grid>
                     <Grid item xs={8} className={classes.cardcontent}>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Button, Grid, Typography, Card} from '@material-ui/core'
+import { Button, Grid, Typography, Card, Dialog} from '@material-ui/core'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
@@ -49,16 +49,17 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 
-function Random(){
+function Random({ CloseBackdrop }){
     const classes = useStyle()
     const [result, setResult] = useState(null)
-
     const getResult = async () => {
         const res = await instance.get('/stores/random')
-        console.log(res.data)
         setResult(res.data)
     }
-
+    const handleClose = () => {
+        CloseBackdrop()
+        setResult(null)
+    }
     return(
         <>
             <Grid container
@@ -66,8 +67,7 @@ function Random(){
                 direction="row"
                 className={classes.outergrid}
             >
-                <Card 
-                    alignItems="center"
+                <Card alignItems="center"
                     justify="center"
                     style={{backgroundColor: "#EBEBD3"}}
                     className={classes.card}
@@ -78,24 +78,16 @@ function Random(){
                     justify="center" 
                 >
                     <Grid item>
-                        <Typography
-                            className={classes.header}
-                            variant="h2"
-                        >今天吃什麼
-                        </Typography>
+                        <Typography className={classes.header} variant="h2">今天吃什麼</Typography>
                     </Grid>
-                    <Grid item >
+                    <Grid item>
                         {(result) ? (
                             <Card 
                                 alignItems="center"
                                 className={classes.innercard}
                             >
-                                <Typography variant="h5" 
-                                    style={{ display : "inline-block" }}
-                                    className={classes.text}
-                                >{result.storename}</Typography>
-                                <Link 
-                                    to={`/${result._id}`}
+                                <Typography variant="h5" style={{ display : "inline-block" }} className={classes.text}>{result.storename}</Typography>
+                                <Link to={`/${result._id}`}
                                     style={{paddingLeft: 13, 
                                         textDecoration: 'none', 
                                         display: "inline-block", 
@@ -108,8 +100,9 @@ function Random(){
                                         style={{ 
                                             backgroundColor : "#3C3C3B",
                                             color : "#FFFFFF"
-                                        }}
-                                    >吃！</Button>
+                                    }}>
+                                        吃！
+                                    </Button>
                                 </Link>
                             </Card>
                         ):null
@@ -121,16 +114,11 @@ function Random(){
                     >
                         <Button 
                             size="large"
-                            className={classes.buttonHelp}
-                            style={{ 
-                                backgroundColor : "#3C3C3B",
-                                color : "#FFFFFF",
-                            }}
-                            variant="contained"
                             onClick={getResult}
                         >
                             救救我！
                         </Button>
+                        <Button onClick={handleClose}>close</Button>
                     </Grid>
                 </Grid>
                 </Card>

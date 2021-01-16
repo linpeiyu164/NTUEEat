@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
+const mongooseFuzzySearching = require('mongoose-fuzzy-searching')
 
 const StoreSchema = new Schema({
     storename : {
@@ -40,6 +41,7 @@ const StoreSchema = new Schema({
     }],
     favorites : Number
 })
+StoreSchema.plugin(mongooseFuzzySearching, { fields: ['storename'] })
 
 const Store = mongoose.model('Store', StoreSchema);
 module.exports = Store

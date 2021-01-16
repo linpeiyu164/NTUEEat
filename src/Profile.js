@@ -1,6 +1,6 @@
-import { useState , useContext} from 'react'
+import { useState , useContext, useEffect} from 'react'
 import userContext from './userContext'
-import { AppBar, Tabs, Tab , Typography, Avatar, Card, CardContent, CardActionArea , Box,Button, IconButton, TextField} from '@material-ui/core'
+import { AppBar, Tabs, Tab , Typography, Avatar, Card, CardContent, Box,Button, IconButton, TextField, ButtonGroup} from '@material-ui/core'
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
@@ -9,8 +9,10 @@ import { Link } from 'react-router-dom'
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import axios from 'axios'
 import RateStar from './Ratestar'
-const instance = axios.create({ baseURL : "http://localhost:4000/users" })
 import DeleteIcon from '@material-ui/icons/Delete';
+
+const instance = axios.create({ baseURL : "http://localhost:4000/users" })
+
 const useStyle = makeStyles(theme => ({
     AppBar : {
         paddingTop : theme.spacing(6),
@@ -97,28 +99,33 @@ function User() {
     let [editComment, setEditComment] = useState()
     let [updatedContent, setUpdatedContent] = useState()
     let [updatedStar, setUpdatedStar] = useState()
-
+    useEffect(() => {
+      getFavorites()
+    },[])
     const handleChange = (event, newValue) => {
       setSelectedTab(newValue);
     };
-
     const getComments = async () => {
+      // returns entire user with comments populated
       const {data} = await instance.get(`/comments/${user._id}`)
-      setComments([...data.comments])
+      setComments([...data])
     }
     const getFavorites = async () => {
+      // returns entire user with favorites populated
       const {data} = await instance.get(`/favorites/${user._id}`)
-      setFavorites([...data.favorites])
+      setFavorites([...data])
     }
     const handleRemoveFavorite = async (e) => {
+      // returns entire user with favorites populated
       const {data} = await instance.delete(`/favorite?USERID=${user._id}&STOREID=${e.target.id}`)
-      setFavorites([...data.favorites])
+      setFavorites([...data])
     }
-    const handleEditComment = (e) => {
+    const handleEditComment = async (e) => {
       setEditComment(e.target.id)
     }
-    const handleDeleteComment = (e) => {
-      // delete comment from database
+    const handleDeleteComment = async (e) => {
+      const {data} = await instance.delete(`/comments?USERID=${user._id}&COMMENTID=${e.target.id}`)
+      setComments([...data])
     }
     const handleSubmit = async () => {
       // renew the comment
@@ -151,7 +158,8 @@ function User() {
             indicatorColor="secondary"
             style={{ background : "#D4E6F1", color : "#000000" }}
             position="static">
-            <Avatar className={classes.Avatar}>P</Avatar>
+            {/* <Avatar className={classes.Avatar}>P</Avatar> */}
+            <Link to='/' style={{ textDecoration : "none" }}><Button>HomePage</Button></Link>
             <Typography className={classes.username} variant="h3" style={{color : "#000000"}}>{user.username}</Typography>
             <Tabs value={selectedTab} onChange={handleChange}>
                 <Tab className={classes.Tab} value={0} label="Favorites" onClick={getFavorites}/>
@@ -199,12 +207,16 @@ function User() {
                     <CardContent>
                       <Box className={classes.box1}>
                       <Typography variant="body1">{comment.storename}</Typography>
-                      <Typography style={{ display : 'inline-block'}} variant="body2">{`Rating : ${comment.rating}`}</Typography>
-                      <IconButton onClick={(e) => {handleEditComment(e)}}><EditIcon id={comment._id}></EditIcon></IconButton>
-                      <IconButton onClick={(e) => {handleDeleteComment(e)}}><DeleteIcon id={comment._id}></DeleteIcon></IconButton>
+                      <Typography style={{ display : 'inline-block'}} variant="body2">{`rating : ${comment.rating}`}</Typography>
                       </Box>
                       <Box className={classes.box2}>
                       <Typography style={{ display : 'block'}} variant="body2">{comment.content}</Typography>
+                      </Box>
+                      <Box className={classes.box1}>
+                        <ButtonGroup>
+                        <IconButton onClick={(e) => {handleEditComment(e)}}><EditIcon id={comment._id}></EditIcon></IconButton>
+                        <IconButton onClick={(e) => {handleDeleteComment(e)}}><DeleteIcon id={comment._id}></DeleteIcon></IconButton>
+                        </ButtonGroup>
                       </Box>
                     </CardContent>
                   </Card>
@@ -212,7 +224,6 @@ function User() {
               })
             ) : null}
         </MuiThemeProvider>
-        
     )
 }
 export default User;
