@@ -1,8 +1,8 @@
-import { fetchStoreData } from '../routes'
+import { fetchStoreData } from '../routes/routes'
 import BasicInfo from '../components/store/BasicInfo';
 import Review from '../components/store/Review';
 
-function StoreContainer () {
+async function StoreContainer () {
     const data = await fetchStoreData();
     if (data !== "error"){
         const basicInfo = {

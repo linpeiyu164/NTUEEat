@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+## `Backend`
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### `ImageForm`
+這個是我之前在測後端的時候做的前端～
 
-## Available Scripts
+改一改應該就可以跟後端連接ㄌ
+* 前端傳照片給後端：轉成base64才傳給後端
+* 後端傳照片給前端：上傳之後存下url，所以前端顯示的時候只需要秀出url就可以ㄌ
 
-In the project directory, you can run:
+### `yarn server`
+***我把前後端分開了喔喔喔
+要跑server要進去server資料夾喔～***
+### `.env 裡面需要加上`
+* MONGO_URL=
+* CLOUD_NAME=
+* CLOUD_API_KEY=
+* CLOUD_API_SECRET=
+### `model`
+* Store.js
 
-### `yarn start`
+    價位的儲存方法是
+    
+    第一等級：[1, 0, 0]
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    第二等級：[0, 1, 0]
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+    第三等級：[0, 0, 1]
 
-### `yarn test`
+* User.js
+### `core`
++ functions.js
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    我把價位的計算方式改成利用最高和最低的平均來估計價位，因為感覺有的店家會有小菜就超便宜，但是不代表這家店真的很便宜？可以再討論～
 
-### `yarn build`
+### `routes`
++ stores.js
+    
+    ***comments部分改去index.js裡面做（利用websocket)***
++ users.js
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## `FrontEnd`
++ Map.css 
++ StoreMap.js
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    單一店家右側的地圖，目前只會顯示該店家的
+    1. location : 地址
+    2. coordinates : [longtitude, latitude]
+    3. storename : 店家名稱
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    都是當作props傳進去。
+    目前測試傳進去固定的東西是成功的，變動的props沒有測試過。
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    + 然後用CircleMarker是因為Marker不能用，可能是因為他剛剛更新版本，有些東西爛掉ㄌ

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { List, ListItem, ListItemIcon, ListItemText, GridList, GridListTile, Backdrop, ButtonBase, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { RestaurantIcon, RoomIcon, PhoneIcon } from '@material-ui/icons';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import PhoneIcon from '@material-ui/icons/Phone';
+import RoomIcon from '@material-ui/icons/Room';
 
 const useStyles = makeStyles(theme => (
     {
@@ -40,13 +42,13 @@ function BasicInfo (props) {
                             <ButtonBase
                                 key={Date.now()}
                                 className={classes.imageContainer}
-                                style={}
-                                onClick={() => setOpen(true)}
+                                style=""
+                                onClick={setOpen(true)}
                             >
                                 <span className={classes.image} style={{backgroundImage: `url(${menu})`}}/>
                                 <span className={classes.imageBackdrop}/>
                             </ButtonBase>
-                            <Backdrop className={classes.backdrop} open={open} onClick={() => setOpen(false)}>
+                            <Backdrop className={classes.backdrop} open={open} onClick={setOpen(false)}>
                                 <img src={menu}/>
                             </Backdrop>
                         </>

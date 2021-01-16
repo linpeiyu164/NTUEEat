@@ -1,11 +1,24 @@
-import { useState, useEffect } from 'react';
-import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { SendIcon, StarIcon, StarBorderIcon, FavoriteIcon, FavoriteBorderIcon } from '@material-ui/icons';
+import SendIcon from '@material-ui/icons/Send';
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
-const useStyles = makeStyles();
+const useStyles = makeStyles((theme) => ({
+    commentList: {
+        overflow: 'scroll'
+    },
+    inlineStar: {
+        display: 'inline'
+    }
+}));
 function Review (props) {
-    function StarHeartBar (props) {
+    const classes = useStyles();
+    const { rating, comments } = props.data;
+    function StarHeartBar () {
         return (
             <div>
                 <div className="stars"></div>
@@ -24,7 +37,7 @@ function Review (props) {
         }
         return (
             <div>
-                <Avatar src={}/>
+                <Avatar src=""/>
                 <TextField onChange={this.handleChange}/>
                 <IconButton onClick={this.handleClick}>
                     <SendIcon />
@@ -32,14 +45,34 @@ function Review (props) {
             </div>
         )
     }
-
-    function Comments (props) {
+    // remain: avatar
+    function Comments () {
         return (
-            <div>
-                <List >
-
-                </List>
-            </div>
+            <List className={classes.commentList}>
+                {comments.map(comment => (
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar src=""/>
+                                <ListItemText 
+                                    primary={comment.username}
+                                    secondary={
+                                        <React.Fragment>
+                                            <Typography
+                                                component="span"
+                                                className={classes.inlineStar}
+                                                color="textPrimary"
+                                            >
+                                                {comment.rating}<StarIcon/>
+                                            </Typography>
+                                            {comment.content}
+                                        </React.Fragment>
+                                    }
+                                />
+                            </ListItemAvatar>
+                        </ListItem>
+                    )
+                )}
+            </List>
         )
         
     }
