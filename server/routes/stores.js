@@ -70,35 +70,55 @@ router
     // text information
     // console.log(req.body)
     let checked = checkPrice(req.body.lowestPrice, req.body.highestPrice)
-    console.log(checked);
-    let newStore = new Store({
-        storename : req.body.storename,
-        phone : req.body.phone,
-        picture : [] ,
-        type : req.body.type,
-        location : req.body.location,
-        address : req.body.address,
-        lowestPrice : req.body.lowestPrice,
-        highestPrice : req.body.highestPrice,
-        comments : [],
-        pricing : checked
-    })
-    // image uploading
-    const fileStrArray = req.body.images;
-    fileStrArray.forEach(async fileStr => {
-        try{
-            const res = await cloudinary.uploader.upload(fileStr, {
-                upload_preset : 'ml_default',
-            })
-            newStore.picture.push(res.url);
-            await newStore.save()
-        }catch(err){
-            console.log(err)
-            res.status(500).json({message : 'image failed to upload from server side'})
+    const stores = await Store.find();
+    let error = false;
+    stores.forEach( store => {
+        if(store.storename === req.body.storename){
+            error = true
+            res.json({ error : "another restaurant with the same name already exists"})
+        }
+        else if(store.phone === req.body.phone ){
+            error = true
+            res.json({ error : "another restaurant with the same phone number already exists"})
+        }else if(store.address === req.store.address){
+            error = true
+            res.json({ error : "another restaurant with the same phone number already exists"})
+        }else if(typeof req.body.lowestPrice !== "number"){
+            res.json({ error : "the lowestPrice you entered is not a number" })
+        }else if(typeof req.body.highestPrice){
+            res.json({ error : "the highestPrice you entered is not a number" })
         }
     })
-    await newStore.save();  
-    res.status(200)
+    if(!error){
+        let newStore = new Store({
+            storename : req.body.storename,
+            phone : req.body.phone,
+            picture : [] ,
+            type : req.body.type,
+            location : req.body.location,
+            address : req.body.address,
+            lowestPrice : req.body.lowestPrice,
+            highestPrice : req.body.highestPrice,
+            comments : [],
+            pricing : checked
+        })
+        // image uploading
+        const fileStrArray = req.body.images;
+        fileStrArray.forEach(async fileStr => {
+            try{
+                const res = await cloudinary.uploader.upload(fileStr, {
+                    upload_preset : 'ml_default',
+                })
+                newStore.picture.push(res.url);
+                await newStore.save()
+            }catch(err){
+                console.log(err)
+                res.status(500).json({message : 'image failed to upload from server side'})
+            }
+        })
+        await newStore.save();  
+        res.status(200)
+    }
 })
 
 
