@@ -17,7 +17,7 @@ function App() {
     <>
       <Router>
         <userContext.Provider value={{user, setUser}}>
-            {/* <Mainbar /> */}
+            <Mainbar />
             <Route exact path="/">
               {/* <Navbar /> */}
             

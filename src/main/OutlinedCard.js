@@ -34,8 +34,8 @@ export default function OutlinedCard(props) {
   // }else if(props.pricing[2]==1){
   //   setPriceTag("$$$")
   // }
-  console.log(props)
-  console.log(props.props.storename);
+  // console.log(props)
+  // console.log(props.props.storename);
     return (
     <Card className={classes.root} variant="outlined" >
       
@@ -45,7 +45,7 @@ export default function OutlinedCard(props) {
         <Grid container>
           <Grid item>
             <Typography variant="h5" component="h2">
-              {props.props.storename}
+              {props.data.storename}
             </Typography>
           </Grid>
           <Grid item>
@@ -54,7 +54,7 @@ export default function OutlinedCard(props) {
           </IconButton>
           </Grid>
           <Grid item>
-          {props.rating? <div><StarIcon /><h5>{props.props.rating} </h5></div>:<div><StarIcon /><h5>0</h5></div>}
+          {props.rating? <div><StarIcon /><h5>{props.data.rating} </h5></div>:<div><StarIcon /><h5>0</h5></div>}
           </Grid>
 
         </Grid>

@@ -3,7 +3,7 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import AppBar from '@material-ui/core/AppBar';
-import React, {useState , useContext} from "react";
+import React, {useState , useContext,useEffect} from "react";
 import Toolbar from '@material-ui/core/Toolbar';
 import Random from './Random'
 import {Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper, Box, Typography} from '@material-ui/core';
@@ -58,22 +58,22 @@ const useStyles = makeStyles((theme)=>({
     },
 }))
 
-export default function Navbar(){
+export default function Navbar(props){
     let {user} = useContext(userContext)
     const classes=useStyles();
-    const[location,setLocal]=useState("");
-    const[price,setPrice]=useState("");
-    const[prefer,setPrefer]=useState("");
+    // const[location,setLocal]=useState("");
+    // const[price,setPrice]=useState("");
+    // const[prefer,setPrefer]=useState("");
     const[open, setOpen] = useState(false)
     const[search, setSearch] = useState('')
     const handleChangelocal=e=>{
-        setLocal(e.target.value)
+        props.Local(e.target.value)
     };
     const handleChangeprice=e=>{
-        setPrice(e.target.value)
+        props.Price(e.target.value)
     };
     const handleChangeprefer=e=>{
-        setPrefer(e.target.value)
+        props.Prefer(e.target.value)
     };
     const handleClose = () => {
         setOpen(false)
@@ -84,6 +84,13 @@ export default function Navbar(){
     const handleSearch = async () => {
         const {data} = await instance.post(`/search/?QUERY=${search}`)
     }
+    // useEffect(async ()=>{
+        
+    //     console.log(Local);
+    //     sole.log(Local);
+    //   },[])
+    
+    
     return(
         <Grid container>
             <Paper className={classes.paper}>
@@ -99,10 +106,10 @@ export default function Navbar(){
                         labeled="select-location"
                         id="location-select"
                         displayEmpty
-                        value={location}
+                        // value={location}
                         onChange={handleChangelocal}
                         >
-                            <MenuItem value="">Empty</MenuItem>
+                            {/* <MenuItem value="">Empty</MenuItem> */}
                             <MenuItem value={"118"}>118</MenuItem>
                             <MenuItem value={"公館"}>公館</MenuItem>
                         </Select>
@@ -115,10 +122,10 @@ export default function Navbar(){
                         labeled="select-price"
                         id="price-select"
                         displayEmpty
-                        value={price}
+                        // value={price}
                         onChange={handleChangeprice}
                         >
-                            <MenuItem value={""}>Empty</MenuItem>
+                            {/* <MenuItem value={""}>Empty</MenuItem> */}
                             <MenuItem value={"$"}>$</MenuItem>
                             <MenuItem value={"$$"}>$$</MenuItem>
                             <MenuItem value={"$$$"}>$$$</MenuItem>
@@ -132,10 +139,10 @@ export default function Navbar(){
                         labeled="select-prefer"
                         id="prefer-select"
                         displayEmpty
-                        value={prefer}
+                        // value={prefer}
                         onChange={handleChangeprefer}
                         >
-                            <MenuItem value={""}>Empty</MenuItem>
+                            {/* <MenuItem value={""}>Empty</MenuItem> */}
                             <MenuItem value={"韓式"} >韓式</MenuItem>
                             <MenuItem value={"壽司"}>壽司</MenuItem>
                             <MenuItem value={"牛肉麵"}>牛肉麵</MenuItem>
@@ -144,6 +151,9 @@ export default function Navbar(){
                             <MenuItem value={"義大利麵"}>義大利麵</MenuItem>
                         </Select>
                         </FormControl>
+                    </Grid>
+                    <Grid item>
+                        <Button onClick={props.submit}>Submit</Button>
                     </Grid>
                 </Grid>
                 </Box>

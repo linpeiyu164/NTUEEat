@@ -22,25 +22,15 @@ const useStyles = makeStyles((theme)=>({
       fontSize: 14,
     },  
   }));
-  const instance = axios.create({baseURL : "http://localhost:4000/stores"});
-export default function StoreList(){
+  
+export default function StoreList(props){
     const classes = useStyles();
     const [content,setContents]=useState("") 
 
-    // async function FindStore(){
-    //     const get=await instance.get("/")
-    //     try{setContents(get.data)}
-    //     catch{
-    //       console.log("error")
-    //     }
-    // }
-    // const content=fetchStoreData
-    // let [content,setac;
     useEffect(async ()=>{
-      const {data} = await instance.get("/");
-      setContents(data);
+      setContents(props.data);
     },[])
-    console.log("List",content)
+    // console.log("List",content)
 
     return( 
         <>
@@ -54,7 +44,7 @@ export default function StoreList(){
           {content?
           content.map(item=>
           <>
-          <OutlinedCard props={item} key={item._id}/>
+          <OutlinedCard data={item} key={item._id}/>
           </>
           )
           :

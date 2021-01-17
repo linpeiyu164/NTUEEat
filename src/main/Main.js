@@ -8,18 +8,54 @@ import {
   Route,
   Link
 } from 'react-router-dom'  
+import { useState ,useEffect } from 'react'
 
+import axios from "axios"
+const instance = axios.create({baseURL : "http://localhost:4000/stores"});
 export default function Main() {
-    return (
-        <div className="main">
-          
-          {/* <h1>hello</h1> */}
+  // const Select=""
+  const [content,setContents]=useState("") 
+  // const [Select,setSelect]=useState("")
+  const[location,setLocal]=useState("");
+  const[price,setPrice]=useState("");
+  const[prefer,setPrefer]=useState("");
+  //Select={location,price,prefer}
 
-          <div className="stores">
-            <StoreList className="storeList"/>
-          </div>
+ 
 
+  const handleSetLocal = (e) => {
+    setLocal(e)
+  }
+  const handleSetPrice = (e) => {
+    setPrice(e)
+  }
+  const handleSetPrefer = (e) => {
+    setPrefer(e)
+  }
+  useEffect(async ()=>{
+    const {data} = await instance.get("/");
+    setContents(data);
+    // console.log(location,price,prefer)
+  },[])
+
+  const Submit=async(e)=>{
+    const {data} = await instance.post("/",{
+      pricing:price,
+      location:location,
+      preferences:prefer
+    });
+    setContents(data);
+  }
+  
+  return (
+      <div className="main">
+      
+        <Navbar Local={handleSetLocal} Price={handleSetPrice} Prefer={handleSetPrefer} submit={Submit}/>
+        <div className="stores">
+          <StoreList className="storeList" data={content}/>
         </div>
-        
-      );
+
+      </div>
+      
+    );
 }
