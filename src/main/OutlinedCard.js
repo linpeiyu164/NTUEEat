@@ -29,13 +29,13 @@ let c = 0;
 export default function OutlinedCard(props) {
   const classes = useStyles();
   let {user} = useContext(userContext)
-  console.log(user);
+  console.log("user",user);
   const[check,setCheck]=useState(false)
   
   const Favorite=async()=>{
   console.log(props.data)
   if(user){
-    const {data}= await instance.post("/users/favorite",{userID:user._id,storeID:props.data.store_id})
+    const {data}= await instance.post("/users/favorite",{userID:user._id,storeID:props.data._id})
   }else{
     console.log("Login ,please");
   }
@@ -44,7 +44,7 @@ export default function OutlinedCard(props) {
   const UnFavorite=async()=>{
     console.log(props.data)
     if(user){
-    const {data}= await instance.delete(`/users/favorite?USERID=${user._id}&STOREID=${props.data.store_id}`)
+    const {data}= await instance.delete(`/users/favorite?USERID=${user._id}&STOREID=${props.data._id}`)
     }else{
       console.log("Login ,please");
     }
@@ -67,11 +67,11 @@ export default function OutlinedCard(props) {
               {props.data.storename}
             </Typography>
           </Grid>
-          <Grid item>
-              <IconButton aria-label="add to favorites" onClick={()=>{
+          <Grid item onClick={()=>{
                 setCheck(!check);
                 c=1;
-                }} disabled={!user}>
+                }}>
+              <IconButton aria-label="add to favorites" disabled={!user}>
                 {check?
                 <FavoriteIcon color='error'/>:
                 <FavoriteIcon />}
