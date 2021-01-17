@@ -161,7 +161,6 @@ router
                     res.status(500).json({message : 'image failed to upload from server side'})
                 }
             })
-            await newStore.save();  
             res.status(200)
         }catch(err){
             res.status(400)

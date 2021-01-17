@@ -20,11 +20,9 @@ function App() {
             <Mainbar />
             <Route exact path="/">
               {/* <Navbar /> */}
-            
               <Main  />
             </Route>
             <Route path="/login" exact component={Register} />
-            
             <Route path="/random" exact component={Random} />
             <Route path="/profile" exact component={Profile} />
             <Route path="/addstore" exact component={AddStore} />
