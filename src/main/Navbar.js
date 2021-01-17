@@ -1,22 +1,18 @@
+import axios from 'axios'
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import AppBar from '@material-ui/core/AppBar';
-import React ,{ useState }from "react";
+import React, {useState , useContext,useEffect} from "react";
 import Toolbar from '@material-ui/core/Toolbar';
 import Random from './Random'
-import { Backdrop, FormControl, InputLabel, makeStyles, TextField} from '@material-ui/core';
-import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
+import {Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper, Box, Typography} from '@material-ui/core';
 import './Navbar.css';
-//import instance from "../routes"
-import { 
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from 'react-router-dom'  
+import userContext from '../userContext'
 
-const useStyles=makeStyles((theme)=>({
+const instance = axios.create({ baseURL : "http://localhost:4000/stores" })
+
+const useStyles = makeStyles((theme)=>({
     root: {
         flexGrow: 1,
         position: 'fixed',
@@ -37,8 +33,8 @@ const useStyles=makeStyles((theme)=>({
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
     },
-    Button:{
-        margin:theme.spacing(2),
+    button:{
+        marginLeft : theme.spacing(2),
         alignSelf: 'flex',
     },
     Avatar:{
@@ -48,23 +44,36 @@ const useStyles=makeStyles((theme)=>({
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
     },
+    paper : {
+        marginTop : theme.spacing(16),
+        marginRight : theme.spacing(2),
+        marginLeft : theme.spacing(2),
+        padding : theme.spacing(2)
+    },
+    box2 : {
+        margin : theme.spacing(2),
+        backgroundColor: "#D4E6F1",
+        borderRadius:20,
+        padding : theme.spacing(2)
+    },
 }))
 
-export default function Navbar(){
+export default function Navbar(props){
+    let {user} = useContext(userContext)
     const classes=useStyles();
-    const[location,setLocal]=useState("");
-    const[price,setPrice]=useState("");
-    const[prefer,setPrefer]=useState("");
+    // const[location,setLocal]=useState("");
+    // const[price,setPrice]=useState("");
+    // const[prefer,setPrefer]=useState("");
     const[open, setOpen] = useState(false)
     const[search, setSearch] = useState('')
     const handleChangelocal=e=>{
-        setLocal(e.target.value)
+        props.Local(e.target.value)
     };
     const handleChangeprice=e=>{
-        setPrice(e.target.value)
+        props.Price(e.target.value)
     };
     const handleChangeprefer=e=>{
-        setPrefer(e.target.value)
+        props.Prefer(e.target.value)
     };
     const handleClose = () => {
         setOpen(false)
@@ -72,55 +81,68 @@ export default function Navbar(){
     const handleSetSearch = (e) => {
         setSearch(e.target.value)
     }
-    const handleSearch = () => {
+    const handleSearch = async () => {
+        const {data} = await instance.post(`/search/?QUERY=${search}`)
     }
+    // useEffect(async ()=>{
+        
+    //     console.log(Local);
+    //     sole.log(Local);
+    //   },[])
+    
+    
     return(
-        <div className={classes.root}>
-            <AppBar position="fixed" color="transparent">
-                <Toolbar>
-                    <Link className="navbar-brand" to="/">
-                        <img src="../logo.svg"/>
-                    </Link>
-                <span >
-                    <FormControl className={classes.FormControl}>
+        <Grid container>
+            <Paper className={classes.paper}>
+                {/* <Link className="navbar-brand" to="/">
+                    <img src={foodIcon}/>
+                </Link> */}
+                <Box className={classes.box2}>
+                <Grid item container>
+                    <Grid item xs={4}>
+                        <FormControl className={classes.FormControl}>
                         <InputLabel>location</InputLabel>
                         <Select className="select"
                         labeled="select-location"
                         id="location-select"
                         displayEmpty
-                        value={location}
+                        // value={location}
                         onChange={handleChangelocal}
                         >
-                            <MenuItem value="">Empty</MenuItem>
+                            {/* <MenuItem value="">Empty</MenuItem> */}
                             <MenuItem value={"118"}>118</MenuItem>
                             <MenuItem value={"公館"}>公館</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl className={classes.FormControl} >
+                    </Grid>
+                    <Grid item xs={4}>
+                        <FormControl className={classes.FormControl} >
                         <InputLabel>Price</InputLabel>
                         <Select className="select"
                         labeled="select-price"
                         id="price-select"
                         displayEmpty
-                        value={price}
+                        // value={price}
                         onChange={handleChangeprice}
                         >
-                            <MenuItem value={""}>Empty</MenuItem>
+                            {/* <MenuItem value={""}>Empty</MenuItem> */}
                             <MenuItem value={"$"}>$</MenuItem>
                             <MenuItem value={"$$"}>$$</MenuItem>
                             <MenuItem value={"$$$"}>$$$</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl className={classes.FormControl} >
+                    </Grid>
+                    <Grid item xs={4}>
+                        <FormControl className={classes.FormControl} >
                         <InputLabel>Preference</InputLabel>
                         <Select className="select"
                         labeled="select-prefer"
                         id="prefer-select"
                         displayEmpty
-                        value={prefer}
+                        // value={prefer}
                         onChange={handleChangeprefer}
                         >
-                            <MenuItem value={""}>Empty</MenuItem>
+                            {/* <MenuItem value={""}>Empty</MenuItem> */}
                             <MenuItem value={"韓式"} >韓式</MenuItem>
                             <MenuItem value={"壽司"}>壽司</MenuItem>
                             <MenuItem value={"牛肉麵"}>牛肉麵</MenuItem>
@@ -128,22 +150,24 @@ export default function Navbar(){
                             <MenuItem value={"咖哩"}>咖哩</MenuItem>
                             <MenuItem value={"義大利麵"}>義大利麵</MenuItem>
                         </Select>
-                    </FormControl>
-                </span>
-                <Button className={classes.Button} variant="outlined" color="default" size="large" onClick={() => setOpen(prev => !prev)}>Random</Button>
-                <Button className={classes.Button} variant="outlined" color="default" size="large">Signup</Button>
-                <Link to="/login" style={{ textDecoration : "none"}}><Button className={classes.Button} variant="outlined" color="default" size="large">Login</Button></Link>
-                <Link to="/profile" style={{ textDecoration : "none"}}><Button className={classes.Button} variant="outlined" color="default" size="large">Profile</Button></Link>
-                </Toolbar>
-                <div>
-                <TextField value={search} onChange={(e) => handleSetSearch(e)}></TextField>
-                <Button onClick={handleSearch}>Search</Button>
-                </div>
-            </AppBar>
+                        </FormControl>
+                    </Grid>
+                    <Grid item>
+                        <Button onClick={props.submit}>Submit</Button>
+                    </Grid>
+                </Grid>
+                </Box>
+                    <Grid item xs={4}>
+                        <Box className={classes.box2}>
+                            <TextField value={search} variant="outlined" label="Restaurant name" onChange={(e) => handleSetSearch(e)}></TextField>
+                            <Button className={classes.button} onClick={handleSearch}>Search</Button>
+                        </Box>
+                    </Grid>
+            </Paper>
             <Backdrop open={open} className={classes.backdrop}>
                 <Random CloseBackdrop={handleClose}/>
             </Backdrop>
-        </div>
+        </Grid>
        
     )
 }

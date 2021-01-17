@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import AddStore from './main/addStore';
-// import {Link} from 'react-router';
 
 ReactDOM.render(
   <React.StrictMode>

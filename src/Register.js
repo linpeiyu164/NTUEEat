@@ -19,7 +19,7 @@ const useStyle = makeStyles( theme => ({
         minWidth: 275,
     },
     paper : {
-        margin : theme.spacing(2),
+        margin : theme.spacing(20),
         padding : theme.spacing(4),
         maxWidth : 'lg',
         minWidth: 'xs'
@@ -36,8 +36,8 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 function Register(){
-    let {user, setUser} = useContext(userContext)
     const classes = useStyle()
+    let {user, setUser} = useContext(userContext)
     let [username , setUsername] = useState('');
     let [password, setPassword] = useState('');
     let [usernameError, setUsernameError] = useState(null);

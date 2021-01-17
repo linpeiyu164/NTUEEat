@@ -14,7 +14,7 @@ const styles = theme => ({
     },
     paper : {
         padding : theme.spacing(4),
-        margin : theme.spacing(2)
+        marginTop : theme.spacing(15)
     },
     paper2 : {
         padding : theme.spacing(2),
@@ -208,7 +208,7 @@ class AddStore extends Component {
                 autoHideDuration={2000} 
                 action={
                     <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleSnackbarClose} >
-                        <HighlightOffIcon fontSize="small" />
+                        <HighlightOffIcon fontSize="small"/>
                     </IconButton>
                 }
             >
@@ -216,7 +216,7 @@ class AddStore extends Component {
                 {(this.state.error) ? `${this.state.errormessage}` : null}
                 </Alert>
             </Snackbar>
-            </Paper>): <Redirect to="/" />
+            </Paper>) : <Redirect to="/" />
             }
             </>
         )
