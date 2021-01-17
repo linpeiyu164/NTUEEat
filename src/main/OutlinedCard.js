@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -13,6 +13,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarHalfIcon from '@material-ui/icons/StarHalf';
 import { produceWithPatches } from 'immer';
 import axios from "axios"
+import userContext from '../userContext'
 const instance = axios.create({baseURL : "http://localhost:4000/stores"});
 
 const useStyles = makeStyles(theme => ({
@@ -31,8 +32,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function OutlinedCard(props) {
   const classes = useStyles();
+  let {user} = useContext(userContext)
   const Favorite=()=>{
-    
+    const {data}=instance.post("/favorites",{userID:user._id,storeID:props.data.store_id})
   }
   
     return (
