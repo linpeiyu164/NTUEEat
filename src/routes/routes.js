@@ -5,18 +5,22 @@ const instance = axios.create({baseURL : "http://localhost:4000"});
 // AddStore
 const uploadStoreInfo = async (encodedFiles) => {
     let response;
-    console.log(encodedFiles);
     await instance.post('/stores/addstore', 
         encodedFiles,
         { headers : {'Content-Type' : 'application/json'} }
     )
     .then(res => {
-        console.log(res)
-        response = res
+        console.log(res.data)
+        if(res.data){
+            response = res.data.error
+            console.log(response)
+        }else{
+            response = 'success'
+        }
     })
     .catch(err => {
-        console.log("error: ", err)
-        response = 'error'
+        console.error('Error : ', err)
+        response='error'
     });
     return response;
 }
@@ -28,14 +32,17 @@ const fetchStoreData = async (storeId) => {
     .then(res => {
         response = res.data;
     })
-    .catch(err => { response = "error" })
+    .catch(err => { 
+        console.error('Error : ',err)
+        response = "error" 
+    })
     return response;
 }
 
 // Comment
-const sendComment = async (data) => {
-    let response;
-    instance.post()
-}
+// const sendComment = async (data) => {
+//     let response;
+//     instance.post()
+// }
 
 export { uploadStoreInfo, fetchStoreData };

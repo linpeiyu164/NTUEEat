@@ -26,6 +26,7 @@ function calculateAverageRating(store){
     return avg;
 }
 
+<<<<<<< HEAD
 const getRandom = async (Store) => {
     const total = await Store.countDocuments();
     let random = Math.floor(Math.random() * total)
@@ -35,3 +36,27 @@ const getRandom = async (Store) => {
  module.exports.checkPrice = checkPrice;
  module.exports.calculateAverageRating = calculateAverageRating;
  module.exports.getRandom = getRandom;
+=======
+const checkInput = (stores, req) => {
+    for(let i = 0; i < stores.length; i++){
+        if(stores[i].storename === req.body.storename){
+            return { Error : "Another restaurant with the same name already exists"}
+        }
+        else if(stores[i].phone === req.body.phone){
+            return { Error : "Another restaurant with the same phone number already exists"}
+        }else if(stores[i].address === req.body.address){
+            return { Error : "Another restaurant with the same address already exists"}
+        }else if(isNaN(parseInt(req.body.lowestPrice, 10))){
+            return { Error : "The lowest price you entered is not a number" }
+        }else if(isNaN(parseInt(req.body.highestPrice, 10))){
+            return { Error : "The highest price you entered is not a number" }
+        }else{
+            return { Error : null }
+        }
+    }
+}
+
+ module.exports.checkPrice = checkPrice;
+ module.exports.calculateAverageRating = calculateAverageRating;
+ module.exports.checkInput = checkInput;
+>>>>>>> 413d6edb872779ba1bcb1086d7dfc3a52e4fbe94

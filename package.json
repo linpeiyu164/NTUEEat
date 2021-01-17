@@ -9,8 +9,12 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+<<<<<<< HEAD
     "axios": "^0.21.0",
     "cookie-parser": "^1.4.5",
+=======
+    "axios": "^0.21.1",
+>>>>>>> 413d6edb872779ba1bcb1086d7dfc3a52e4fbe94
     "leaflet": "^1.7.1",
     "mongoose": "^5.11.12",
     "mongoose-fuzzy-searching": "^2.0.2",
