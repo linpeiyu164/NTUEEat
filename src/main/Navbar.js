@@ -1,3 +1,4 @@
+import axios from 'axios'
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -5,20 +6,11 @@ import AppBar from '@material-ui/core/AppBar';
 import React, {useState , useContext} from "react";
 import Toolbar from '@material-ui/core/Toolbar';
 import Random from './Random'
-import { IconButton, Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper} from '@material-ui/core';
-import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
-import FaceIcon from '@material-ui/icons/Face';
+import {Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper, Box, Typography} from '@material-ui/core';
 import './Navbar.css';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import userContext from '../userContext'
-import foodIcon from '../Image/foodicon.png'
-// import instance from "../routes"
-import { 
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from 'react-router-dom'  
+
+const instance = axios.create({ baseURL : "http://localhost:4000/stores" })
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -41,8 +33,8 @@ const useStyles = makeStyles((theme)=>({
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
     },
-    Button:{
-        margin:theme.spacing(2),
+    button:{
+        marginLeft : theme.spacing(2),
         alignSelf: 'flex',
     },
     Avatar:{
@@ -53,8 +45,17 @@ const useStyles = makeStyles((theme)=>({
         color: '#fff',
     },
     paper : {
-        marginTop : theme.spacing(16)
-    }
+        marginTop : theme.spacing(16),
+        marginRight : theme.spacing(2),
+        marginLeft : theme.spacing(2),
+        padding : theme.spacing(2)
+    },
+    box2 : {
+        margin : theme.spacing(2),
+        backgroundColor: "#D4E6F1",
+        borderRadius:20,
+        padding : theme.spacing(2)
+    },
 }))
 
 export default function Navbar(){
@@ -80,14 +81,16 @@ export default function Navbar(){
     const handleSetSearch = (e) => {
         setSearch(e.target.value)
     }
-    const handleSearch = () => {
+    const handleSearch = async () => {
+        const {data} = await instance.post(`/search/?QUERY=${search}`)
     }
     return(
         <Grid container>
             <Paper className={classes.paper}>
-                    {/* <Link className="navbar-brand" to="/">
-                        <img src={foodIcon}/>
-                    </Link> */}
+                {/* <Link className="navbar-brand" to="/">
+                    <img src={foodIcon}/>
+                </Link> */}
+                <Box className={classes.box2}>
                 <Grid item container>
                     <Grid item xs={4}>
                         <FormControl className={classes.FormControl}>
@@ -140,13 +143,16 @@ export default function Navbar(){
                             <MenuItem value={"咖哩"}>咖哩</MenuItem>
                             <MenuItem value={"義大利麵"}>義大利麵</MenuItem>
                         </Select>
-                    </FormControl>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField value={search} onChange={(e) => handleSetSearch(e)}></TextField>
-                        <Button onClick={handleSearch}>Search</Button>
+                        </FormControl>
                     </Grid>
                 </Grid>
+                </Box>
+                    <Grid item xs={4}>
+                        <Box className={classes.box2}>
+                            <TextField value={search} variant="outlined" label="Restaurant name" onChange={(e) => handleSetSearch(e)}></TextField>
+                            <Button className={classes.button} onClick={handleSearch}>Search</Button>
+                        </Box>
+                    </Grid>
             </Paper>
             <Backdrop open={open} className={classes.backdrop}>
                 <Random CloseBackdrop={handleClose}/>

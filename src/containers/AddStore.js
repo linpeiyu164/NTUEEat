@@ -14,7 +14,7 @@ const styles = theme => ({
     },
     paper : {
         padding : theme.spacing(4),
-        margin : theme.spacing(2)
+        marginTop : theme.spacing(15)
     },
     paper2 : {
         padding : theme.spacing(2),

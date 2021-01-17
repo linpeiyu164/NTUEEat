@@ -46,25 +46,24 @@ const isValidPhone = (string) => {
 }
 
 const checkInput = (stores, req) => {
+    if(!isValidPhone(req.body.phone)){
+        return Promise.resolve({ Error : "Invalid phone number entered" })
+    }
     for(let i = 0; i < stores.length; i++){
         if(stores[i].storename === req.body.storename){
-            return { Error : "Another restaurant with the same name already exists"}
+            return Promise.resolve({ Error : "Another restaurant with the same name already exists"})
         }
         else if(stores[i].phone === req.body.phone){
-            return { Error : "Another restaurant with the same phone number already exists"}
+            return Promise.resolve({ Error : "Another restaurant with the same phone number already exists"})
         }else if(stores[i].address === req.body.address){
-            return { Error : "Another restaurant with the same address already exists"}
+            return Promise.resolve({ Error : "Another restaurant with the same address already exists"})
         }else if(isNaN(parseInt(req.body.lowestPrice, 10))){
-            return { Error : "The lowest price you entered is not a number" }
+            return Promise.resolve({ Error : "The lowest price you entered is not a number" })
         }else if(isNaN(parseInt(req.body.highestPrice, 10))){
-            return { Error : "The highest price you entered is not a number" }
-        }else{
-            return { Error : null }
+            return Promise.resolve({ Error : "The highest price you entered is not a number" })
         }
     }
-    if(!isValidPhone(req.body.phone)){
-        return { Error : "Invalid phone number entered" }
-    }
+    return Promise.resolve({ Error : null })
 }
 
 module.exports.getRandom = getRandom;

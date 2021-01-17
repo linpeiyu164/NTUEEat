@@ -62,6 +62,16 @@ router.route('/')
     }
 })
 
+router.post('/search', async (req, res) => {
+    // req.query.QUERY
+    try{
+        const stores = await Store.fuzzySearch(req.query.QUERY)
+        .select('storename _id rating');    
+        res.json(stores)
+    }catch(err){
+        console.error(err)
+    }
+})
 router.route('/store/:id')
 .get(async (req,res) => {
     //這邊我會給你單一一個店家的「詳細」資料
@@ -100,9 +110,9 @@ router.route('/store/:id')
 router
 .route('/addstore')
 .post( async (req, res) => {
-    let checked = checkPrice(req.body.lowestPrice, req.body.highestPrice)
+    let checked = checkPrice(parseInt(req.body.lowestPrice,10), parseInt(req.body.highestPrice,10))
     const stores = await Store.find();
-    const { Error } = checkInput(stores, req)
+    const { Error } = await checkInput(stores, req)
     if(Error){
         res.json({ error : Error })
     }

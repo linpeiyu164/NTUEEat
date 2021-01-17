@@ -1,6 +1,6 @@
 import { useState , useContext, useEffect} from 'react'
 import userContext from './userContext'
-import { AppBar, Tabs, Tab , Typography, Avatar, Card, CardContent, Box,Button, IconButton, TextField, ButtonGroup} from '@material-ui/core'
+import { Tabs, Tab , Typography, Avatar, Card, CardContent, Box,Button, IconButton, TextField, ButtonGroup, Paper} from '@material-ui/core'
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles'
@@ -15,7 +15,9 @@ const instance = axios.create({ baseURL : "http://localhost:4000/users" })
 
 const useStyle = makeStyles(theme => ({
     AppBar : {
-        paddingTop : theme.spacing(6),
+        marginTop : theme.spacing(15),
+        marginLeft : theme.spacing(2),
+        marginRight : theme.spacing(2)
     },
     Tab : {
         padding : theme.spacing(3),
@@ -32,7 +34,7 @@ const useStyle = makeStyles(theme => ({
       paddingBottom : theme.spacing(2)
     },
     Card : {
-      margin : theme.spacing(3),
+      margin : theme.spacing(2),
       padding : theme.spacing(4)
     },
     visit : {
@@ -90,6 +92,7 @@ const theme = createMuiTheme({
       }
     },
   });
+
 function User() {
     const classes = useStyle()
     let {user} = useContext(userContext)
@@ -153,20 +156,19 @@ function User() {
     }
     return(
         <MuiThemeProvider theme={theme}>
-            <AppBar 
+            <Paper 
             className={classes.AppBar}
             indicatorColor="secondary"
             style={{ background : "#D4E6F1", color : "#000000" }}
             position="static">
             {/* <Avatar className={classes.Avatar}>P</Avatar> */}
-            <Link to='/' style={{ textDecoration : "none" }}><Button>HomePage</Button></Link>
             <Typography className={classes.username} variant="h3" style={{color : "#000000"}}>{user.username}</Typography>
             <Tabs value={selectedTab} onChange={handleChange}>
                 <Tab className={classes.Tab} value={0} label="Favorites" onClick={getFavorites}/>
                 <Tab className={classes.Tab} value={1} label="Reviews" onClick={getComments}/>
                 <Tab className={classes.Tab} value={2} label="Settings"/>
             </Tabs>
-            </AppBar>
+            </Paper>
             {(selectedTab === 0 && favorites) ? (
               favorites.map(store => {
                 return(
