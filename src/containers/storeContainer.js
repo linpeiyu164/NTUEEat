@@ -8,7 +8,7 @@ function StoreContainer () {
     const [ basicInfo, setBasicInfo ] = useState(null)
     const [ review, setReview ] = useState(null)
     useEffect(async () => {
-        data = await fetchStoreData('6002fc538915aed1db40fd15');
+        data = await fetchStoreData('60039fe64aef0bee6124d989');
         setBasicInfo({
             storeName: data.storename,
             address: data.address,

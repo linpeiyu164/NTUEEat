@@ -6,7 +6,7 @@ const Store = require('../model/Store');
 const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2
 
-const { checkPrice } = functions
+const { checkPrice , getRandom } = functions
 
 cloudinary.config({
     cloud_name : process.env.CLOUD_NAME,
@@ -90,7 +90,6 @@ router
             const res = await cloudinary.uploader.upload(fileStr, {
                 upload_preset : 'ml_default',
             })
-            console.log(res.url);
             newStore.picture.push(res.url);
         }catch(err){
             console.log(err)
@@ -102,5 +101,10 @@ router
     res.redirect('/');
 })
 
+router.get('/random', async(req, res) => {
+    const result = await getRandom(Store);
+    console.log(result)
+    res.json(result)
+})
 
 module.exports = router;

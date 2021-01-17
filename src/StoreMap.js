@@ -45,7 +45,6 @@ function StoreMap({storename , coordinates, location, rating}){
                 </CircleMarker>
             </MapContainer>
         )
-    
 }
 
 export default StoreMap;

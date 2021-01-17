@@ -11,16 +11,27 @@ const useStyles = makeStyles(theme => (
 
         },
         menuGrid: {
-
+            display: 'flex',
+            flexWrap: 'wrap',
+            width: '100%'
         },
         imageContainer: {
             position: 'relative',
-
+            border: '5px',
+            height: 100,
+            '&:hover': {
+                cursor: 'pointer',
+            }
         },
-        image: {
-
-        },
-        imageBackdrop: {
+        imageButton: {
+            position: 'absolute',
+            height: '100%',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
 
         },
         backdrop: {
@@ -44,20 +55,18 @@ function BasicInfo (props) {
                     const [ open, setOpen ] = TogglePic();
                     console.log(menu)
                     return (
-                        <>
+                        <div key={Date.now()}>
                             <ButtonBase
-                                key={Date.now()}
-                                className={classes.imageContainer}
-                                style={{}}
                                 onClick={() => setOpen(true)}
                             >
-                                <span className={classes.image} style={{backgroundImage: `url(${menu})`}}/>
-                                <span className={classes.imageBackdrop}/>
+                                <div className={classes.imageContainer} >
+                                    <img src={menu} style={{height: '100%'}}/>
+                                </div>
                             </ButtonBase>
                             <Backdrop className={classes.backdrop} open={open} onClick={() => setOpen(false)}>
                                 <img src={menu}/>
                             </Backdrop>
-                        </>
+                        </div>
                     )
                 })}
             </div>     
