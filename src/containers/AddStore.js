@@ -200,7 +200,7 @@ class AddStore extends Component {
                 autoHideDuration={2000} 
                 action={
                     <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleSnackbarClose} >
-                        <HighlightOffIcon fontSize="small" />
+                        <HighlightOffIcon fontSize="small"/>
                     </IconButton>
                 }
             >
