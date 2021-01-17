@@ -26,17 +26,6 @@ function calculateAverageRating(store){
     return avg;
 }
 
-<<<<<<< HEAD
-const getRandom = async (Store) => {
-    const total = await Store.countDocuments();
-    let random = Math.floor(Math.random() * total)
-    const result = await Store.findOne().skip(random)
-    return result
-}
- module.exports.checkPrice = checkPrice;
- module.exports.calculateAverageRating = calculateAverageRating;
- module.exports.getRandom = getRandom;
-=======
 const checkInput = (stores, req) => {
     for(let i = 0; i < stores.length; i++){
         if(stores[i].storename === req.body.storename){
@@ -59,4 +48,3 @@ const checkInput = (stores, req) => {
  module.exports.checkPrice = checkPrice;
  module.exports.calculateAverageRating = calculateAverageRating;
  module.exports.checkInput = checkInput;
->>>>>>> 413d6edb872779ba1bcb1086d7dfc3a52e4fbe94

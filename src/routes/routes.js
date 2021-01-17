@@ -40,9 +40,14 @@ const fetchStoreData = async (storeId) => {
 }
 
 // Comment
-// const sendComment = async (data) => {
-//     let response;
-//     instance.post()
-// }
+const sendComment = async (data) => {
+    let response;
+    console.log(data)
+    await instance.post(`/stores/store/${data.storeid}`, data)
+    .then(res => {response = res})
+    .catch(err => {
+        throw err
+    })
+}
 
-export { uploadStoreInfo, fetchStoreData };
+export { uploadStoreInfo, fetchStoreData, sendComment };

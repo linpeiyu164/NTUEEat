@@ -9,6 +9,7 @@ function StoreContainer () {
     const [ review, setReview ] = useState(null)
     useEffect(async () => {
         data = await fetchStoreData('60039fe64aef0bee6124d989');
+        console.log("id: ", data._id)
         setBasicInfo({
             storeName: data.storename,
             address: data.address,
@@ -16,6 +17,8 @@ function StoreContainer () {
             menus: data.picture
         })
         setReview({
+            storename: data.storename,
+            storeId: data._id,
             rating: data.rating,
             comments: data.comments
         })
@@ -23,6 +26,7 @@ function StoreContainer () {
     //const data = await fetchStoreData('6002e4d7d31a19a31b19086f');
     //console.log("data: ", data)
     if (data !== "error"){
+        
         //console.log(basicInfo, review)
         return (
             <div>
