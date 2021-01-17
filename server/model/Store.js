@@ -41,6 +41,7 @@ const StoreSchema = new Schema({
     }],
     favorites : Number
 })
+
 StoreSchema.plugin(mongooseFuzzySearching, { fields: ['storename'] })
 
 const Store = mongoose.model('Store', StoreSchema);

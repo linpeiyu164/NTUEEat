@@ -15,7 +15,7 @@ cloudinary.config({
 })
 
 router.route('/')
-.get(async (req,res) => {
+.get(async(req,res) => {
     try{
         let allStores = await Store.find({}, 'storename rating _id');
         // return higher ranking restaurants at the front of the array
@@ -28,32 +28,36 @@ router.route('/')
         })
         res.json(allStores);
     }catch(err){
-        res.status(400).json({ msg : 'could not retrieve restaurant data' })
+        res.status(400).json({ Error : 'Failed to retrieve restaurant data' })
     }
 })
 .post(async (req, res) => {
     // console.log(req.body)
-    let price = [];
-    switch(req.body.pricing){
-        case "$" :
-            price = [1, 0, 0]
-            break;
-        case "$$" : 
-            price = [0, 1, 0]
-            break;
-        case "$$$" : 
-            price = [0, 0, 1]
-            break;
-    }
-    const filteredArray = await Store.find({ 
-        location : req.body.location, 
-        pricing : price, 
-        preferences : req.body.preferences
-    }, 'storename rating _id')
-    if(filteredArray.length !== 0){
-        res.json(filteredArray)
-    }else{
-        res.json({msg : "restaurant not found"})
+    try{
+        let price = [];
+        switch(req.body.pricing){
+            case "$" :
+                price = [1, 0, 0]
+                break;
+            case "$$" : 
+                price = [0, 1, 0]
+                break;
+            case "$$$" : 
+                price = [0, 0, 1]
+                break;
+        }
+        const filteredArray = await Store.find({ 
+            location : req.body.location, 
+            pricing : price, 
+            preferences : req.body.preferences
+        }, 'storename rating _id')
+        if(filteredArray.length !== 0){
+            res.json(filteredArray)
+        }else{ 
+            res.json({ msg : "restaurant not found"})
+        }
+    }catch(err){
+        res.status(400).json({ Error : "Failed to load restaurant data" })
     }
 })
 
@@ -63,6 +67,34 @@ router.route('/store/:id')
     const store = await Store.findOne({ _id : req.params.id})
     res.json(store);
 })
+.post(async(req, res) => {
+    /*
+    storename
+    username
+    content
+    rating
+    storeid
+    */
+   try{
+    const comment =  new Comment({
+        store : req.body.storeid,
+        storename : req.body.storename,
+        username : req.body.username,
+        content : req.body.content,
+        rating : req.body.rating
+    })
+    await comment.save();
+    let user = await User.findOne({ username : req.body.username })
+    await user.comments.push(comment)
+    let store = await Store.findOne({ _id : req.body.storeid })
+    store.comments.push(comment)
+    await store.save()
+    res.json(comment)
+   }catch(err){
+       console.error(err)
+       res.status(400).json({ Error : "Failed to add comment" })
+   }
+}) 
 
 router
 .route('/addstore')
