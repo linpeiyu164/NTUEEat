@@ -45,6 +45,7 @@ router.post('/login', (req, res, next) => {
 })
 
 router.post('/favorite', async (req,res) => {
+    console.log(req.body)
     const user = await User.findOne({ _id : req.body.userID })
     const store = await Store.find({ _id : req.body.storeID })
     store.favorites++;
