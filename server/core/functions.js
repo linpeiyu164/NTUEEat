@@ -66,13 +66,7 @@ const checkInput = (stores, req) => {
     return Promise.resolve({ Error : null })
 }
 
-<<<<<<< HEAD
- module.exports.checkPrice = checkPrice;
- module.exports.calculateAverageRating = calculateAverageRating;
- module.exports.checkInput = checkInput;
-=======
 module.exports.getRandom = getRandom;
 module.exports.checkPrice = checkPrice;
 module.exports.calculateAverageRating = calculateAverageRating;
 module.exports.checkInput = checkInput;
->>>>>>> origin/auth

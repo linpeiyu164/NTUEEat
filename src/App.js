@@ -5,7 +5,7 @@ import Random from './main/Random'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import Navbar from './main/Navbar'
 import Profile from './Profile'
-import AddStore from './containers/AddStore';
+//import AddStore from './containers/AddStore';
 import Mainbar from './main/Mainbar'
 import Main from './main/Main'
 // import { Grid } from '@material-ui/core'
@@ -22,8 +22,7 @@ function App() {
         <userContext.Provider value={{user, setUser}}>
             <Mainbar />
             <Route exact path="/">
-              {/* <Navbar /> */}
-            
+              {} <Navbar /> }
               <Main  />
             </Route>
             <Route path="/login" exact component={Register} />
