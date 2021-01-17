@@ -12,6 +12,8 @@ import {
   } from 'react-router-dom'  
 import { render } from 'ejs';
 import Store from './containers/storeContainer';
+import Review from './components/store/Review'
+import BasicInfo from './components/store/BasicInfo';
 
 function App() {
   const [login, setLogin] = useState(false);
@@ -20,7 +22,7 @@ function App() {
   }
 
   return (
-    <AddStore/>
+    <BasicInfo/>
   )
   /*
   return (
