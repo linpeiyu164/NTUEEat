@@ -7,7 +7,7 @@ const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2;
 const { NextWeek } = require('@material-ui/icons');
 
-const { checkPrice , getRandom , checkInput} = functions
+const { checkPrice , getRandom , checkInput, calculateAverageRating } = functions
 
 cloudinary.config({
     cloud_name : process.env.CLOUD_NAME,
@@ -47,11 +47,16 @@ router.route('/')
                 price = [0, 0, 1]
                 break;
         }
-        const filteredArray = await Store.find({ 
+        let filteredArray = await Store.find({ 
             location : req.body.location, 
-            pricing : price, 
-            preferences : req.body.preferences
+            pricing : price
         }, 'storename rating _id')
+        const array = filteredArray.filter(store => {
+            if(store.type.some(e => e === req.body.preferences)){
+                return store
+            }
+        })
+        filteredArray = [...array]
         if(filteredArray.length !== 0){
             res.json(filteredArray)
         }else{ 
@@ -75,7 +80,7 @@ router.post('/search', async (req, res) => {
 router.route('/store/:id')
 .get(async (req,res) => {
     //這邊我會給你單一一個店家的「詳細」資料
-    const store = await Store.findOne({ _id : req.params.id})
+    const store = await Store.findOne({ _id : req.params.id })
     res.json(store);
 })
 .post(async(req, res) => {
@@ -87,20 +92,32 @@ router.route('/store/:id')
     storeid
     */
    try{
-    const comment =  new Comment({
-        store : req.body.storeid,
-        storename : req.body.storename,
-        username : req.body.username,
-        content : req.body.content,
-        rating : req.body.rating
+    let user = await User.findOne({ username : req.body.username }).populate('comments')
+    const exist = user.comments.some(comment => {
+        if(comment.store.toString() === req.body.storeid){
+            return true
+        }
     })
-    await comment.save();
-    let user = await User.findOne({ username : req.body.username })
-    await user.comments.push(comment)
-    let store = await Store.findOne({ _id : req.body.storeid })
-    store.comments.push(comment)
-    await store.save()
-    res.json(comment)
+    if(exist){
+        res.json({ Error : "You have already given a review"})
+    }else{
+        const comment =  new Comment({
+            store : req.body.storeid,
+            storename : req.body.storename,
+            username : req.body.username,
+            content : req.body.content,
+            rating : req.body.rating
+        })
+        await comment.save();
+        await user.comments.push(comment)
+        let store = await Store.findOne({ _id : req.body.storeid })
+        store.comments.push(comment)
+        await store.save()
+        let newRating = calculateAverageRating(store)
+        store.rating = newRating
+        await store.save()
+        res.json(comment)
+    }
    }catch(err){
        console.error(err)
        res.status(400).json({ Error : "Failed to add comment" })

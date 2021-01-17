@@ -36,8 +36,8 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 function Register(){
-    let {user, setUser} = useContext(userContext)
     const classes = useStyle()
+    let {user, setUser} = useContext(userContext)
     let [username , setUsername] = useState('');
     let [password, setPassword] = useState('');
     let [usernameError, setUsernameError] = useState(null);
