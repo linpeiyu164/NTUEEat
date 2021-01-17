@@ -2,13 +2,17 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import AppBar from '@material-ui/core/AppBar';
-import React ,{ useState }from "react";
+import React, {useState , useContext} from "react";
 import Toolbar from '@material-ui/core/Toolbar';
 import Random from './Random'
-import { Backdrop, FormControl, InputLabel, makeStyles, TextField} from '@material-ui/core';
+import { IconButton, Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper} from '@material-ui/core';
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
+import FaceIcon from '@material-ui/icons/Face';
 import './Navbar.css';
-import instance from "../routes"
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import userContext from '../userContext'
+import foodIcon from '../Image/foodicon.png'
+// import instance from "../routes"
 import { 
     BrowserRouter as Router,
     Switch,
@@ -16,7 +20,7 @@ import {
     Link
 } from 'react-router-dom'  
 
-const useStyles=makeStyles((theme)=>({
+const useStyles = makeStyles((theme)=>({
     root: {
         flexGrow: 1,
         position: 'fixed',
@@ -48,9 +52,13 @@ const useStyles=makeStyles((theme)=>({
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
     },
+    paper : {
+        marginTop : theme.spacing(16)
+    }
 }))
 
 export default function Navbar(){
+    let {user} = useContext(userContext)
     const classes=useStyles();
     const[location,setLocal]=useState("");
     const[price,setPrice]=useState("");
@@ -75,14 +83,14 @@ export default function Navbar(){
     const handleSearch = () => {
     }
     return(
-        <div className={classes.root}>
-            <AppBar position="fixed" color="transparent">
-                <Toolbar>
-                    <Link className="navbar-brand" to="/">
-                        <img src="../logo.svg"/>
-                    </Link>
-                <span >
-                    <FormControl className={classes.FormControl}>
+        <Grid container>
+            <Paper className={classes.paper}>
+                    {/* <Link className="navbar-brand" to="/">
+                        <img src={foodIcon}/>
+                    </Link> */}
+                <Grid item container>
+                    <Grid item xs={4}>
+                        <FormControl className={classes.FormControl}>
                         <InputLabel>location</InputLabel>
                         <Select className="select"
                         labeled="select-location"
@@ -96,7 +104,9 @@ export default function Navbar(){
                             <MenuItem value={"公館"}>公館</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl className={classes.FormControl} >
+                    </Grid>
+                    <Grid item xs={4}>
+                        <FormControl className={classes.FormControl} >
                         <InputLabel>Price</InputLabel>
                         <Select className="select"
                         labeled="select-price"
@@ -111,7 +121,9 @@ export default function Navbar(){
                             <MenuItem value={"$$$"}>$$$</MenuItem>
                         </Select>
                     </FormControl>
-                    <FormControl className={classes.FormControl} >
+                    </Grid>
+                    <Grid item xs={4}>
+                        <FormControl className={classes.FormControl} >
                         <InputLabel>Preference</InputLabel>
                         <Select className="select"
                         labeled="select-prefer"
@@ -129,21 +141,17 @@ export default function Navbar(){
                             <MenuItem value={"義大利麵"}>義大利麵</MenuItem>
                         </Select>
                     </FormControl>
-                </span>
-                <Button className={classes.Button} variant="outlined" color="default" size="large" onClick={() => setOpen(prev => !prev)}>Random</Button>
-                <Button className={classes.Button} variant="outlined" color="default" size="large">Signup</Button>
-                <Link to="/login" style={{ textDecoration : "none"}}><Button className={classes.Button} variant="outlined" color="default" size="large">Login</Button></Link>
-                <Link to="/profile" style={{ textDecoration : "none"}}><Button className={classes.Button} variant="outlined" color="default" size="large">Profile</Button></Link>
-                </Toolbar>
-                <div>
-                <TextField value={search} onChange={(e) => handleSetSearch(e)}></TextField>
-                <Button onClick={handleSearch}>Search</Button>
-                </div>
-            </AppBar>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField value={search} onChange={(e) => handleSetSearch(e)}></TextField>
+                        <Button onClick={handleSearch}>Search</Button>
+                    </Grid>
+                </Grid>
+            </Paper>
             <Backdrop open={open} className={classes.backdrop}>
                 <Random CloseBackdrop={handleClose}/>
             </Backdrop>
-        </div>
+        </Grid>
        
     )
 }

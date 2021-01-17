@@ -4,9 +4,10 @@ const express = require('express');
 const router = express.Router();
 const Store = require('../model/Store');
 const functions = require('../core/functions')
-let cloudinary = require('cloudinary').v2
+let cloudinary = require('cloudinary').v2;
+const { NextWeek } = require('@material-ui/icons');
 
-const { checkPrice , getRandom } = functions
+const { checkPrice , getRandom , checkInput} = functions
 
 cloudinary.config({
     cloud_name : process.env.CLOUD_NAME,
@@ -99,37 +100,47 @@ router.route('/store/:id')
 router
 .route('/addstore')
 .post( async (req, res) => {
-    // text information
-    // console.log(req.body)
     let checked = checkPrice(req.body.lowestPrice, req.body.highestPrice)
-    console.log(checked);
-    let newStore = new Store({
-        storename : req.body.storename,
-        phone : req.body.phone,
-        picture : [] ,
-        type : req.body.type,
-        location : req.body.location,
-        address : req.body.address,
-        lowestPrice : req.body.lowestPrice,
-        highestPrice : req.body.highestPrice,
-        comments : [],
-        pricing : checked
-    })
-    // image uploading
-    const fileStrArray = req.body.images;
-    fileStrArray.forEach(async fileStr => {
+    const stores = await Store.find();
+    const { Error } = checkInput(stores, req)
+    if(Error){
+        res.json({ error : Error })
+    }
+    else{
         try{
-            const res = await cloudinary.uploader.upload(fileStr, {
-                upload_preset : 'ml_default',
+            let newStore = new Store({
+                storename : req.body.storename,
+                phone : req.body.phone,
+                picture : [],
+                type : req.body.type,
+                location : req.body.location,
+                address : req.body.address,
+                lowestPrice : req.body.lowestPrice,
+                highestPrice : req.body.highestPrice,
+                comments : [],
+                pricing : checked
             })
-            newStore.picture.push(res.url);
+            // image uploading
+            const fileStrArray = req.body.images;
+            fileStrArray.forEach(async fileStr => {
+                try{
+                    const res = await cloudinary.uploader.upload(fileStr, {
+                        upload_preset : 'ml_default',
+                    })
+                    newStore.picture.push(res.url);
+                    await newStore.save()
+                }catch(err){
+                    console.log(err)
+                    res.status(500).json({message : 'image failed to upload from server side'})
+                }
+            })
+            await newStore.save();  
+            res.status(200)
         }catch(err){
-            console.log(err)
-            res.status(500).json({message : 'image failed to upload from server side'})
+            res.status(400)
+            console.error(err)
         }
-    })
-    await newStore.save();  
-    res.redirect('/');
+    }
 })
 
 router.get('/random', async(req, res) => {

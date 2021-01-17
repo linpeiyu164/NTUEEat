@@ -19,7 +19,7 @@ const useStyle = makeStyles( theme => ({
         minWidth: 275,
     },
     paper : {
-        margin : theme.spacing(2),
+        margin : theme.spacing(20),
         padding : theme.spacing(4),
         maxWidth : 'lg',
         minWidth: 'xs'

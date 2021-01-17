@@ -36,4 +36,36 @@
     transform: rotate(360deg);
   }
 }
+
+.menus {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.menu-frame {
+  width: 480px;
+  height: 360px;
+}
+
+.menu {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+.upload-block {
+  border-style: solid;
+  border-color: gray;
+  border-width: 2px;
+  padding: 10px;
+}
+
+.uploaders {
+  border-style: solid;
+  border-color: gray;
+  border-width: 2px;
+  padding: 5px;
+}
 #mapid { height: 180px; }
