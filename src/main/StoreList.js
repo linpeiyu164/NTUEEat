@@ -24,7 +24,7 @@ export default function StoreList(props){
         <>
         <Paper>
         <Grid container spacing={3} justify="center">
-        <Grid item xs={6} justify="space-between" >
+        <Grid item xs={6}  >
           {props.data ? 
           props.data.map(item=><OutlinedCard data={item} key={item._id}/>) : null }
         </Grid>

@@ -2,13 +2,12 @@ import './App.css';
 import React, { useState} from "react";
 import Register from './Register'
 import Random from './main/Random'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import Navbar from './main/Navbar'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Profile from './Profile'
 import AddStore from './containers/AddStore';
 import Mainbar from './main/Mainbar'
 import Main from './main/Main'
-// import { Grid } from '@material-ui/core'
+
 import userContext from './userContext'
 
 function App() {
@@ -19,8 +18,7 @@ function App() {
         <userContext.Provider value={{user, setUser}}>
             <Mainbar />
             <Route exact path="/">
-              {/* <Navbar /> */}
-              <Main  />
+              <Main />
             </Route>
             <Route path="/login" exact component={Register} />
             <Route path="/random" exact component={Random} />
