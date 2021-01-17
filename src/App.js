@@ -1,5 +1,5 @@
-//import logo from './logo.svg';
 import './App.css';
+<<<<<<< HEAD
 //import Main from './main/Main';
 //import Login from './main/Login.js/Login';
 import { useState } from 'react';
@@ -25,20 +25,35 @@ function App() {
     <BasicInfo/>
   )
   /*
-  return (
-      <Router>
-          <Route path="/" render={() => <Main username={username}/>}/>
-          <Route path="/login" render={() =>  <Login setLogin={setLogin} setUsername={setUsername}/>}/>
-      </Router>
-    <Router>
-      { <Switch> }
-        <Route path="/" render={() => <Main username={username}/>}/>          
-        <Route path="/Login" render={() => <Login setLogin={login} setUsername={username}/>}/>
-        { <Route path="/AddStore" render={() => <Addstore username={username}/>}/> }
-      { </Switch>  }
-    </Router>
+=======
+import React, { useState} from "react";
+import Register from './Register'
+import Random from './main/Random'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import Navbar from './main/Navbar'
+import Profile from './Profile'
+// import { Grid } from '@material-ui/core'
+import userContext from './userContext'
+import Store from './containers/storeContainer'
 
+function App() {
+  const [user, setUser] = useState(null)
+>>>>>>> 61ae470bfe1af4b9a5017e40f0f605dc87258263
+  return (
+    <Store/>
+    /*
+    <>
+      <Router>
+        <userContext.Provider value={{user, setUser}}>
+            <Route path="/" exact component={Navbar} />
+            <Route path="/login" exact component={Register} />
+            <Route path="/main" />
+            <Route path="/random" exact component={Random} />
+            <Route path="/profile" exact component={Profile} />
+        </userContext.Provider>
+      </Router>
+    </>
+    */
   )
-  */
 }
 export default App;

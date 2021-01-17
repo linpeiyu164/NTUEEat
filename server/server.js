@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const Websocket = require('ws')
+const cookieParser = require('cookie-parser')
 const functions = require('./core/functions')
 const {calculateAverageRating} = functions
 
@@ -16,6 +17,8 @@ const storeRouter = require('./routes/stores')
 const userRouter = require('./routes/users')
 
 const Store = require('./model/Store')
+const User = require('./model/User')
+const Comment = require('./model/Comment')
 
 const app = express();
 const server = http.createServer(app)
@@ -23,22 +26,6 @@ const wss = new Websocket.Server({server})
 
 //initializing passport config
 initialize(passport)
-
-//middleware
-app.use(cors())
-app.use(bodyParser.json({limit: '10mb', extended: true}))
-app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
-
-app.use(passport.initialize()) // initialize passport
-app.use(passport.session()) // uses persistent login sessions
-
-app.use('/stores', storeRouter)
-app.use('/users', userRouter)
-
-
-const port = process.env.PORT || 4000
-server.listen(port, () => console.log(`listening on port ${port}`))
-
 
 //database connection
 mongoose.connect(process.env.MONGO_URL,{
@@ -49,6 +36,20 @@ mongoose.connect(process.env.MONGO_URL,{
     poolSize: 10
 });
 
+//middleware
+app.use(cors())
+app.use(bodyParser.json({limit: '10mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
+app.use(cookieParser('secret'))
+app.use(passport.initialize()) // initialize passport
+app.use(passport.session()) // uses persistent login sessions
+
+app.use('/stores', storeRouter)
+app.use('/users', userRouter)
+
+const port = process.env.PORT || 4000
+server.listen(port, () => console.log(`listening on port ${port}`))
+
 const db = mongoose.connection;
 db.on('open', () => {
     console.log('database connected!')
@@ -56,31 +57,41 @@ db.on('open', () => {
 
 // websockets for comments
 wss.on('connection', ws => {
-
     ws.on('message', async (data) => {
-        const {username, content, rating, storeId} = data;
+        const { username, content, rating, storeId } = JSON.parse(data);
         try{
-            let store = await Store.find({ _id : storeId })
-            const newComment = {
-                username : username, 
-                content : content, 
-                rating : rating
+            let user = await User.find({ username : username }).populate('comments')
+            let previousComment = null
+            user.comments.forEach(comment => {
+                if(comment.store === storeId){
+                    previousComment = comment
+                }
+            })
+            if(!previousComment){
+                let store = await Store.find({ _id : storeId })
+                const newComment = {
+                    store : storeId,
+                    storename : store.storename,
+                    username : username,
+                    content : content, 
+                    rating : rating
+                }
+                await newComment.save()
+                store.comments.push(newComment)
+                await store.save()
+                let newRating = calculateAverageRating(store)
+                store.rating = newRating
+                await store.save()
+            }else{
+                ws.send(JSON.stringify({ data : previousComment, 
+                msg : "You've already reviewed this restaurant before"}))
             }
-            store.comments.push(newComment)
-            await store.save()
-
-            // new rating --> not real-time, only comments are real-time
-            let newRating = calculateAverageRating(store)
-            store.rating = newRating
-            await store.save()
-
             // broadcasting comments to all users connected
-            wss.clients.forEach( client => {
+            wss.clients.forEach(client => {
                 client.send(JSON.stringify(store.comments))
             })
-
-        }catch(err){
-            ws.send(JSON.stringify({msg : err}))
+        }catch(error){
+            ws.send(JSON.stringify({ msg : errror }))
         }
     })
 })

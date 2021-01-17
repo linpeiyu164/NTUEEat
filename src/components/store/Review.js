@@ -3,6 +3,7 @@ import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItem
 import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import StarIcon from '@material-ui/icons/Star';
+import RateStar from './Ratestar'
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 function Review (props) {
     const classes = useStyles();
-    const { rating, comments } = props.data;
+    //const { rating, comments } = props.data;
     function StarHeartBar () {
         return (
             <div>
@@ -38,8 +39,8 @@ function Review (props) {
         return (
             <div>
                 <Avatar src=""/>
-                <TextField onChange={this.handleChange}/>
-                <IconButton onClick={this.handleClick}>
+                <TextField onChange={handleChange}/>
+                <IconButton onClick={handleClick}>
                     <SendIcon />
                 </IconButton>
             </div>
@@ -49,7 +50,7 @@ function Review (props) {
     function Comments () {
         return (
             <List className={classes.commentList}>
-                {comments.map(comment => (
+                {props.data&&props.data.comments.map(comment => (
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar src=""/>
@@ -78,7 +79,7 @@ function Review (props) {
     }
     return ( 
         <div>
-            <StarHeartBar />
+            <RateStar />
             <TypeIn />
             <Comments />
         </div>

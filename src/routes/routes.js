@@ -28,10 +28,9 @@ const uploadStoreInfo = async (encodedFiles) => {
 // Store
 const fetchStoreData = async (storeId) => {
     let response;
-    instance.get(`/stores/store/:${storeId}`)
+    await instance.get(`/stores/store/${storeId}`)
     .then(res => {
-        const data = JSON.parse(res.data);
-        response = data;
+        response = res.data;
     })
     .catch(err => { 
         console.error('Error : ',err)

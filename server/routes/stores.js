@@ -7,7 +7,11 @@ const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2;
 const { NextWeek } = require('@material-ui/icons');
 
+<<<<<<< HEAD
+const { checkPrice , getRandom } = functions
+=======
 const { checkPrice, checkInput } = functions
+>>>>>>> 413d6edb872779ba1bcb1086d7dfc3a52e4fbe94
 
 cloudinary.config({
     cloud_name : process.env.CLOUD_NAME,
@@ -61,7 +65,7 @@ router.route('/')
 router.route('/store/:id')
 .get(async (req,res) => {
     //這邊我會給你單一一個店家的「詳細」資料
-    const store = await Store.findOne({ _id : req.params.id})
+    const store = await Store.findOne({ _id : req.params.id })
     res.json(store);
 })
 
@@ -88,6 +92,9 @@ router
                 comments : [],
                 pricing : checked
             })
+<<<<<<< HEAD
+            newStore.picture.push(res.url);
+=======
             // image uploading
             const fileStrArray = req.body.images;
             fileStrArray.forEach(async fileStr => {
@@ -104,6 +111,7 @@ router
             })
             await newStore.save();  
             res.status(200)
+>>>>>>> 413d6edb872779ba1bcb1086d7dfc3a52e4fbe94
         }catch(err){
             res.status(400)
             console.error(err)
@@ -111,5 +119,10 @@ router
     }
 })
 
+router.get('/random', async(req, res) => {
+    const result = await getRandom(Store);
+    console.log(result)
+    res.json(result)
+})
 
 module.exports = router;
