@@ -1,7 +1,7 @@
 // import Button from '@material-ui/core/Button';
 import Navbar from './Navbar'
 import StoreList from "./StoreList"
-import Store from "./Store"
+// import Store from "./Store"
 import { 
   BrowserRouter as Router,
   Switch,
@@ -11,17 +11,14 @@ import {
 
 export default function Main() {
     return (
-        <div className="App">
-          <Navbar />
-          <Router className="down">
-            <Route path="/stores">
-              <div className="stores">
-                <StoreList className="storeList"/>
-              </div>
-            </Route>
-            
-            <Route path="/storedetail" render={() => <Store/>}/> 
-           </Router>
+        <div className="main">
+          
+          {/* <h1>hello</h1> */}
+
+          <div className="stores">
+            <StoreList className="storeList"/>
+          </div>
+
         </div>
         
       );
