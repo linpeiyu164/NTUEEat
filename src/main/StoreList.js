@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import OutlinedCard from "./OutlinedCard"
 // import Favorite from "./Favorite"
-import Grid from '@material-ui/core/Grid';
+import { Grid, Paper } from '@material-ui/core';
 import axios from "axios"
 import  { uploadStoreInfo, fetchStoreData } from "../routes/routes";
 // const API_ROOT = 'http://localhost:4000/api'
@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme)=>({
 export default function StoreList(){
     const classes = useStyles();
     const [content,setContents]=useState("") 
-
     // async function FindStore(){
     //     const get=await instance.get("/")
     //     try{setContents(get.data)}
@@ -41,32 +40,20 @@ export default function StoreList(){
       setContents(data);
     },[])
     console.log("List",content)
-
     return( 
         <>
-        <Grid container spacing={3}>
-        
-        <Grid item xs>
-          {/* <Paper className={classes.paper}>xs</Paper> */}
-        </Grid>
+        <Paper>
+        <Grid container spacing={3} justify="center">
         <Grid item xs={6}>
-          
           {content?
-          content.map(item=>
-          <>
-          <OutlinedCard props={item} key={item._id}/>
-          </>
-          )
-          :
-          <></> }
-          
-          
+            content.map(item=><OutlinedCard props={item} key={item._id}/>):<></>
+          }
         </Grid>
-
         <Grid item xs>
           {/* <Favorite/> */}
         </Grid>
       </Grid>
+      </Paper>
         </>
     )
 }
