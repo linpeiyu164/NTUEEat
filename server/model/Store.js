@@ -38,7 +38,10 @@ const StoreSchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : 'Comment'
     }],
-    favorites : Number
+    favorites : {
+        type : Number,
+        default : 0
+    }
 })
 
 StoreSchema.plugin(mongooseFuzzySearching, { fields: ['storename'] })
