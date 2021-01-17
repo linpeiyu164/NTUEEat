@@ -208,7 +208,7 @@ class AddStore extends Component {
                 {(this.state.error) ? `${this.state.errormessage}` : null}
                 </Alert>
             </Snackbar>
-            </Paper>): <Redirect to="/" />
+            </Paper>) : <Redirect to="/" />
             }
             </>
         )
