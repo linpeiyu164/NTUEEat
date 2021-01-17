@@ -47,11 +47,16 @@ router.route('/')
                 price = [0, 0, 1]
                 break;
         }
-        const filteredArray = await Store.find({ 
+        let filteredArray = await Store.find({ 
             location : req.body.location, 
-            pricing : price, 
-            preferences : req.body.preferences
+            pricing : price
         }, 'storename rating _id')
+        const array = filteredArray.filter(store => {
+            if(store.type.some(e => e === req.body.preferences)){
+                return store
+            }
+        })
+        filteredArray = [...array]
         if(filteredArray.length !== 0){
             res.json(filteredArray)
         }else{ 
