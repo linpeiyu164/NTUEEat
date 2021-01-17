@@ -14,7 +14,7 @@ const styles = theme => ({
     },
     paper : {
         padding : theme.spacing(4),
-        margin : theme.spacing(2)
+        marginTop : theme.spacing(15)
     },
     paper2 : {
         padding : theme.spacing(2),
@@ -130,13 +130,6 @@ class AddStore extends Component {
             }
             console.log("data: ", parsedData)
             const res = await uploadStoreInfo(JSON.stringify(parsedData));
-<<<<<<< HEAD
-            console.log("res: ", res)
-
-            // Redirection!!!!!!!!!!!!!!!!!!!!!!!!
-            if (res === 'error') {
-                alert('系統出了一點問題QAQ 拜託再試一次Orz')
-=======
             console.log(res)
             // res should either be success or the error message
             if(res === "success"){
@@ -153,7 +146,6 @@ class AddStore extends Component {
                 this.setState({
                     errormessage: '系統出了一點問題QAQ 拜託再試一次Orz'
                 })
->>>>>>> 413d6edb872779ba1bcb1086d7dfc3a52e4fbe94
             }
         }
         sendData();

@@ -55,7 +55,7 @@ function BasicInfo (props) {
                     const [ open, setOpen ] = TogglePic();
                     console.log(menu)
                     return (
-                        <div key={Date.now()}>
+                        <div key={Date.now()+Math.random()}>
                             <ButtonBase
                                 onClick={() => setOpen(true)}
                             >
