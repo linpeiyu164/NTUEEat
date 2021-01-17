@@ -46,8 +46,9 @@ router.post('/login', (req, res, next) => {
 
 router.post('/favorite', async (req,res) => {
     const user = await User.findOne({ _id : req.body.userID })
-    const store = await Store.find({ _id : req.body.storeID })
-    store.favorites++;
+    const store = await Store.findOne({ _id : req.body.storeID })
+    console.log(store, user)
+    store.favorites+=1;
     user.favorites.push(store);
     await store.save();
     await user.save()
@@ -66,8 +67,8 @@ router.delete('/favorite', async(req,res)=> {
         user.favorites = [...newarray]
         await user.save()
         const store = await Store.findOne({ _id : req.query.STOREID })
-        store.favorites--;
-        store.save(); // not awaiting
+        store.favorites -= 1;
+        await store.save(); // not awaiting
         res.json(user.favorites)
     }catch(err){
         console.log(err)

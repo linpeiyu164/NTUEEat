@@ -95,7 +95,7 @@ const theme = createMuiTheme({
 
 function User() {
     const classes = useStyle()
-    let {user} = useContext(userContext)
+    let {user, setUser} = useContext(userContext)
     let [selectedTab, setSelectedTab] = useState(0)
     let [comments, setComments] = useState()
     let [favorites, setFavorites] = useState()
@@ -112,16 +112,37 @@ function User() {
       // returns entire user with comments populated
       const {data} = await instance.get(`/comments/${user._id}`)
       setComments([...data])
+      const array = data.map(comment => comment._id)
+      setUser(prev => {
+        return {
+          ...prev,
+          comments : [...array]
+        }
+      })
     }
     const getFavorites = async () => {
       // returns entire user with favorites populated
       const {data} = await instance.get(`/favorites/${user._id}`)
       setFavorites([...data])
+      const array = data.map(fav => fav._id)
+      setUser(prev => {
+        return {
+          ...prev,
+          favorites : [...array]
+        }
+      })
     }
     const handleRemoveFavorite = async (e) => {
       // returns entire user with favorites populated
       const {data} = await instance.delete(`/favorite?USERID=${user._id}&STOREID=${e.target.id}`)
       setFavorites([...data])
+      const array = data.map(fav => fav._id)
+      setUser(prev => {
+        return {
+          ...prev,
+          favorites : [...array]
+        }
+      })
     }
     const handleEditComment = async (e) => {
       setEditComment(e.target.id)
@@ -129,6 +150,13 @@ function User() {
     const handleDeleteComment = async (e) => {
       const {data} = await instance.delete(`/comments?USERID=${user._id}&COMMENTID=${e.target.id}`)
       setComments([...data])
+      const array = data.map(comment => comment._id)
+      setUser(prev => {
+        return {
+          ...prev,
+          comments : [...array]
+        }
+      })
     }
     const handleSubmit = async () => {
       // renew the comment

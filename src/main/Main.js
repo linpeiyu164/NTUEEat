@@ -24,11 +24,11 @@ const useStyles = makeStyles(theme => ({
 
 const instance = axios.create({baseURL : "http://localhost:4000/stores"});
 export default function Main() {
-  // const Select=""
+  
   let {user} = useContext(userContext)
   const classes = useStyles()
   const [content,setContents]=useState("") 
-  // const [Select,setSelect]=useState("")
+  
   const[location,setLocal]=useState("");
   const[price,setPrice]=useState("");
   const[prefer,setPrefer]=useState("");
