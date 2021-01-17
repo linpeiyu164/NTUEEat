@@ -51,7 +51,8 @@ class AddStore extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const sendData = async () => {
-            const parsedData = { images: this.state.urls };
+            const parsedData = { //images: this.state.urls 
+            };
             for (let [key, value] of Object.entries(this.state)) {
                 switch(key){
                     case 'restaurant':
@@ -87,7 +88,7 @@ class AddStore extends Component {
             console.log("res: ", res)
 
             // Redirection!!!!!!!!!!!!!!!!!!!!!!!!
-            if (res == 'error') {
+            if (res === 'error') {
                 alert('系統出了一點問題QAQ 拜託再試一次Orz')
             }
         }

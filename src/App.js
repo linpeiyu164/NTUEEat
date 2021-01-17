@@ -20,7 +20,7 @@ function App() {
   }
 
   return (
-    <AddStore/>
+    <Store/>
   )
   /*
   return (

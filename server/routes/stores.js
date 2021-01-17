@@ -60,7 +60,7 @@ router.route('/')
 router.route('/store/:id')
 .get(async (req,res) => {
     //這邊我會給你單一一個店家的「詳細」資料
-    const store = await Store.findOne({ _id : req.params.id})
+    const store = await Store.findOne({ _id : req.params.id })
     res.json(store);
 })
 

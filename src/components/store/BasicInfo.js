@@ -37,17 +37,18 @@ function TogglePic() {
 // Backdrop
 function BasicInfo (props) {
     const classes = useStyles();
-    function MenuGrid () {
+    function MenuGrid (props) {
         return (
             <div className={classes.menuGrid}>
-                {props.data.menus.map(menu => {
+                {props.data&&props.data.menus.map(menu => {
                     const [ open, setOpen ] = TogglePic();
+                    console.log(menu)
                     return (
                         <>
                             <ButtonBase
                                 key={Date.now()}
                                 className={classes.imageContainer}
-                                style=""
+                                style={{}}
                                 onClick={() => setOpen(true)}
                             >
                                 <span className={classes.image} style={{backgroundImage: `url(${menu})`}}/>
@@ -69,24 +70,24 @@ function BasicInfo (props) {
                     <ListItemIcon>
                         <RestaurantIcon />
                     </ListItemIcon>
-                    <ListItemText primary={props.data.storeName} />
+                    <ListItemText primary={props.data&&props.data.storeName} />
                 </ListItem>
 
                 <ListItem>
                     <ListItemIcon>
                         <RoomIcon />
                     </ListItemIcon>
-                    <ListItemText primary={props.data.address} />
+                    <ListItemText primary={props.data&&props.data.address} />
                 </ListItem>
 
                 <ListItem>
                     <ListItemIcon>
                         <PhoneIcon />
                     </ListItemIcon>
-                    <ListItemText primary={props.data.phone} />
+                    <ListItemText primary={props.data&&props.data.phone} />
                 </ListItem>
             </List>
-            <MenuGrid />
+            <MenuGrid data={props.data}/>
         </div>
     )
 }
