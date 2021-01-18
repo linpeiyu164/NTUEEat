@@ -9,16 +9,22 @@ import Mainbar from './main/Mainbar'
 import Main from './main/Main'
 
 import userContext from './userContext'
+import Store from './containers/storeContainer'
 
 function App() {
   const [user, setUser] = useState(null)
   return (
+  
+    
     <>
       <Router>
         <userContext.Provider value={{user, setUser}}>
             <Mainbar />
             <Route exact path="/">
               <Main />
+            </Route>
+            <Route path="/store/:id"> 
+              <Store />
             </Route>
             <Route path="/login" exact component={Register} />
             <Route path="/random" exact component={Random} />
@@ -27,6 +33,7 @@ function App() {
         </userContext.Provider>
       </Router>
     </>
+    
   )
 }
 export default App;

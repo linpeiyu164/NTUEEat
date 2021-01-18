@@ -91,7 +91,7 @@ export default function OutlinedCard(props) {
     <Card className={classes.root} variant="outlined">
         <Grid container direction="row" alignItems="center" spacing={2} justify="space-between">
           <Grid item>
-            <Link to ={`/store/${props._id}`} style={{textDecoration:"none",color:"black"}}>
+            <Link to ={`/store/${props.data._id}`} style={{textDecoration:"none",color:"black"}}>
               <Typography variant="h5" component="h2">
                 {props.data.storename}
               </Typography>

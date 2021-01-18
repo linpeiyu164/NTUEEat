@@ -28,10 +28,9 @@ const uploadStoreInfo = async (encodedFiles) => {
 // Store
 const fetchStoreData = async (storeId) => {
     let response;
-    instance.get(`/stores/store/:${storeId}`)
+    await instance.get(`/stores/store/${storeId}`)
     .then(res => {
-        const data = JSON.parse(res.data);
-        response = data;
+        response = res.data;
     })
     .catch(err => { 
         console.error('Error : ',err)
@@ -41,9 +40,14 @@ const fetchStoreData = async (storeId) => {
 }
 
 // Comment
-// const sendComment = async (data) => {
-//     let response;
-//     instance.post()
-// }
+const sendComment = async (data) => {
+    let response;
+    console.log(data)
+    await instance.post(`/stores/store/${data.storeid}`, data)
+    .then(res => {response = res})
+    .catch(err => {
+        throw err
+    })
+}
 
-export { uploadStoreInfo, fetchStoreData };
+export { uploadStoreInfo, fetchStoreData, sendComment };
