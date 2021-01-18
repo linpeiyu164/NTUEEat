@@ -7,6 +7,7 @@ const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2;
 const { NextWeek } = require('@material-ui/icons');
 const User = require('../model/User')
+const Comment = require('../model/Comment')
 
 const { checkPrice , getRandom , checkInput, calculateAverageRating } = functions
 
@@ -111,7 +112,7 @@ router.route('/store/:id')
         })
         await comment.save();
         await user.comments.push(comment)
-        let store = await Store.findOne({ _id : req.body.storeid })
+        let store = await Store.findOne({ _id : req.body.storeid }).populate('comments')
         store.comments.push(comment)
         await store.save()
         let newRating = calculateAverageRating(store)

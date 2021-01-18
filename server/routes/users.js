@@ -3,8 +3,11 @@ const router = express.Router();
 const User = require('../model/User')
 const Store = require('../model/Store')
 const Comment = require('../model/Comment')
+const ProfilePic = require('../model/ProfilePic')
+
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const { getRandom } = require('../core/functions')
 
 router.post('/register', async (req, res) => {
     let { username , password } = req.body
@@ -14,9 +17,11 @@ router.post('/register', async (req, res) => {
         if(user){
             res.json({ isUnique : false })
         }else{
+            const pic = await getRandom(ProfilePic)
             let newUser = new User({
                 username : username,
-                password : hashed
+                password : hashed,
+                profilePic : pic.url
             })
             newUser.save() // not awaiting
             res.json({ isUnique : true })

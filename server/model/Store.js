@@ -13,7 +13,7 @@ const StoreSchema = new Schema({
         unique : true,
         required : true
     },
-    rating : String,
+    rating : Number,
     picture : [{type : String}],
     type : [{type : String}],
     pricing : [{type : Number}], // [1, 0, 0] or [0, 1, 0] or [0, 0, 1]

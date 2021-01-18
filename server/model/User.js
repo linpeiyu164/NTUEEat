@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+    profilePic : String,
     username : {
         type : String,
         unigue : true,
@@ -11,8 +12,8 @@ const UserSchema = new Schema({
         type : String,
         required : true
     },
-    favorites : [{ 
-        type : Schema.Types.ObjectId, 
+    favorites : [{
+        type : Schema.Types.ObjectId,
         ref : 'Store'
     }],
     comments : [{
