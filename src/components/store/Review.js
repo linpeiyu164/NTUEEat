@@ -1,154 +1,131 @@
 import React, { useState, useEffect, useContext } from 'react';
 import userContext from '../../userContext';
-import { sendComment } from '../../routes/routes';
-import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import CommentedBox from './boxes/CommentedBox';
+import TypeInBox from './boxes/TypeInBox'
+import { List, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import SendIcon from '@material-ui/icons/Send';
-import StarIcon from '@material-ui/icons/Star';
-import RateStar from './Ratestar'
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: '10px',
+        overflow: 'hidden'
     },
     commentList: {
         overflow: 'scroll'
     },
-    inlineStar: {
-        display: 'inline'
-    },
-    typeInComment: {
-        
-    }
+    
+    
 }));
 
-
-
-
-
 function Review (props) {
+    console.log(props)
+    /*
+    setReview({
+        storeName: data.storename,
+        storeId: data._id,
+        rating: data.rating,
+        comments: data.comments
+    })
+    */
     const classes = useStyles();
     let { user } = useContext(userContext);
-    const [ userComment, setUserComment ] = useState(null)
-    const [ userRate, setUserRate ] = useState(0);
-    //const { rating, comments } = props.data;
-    function CommentedBox (props) {
-        return (
-            <ListItem key={Date.now() + Math.random()}>
-                <ListItemAvatar>
-                    <Avatar src=""/>
-                </ListItemAvatar>
-                    <ListItemText 
-                        primary={props.username}
-                        secondary={
-                            <React.Fragment>
-                                <Typography
-                                    component="span"
-                                    className={classes.inlineStar}
-                                    color="textPrimary"
-                                >
-                                    {props.rating} <StarIcon/>
-                                </Typography>
-                                {props.content}
-                            </React.Fragment>
-                        }
-                    />
-                
-            </ListItem>
-        )
-    }
-    function TypeIn () {
-        const [ rate, setRate ] = useState(0);
-        const [ typeIn, setTypeIn ] = useState('');
-        const handleChange = event => {
-            setTypeIn(event.target.value);
-        }
-        const handleSubmit = async () => {
-            if (rate === 0) {
-                alert('請給至少一顆星星的評價ㄛ');
-            } else if(typeIn.length === 0) {
-                alert('請至少輸入一個字的評論ㄛ');
-            } else {
-                console.log('storeid: ', props.data.storeId)
-                const data = {
-                    storename: props.data.storename,
-                    username: user.username,
-                    content: typeIn,
-                    rating: rate,
-                    storeid: props.data.storeId
-                }
-                try {
-                    const response = await sendComment(data);
-                    console.log('response: ', response)
-                } catch (e) {
-                    throw e
-                }
-            }
-        }
-        return (
-            user? 
-            ( userComment?
-                <CommentedBox username={user.username} rating={userRate} content={userComment}/>
-                : <div className={classes.typeInComment}>
-                    <div style={{display: 'flex'}}>
-                        <Avatar style={{right: '5px'}} src=""/>
-                        <div>
-                            <span style={{display: 'block'}}>{user.username}</span>
-                            <RateStar 
-                                handleSelectRate={setRate}
-                                style={{display: 'block'}}
-                            />
-                        </div>
-                    </div>
-                    
-                    <TextField onChange={handleChange} value={typeIn}/>
-                    <IconButton onClick={handleSubmit}>
-                        <SendIcon />
-                    </IconButton>
-                </div>) : <div>先登入才可以評論ㄛ～</div>
-        )
-    }
-    // remain: avatar
-    function Comments (props) {
-        let comments = []
-        if (props.comments) {
-            if (user) {//console.log("comments: ", props)
-                props.comments.forEach(comment => {
-                    if (comment.username !== user.username){
-                        
-                        comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} />)
-                        
-                        console.log('comments: ', comments)
-                    } else {
-                        setUserComment(comment.content)
-                        setUserRate(comment.rating)
+    const [ userComment, setUserComment ] = useState(null);
+    const [ commented, setCommented ] = useState(false);
+    const [ editing, setEditing ] = useState(false);
+    const [ comments, setComments] = useState([])
+
+    useEffect(() => {
+        if (props.data.comments){
+            if (user) {
+                const array = props.data.comments.filter(comment => {
+                    if(comment.username !== user.username){
+                        return comment
+                    }else{
+                        setUserComment(comment)
+                        setCommented(true);
                     }
                 })
+                setComments([...array])
             } else {
-            props.comments.forEach(comment => {
-                comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} />)
-                
-                console.log('comments: ', comments)
-            })
-        }
+                setComments([...props.data.comments])
+            }
         } 
-        return (
-            <List className={classes.commentList} >
-                {comments}
+    },[])
+
+    return (
+        <>
+        {(user) ? 
+        (
+            <>
+                {(userComment) ? (<CommentedBox 
+                    username={user.username} 
+                    rating={userComment.rating}
+                    content={userComment.content} 
+                />):(<TypeInBox 
+                    user={user} 
+                    storeName={props.data&&props.data.storeName} 
+                    storeId={props.data&&props.data.storeId} 
+                    commented={commented} 
+                    setEditing={setEditing} 
+                    userComment={userComment} 
+                    handleEdit={(value) => setUserComment(value)} 
+                    />)
+                }
+                <List className={classes.commentList}>
+                    {comments.map(comment => {
+                        <CommentedBox 
+                            username={comment.username} 
+                            rating={comment.rating} 
+                            content={comment.content} 
+                        />
+                    })}
+                </List>
+            </>
+        ):(
+            <>
+            <div>先登入才可以評論ㄛ～</div>
+            <List className={classes.commentList}>
+                {comments.map(comment => {
+                    console.log(comments)
+                    return(
+                        <CommentedBox 
+                            username={comment.username} 
+                            rating={comment.rating} 
+                            content={comment.content} 
+                        />
+                    )
+                })}
             </List>
+            </>
         )
-        
-    }
-    return ( 
-        <div className={classes.root}>
-            
-            <TypeIn />
-            <Comments comments={props.data&&props.data.comments}/>
-        </div>
+        }
+        </>
     )
 }
+    // }
+    // return ( 
+    //     <div className={classes.root}>
+    //         {!user? <div>先登入才可以評論ㄛ～</div> : 
+    //             (commented && !editing? 
+    //                 <div style={{display: "flex", justifyContent: "flex-start"}}>
+    //                     <CommentedBox className={classes.commentedBox} username={user.username} rating={userRate} content={userComment}/>
+    //                     <Button variant="outlined" onClick={() => setEditing(true)}>修改評論</Button>
+    //                     <Button variant="outlined">刪除評論</Button>
+    //                 </div> : 
+    //                 <TypeInBox 
+    //                 user={user} 
+    //                 storeName={props.data&&props.data.storeName} 
+    //                 storeId={props.data&&props.data.storeId} 
+    //                 commented={commented} 
+    //                 commentId={userCommentId} 
+    //                 setEditing={setEditing} 
+    //                 userComment={userComment} 
+    //                 handleEdit={(value) => setUserComment(value)} 
+    //                 userRate={userRate} 
+    //                 setUserRate={setUserRate} />)}
+    //         <Comments comments={props.data&&props.data.comments}/>
+    //     </div>
+    // )
+
 
 export default Review;

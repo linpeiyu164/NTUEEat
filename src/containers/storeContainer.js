@@ -18,7 +18,6 @@ function StoreContainer (props) {
     const [ basicInfo, setBasicInfo ] = useState(null)
     const [ review, setReview ] = useState(null)
     useEffect(async () => {
-        
         data = await fetchStoreData(id);
         console.log("id: ", data._id)
         setBasicInfo({
@@ -28,24 +27,24 @@ function StoreContainer (props) {
             menus: data.picture
         })
         setReview({
-            storename: data.storename,
+            storeName: data.storename,
             storeId: data._id,
             rating: data.rating,
             comments: data.comments
         })
-    },[])
+    },[ id ])
     //const data = await fetchStoreData('6002e4d7d31a19a31b19086f');
     //console.log("data: ", data)
     if (data !== "error"){
-        
         //console.log(basicInfo, review)
         return (
-            <div>
+            (basicInfo && review)?
+            (<div>
                <Paper className={classes.paper}>
-               <BasicInfo data={basicInfo&&basicInfo}/>
-                <Review data={review&&review}/>
+               <BasicInfo data={basicInfo}/>
+                <Review data={review}/>
                </Paper>
-            </div>
+            </div>):null
         )
     }
     

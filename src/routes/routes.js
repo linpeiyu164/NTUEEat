@@ -40,6 +40,7 @@ const fetchStoreData = async (storeId) => {
 }
 
 // Comment
+
 const sendComment = async (data) => {
     let response;
     console.log(data)
@@ -51,4 +52,14 @@ const sendComment = async (data) => {
     return response;
 }
 
-export { uploadStoreInfo, fetchStoreData, sendComment };
+const reviseComment = async (data) => {
+    let response;
+    await instance.post('/users/comments', data)
+    .then(res => response = res)
+    .catch(err => {
+        throw err
+    })
+    return response
+}
+
+export { uploadStoreInfo, fetchStoreData, sendComment, reviseComment };
