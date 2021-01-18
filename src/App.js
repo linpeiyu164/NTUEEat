@@ -12,10 +12,9 @@ import userContext from './userContext'
 import Store from './containers/storeContainer'
 
 function App() {
-  const [user, setUser] = useState(null)
-  return (
+  const [user, setUser] = useState(null);
   
-    
+  return (
     <>
       <Router>
         <userContext.Provider value={{user, setUser}}>
@@ -24,7 +23,7 @@ function App() {
               <Main />
             </Route>
             <Route path="/store/:id"> 
-              <Store />
+              <Store/>
             </Route>
             <Route path="/login" exact component={Register} />
             <Route path="/random" exact component={Random} />

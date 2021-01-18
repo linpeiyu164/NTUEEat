@@ -6,12 +6,8 @@ const Store = require('../model/Store');
 const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2;
 const { NextWeek } = require('@material-ui/icons');
-<<<<<<< HEAD
 const User = require('../model/User') 
 const Comment = require('../model/Comment')
-=======
-const User = require('../model/User')
->>>>>>> 42987f7ccb193b322e66dffea8142c495a8d0522
 
 const { checkPrice , getRandom , checkInput, calculateAverageRating } = functions
 

@@ -2,6 +2,7 @@ import { fetchStoreData } from '../routes/routes'
 import BasicInfo from '../components/store/BasicInfo';
 import Review from '../components/store/Review';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {Paper, makeStyles} from '@material-ui/core'
 const useStyles = makeStyles(theme => ({
     paper : {
@@ -10,13 +11,14 @@ const useStyles = makeStyles(theme => ({
         marginRight : theme.spacing(2)
     }
 }))
-function StoreContainer () {
-    const classes = useStyles()
+function StoreContainer (props) {
+    const classes = useStyles();
+    const { id } = useParams();
     let data;
     const [ basicInfo, setBasicInfo ] = useState(null)
     const [ review, setReview ] = useState(null)
     useEffect(async () => {
-        data = await fetchStoreData('60039fe64aef0bee6124d989');
+        data = await fetchStoreData(id);
         console.log("id: ", data._id)
         setBasicInfo({
             storeName: data.storename,
