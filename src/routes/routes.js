@@ -48,6 +48,7 @@ const sendComment = async (data) => {
     .catch(err => {
         throw err
     })
+    return response;
 }
 
 export { uploadStoreInfo, fetchStoreData, sendComment };

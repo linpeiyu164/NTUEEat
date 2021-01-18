@@ -16,6 +16,7 @@ import {
 
 import axios from "axios"
 import userContext from '../userContext'
+import { Box } from '@material-ui/core';
 const instance = axios.create({ baseURL : "http://localhost:4000/"});
 
 const useStyles = makeStyles(theme => ({
@@ -34,18 +35,16 @@ const useStyles = makeStyles(theme => ({
 
 export default function OutlinedCard(props) {
   const classes = useStyles();
-  let {user, setUser} = useContext(userContext)
-  console.log(user);
   const[check, setCheck]=useState(null)
-
+  const[firstcheck,setFirstcheck]=useState(false)
+  let {user, setUser} = useContext(userContext)
+  
   const Favorite = async() => {
-  if(user){
+  if(user && !firstcheck){
     const {data}= await instance.post("/users/favorite",{ 
       userID : user._id,
       storeID : props.data._id
     })
-    // console.log("userdata",data);
-
     const array = data.map(fav => fav._id)
     setUser(prev => {
       return {
@@ -58,7 +57,6 @@ export default function OutlinedCard(props) {
   }
   }
   const UnFavorite=async()=>{
-    // console.log(props.data)
     if(user){
       const {data}= await instance.delete(`/users/favorite?USERID=${user._id}&STOREID=${props.data._id}`)
       console.log("userdata",data);
@@ -73,31 +71,32 @@ export default function OutlinedCard(props) {
       console.log("Login ,please");
     }
   }
-
   useEffect(async()=>{
-    console.log("item",props.data)
-    console.log("all",user);
     if(user){
-      user.favorites.map(favor_id=>{if(props.data._id===favor_id){setCheck(true)}})
+      user.favorites.map(favor_id=>{if(props.data._id===favor_id){
+        setCheck(true);
+        setFirstcheck(true)}})
+    }
+  },[])
+  useEffect(async()=>{
+    if(user){
       if(check !== null){
         check ? Favorite() : UnFavorite()
       }
+      console.log("check",check);
     }
-    
-    
   },[check])
 
     return (
     <Card className={classes.root} variant="outlined">
         <Grid container direction="row" alignItems="center" spacing={2} justify="space-between">
           <Grid item>
-            <Link to ={`/store/${props._id}`} style={{textDecoration:"none",color:"black"}}>
+            <Link to ={`/store/${props.data._id}`} style={{textDecoration:"none",color:"black"}}>
               <Typography variant="h5" component="h2">
                 {props.data.storename}
               </Typography>
             </Link>
           </Grid>
-          
 
           <Grid item>
               <IconButton aria-label="add to favorites" onClick={() => setCheck(!check)} disabled={!user}>

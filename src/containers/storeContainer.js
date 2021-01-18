@@ -18,6 +18,7 @@ function StoreContainer (props) {
     const [ basicInfo, setBasicInfo ] = useState(null)
     const [ review, setReview ] = useState(null)
     useEffect(async () => {
+        
         data = await fetchStoreData(id);
         console.log("id: ", data._id)
         setBasicInfo({
