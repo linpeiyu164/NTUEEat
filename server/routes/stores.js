@@ -6,8 +6,12 @@ const Store = require('../model/Store');
 const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2;
 const { NextWeek } = require('@material-ui/icons');
+<<<<<<< HEAD
 const User = require('../model/User') 
 const Comment = require('../model/Comment')
+=======
+const User = require('../model/User')
+>>>>>>> 42987f7ccb193b322e66dffea8142c495a8d0522
 
 const { checkPrice , getRandom , checkInput, calculateAverageRating } = functions
 
@@ -82,7 +86,7 @@ router.post('/search', async (req, res) => {
 router.route('/store/:id')
 .get(async (req,res) => {
     //這邊我會給你單一一個店家的「詳細」資料
-    const store = await Store.findOne({ _id : req.params.id })
+    const store = await Store.findOne({ _id : req.params.id }).populate('comments')
     res.json(store);
 })
 .post(async(req, res) => {
@@ -118,7 +122,7 @@ router.route('/store/:id')
         let newRating = calculateAverageRating(store)
         store.rating = newRating
         await store.save()
-        res.json(comment)
+        res.status(200).json(comment)
     }
    }catch(err){
        console.error(err)
