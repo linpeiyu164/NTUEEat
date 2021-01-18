@@ -7,6 +7,12 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import StarIcon from '@material-ui/icons/Star';
+import { 
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom' 
 
 import axios from "axios"
 import userContext from '../userContext'
@@ -38,6 +44,8 @@ export default function OutlinedCard(props) {
       userID : user._id,
       storeID : props.data._id
     })
+    // console.log("userdata",data);
+
     const array = data.map(fav => fav._id)
     setUser(prev => {
       return {
@@ -53,6 +61,7 @@ export default function OutlinedCard(props) {
     // console.log(props.data)
     if(user){
       const {data}= await instance.delete(`/users/favorite?USERID=${user._id}&STOREID=${props.data._id}`)
+      console.log("userdata",data);
       const array = data.map(fav => fav._id)
       setUser(prev => {
         return {
@@ -66,19 +75,30 @@ export default function OutlinedCard(props) {
   }
 
   useEffect(async()=>{
-    if(check !== null){
-      check ? Favorite() : UnFavorite()
+    console.log("item",props.data)
+    console.log("all",user);
+    if(user){
+      user.favorites.map(favor_id=>{if(props.data._id===favor_id){setCheck(true)}})
+      if(check !== null){
+        check ? Favorite() : UnFavorite()
+      }
     }
+    
+    
   },[check])
 
     return (
     <Card className={classes.root} variant="outlined">
         <Grid container direction="row" alignItems="center" spacing={2} justify="space-between">
           <Grid item>
-            <Typography variant="h5" component="h2">
-              {props.data.storename}
-            </Typography>
+            <Link to ={`/store/${props._id}`} style={{textDecoration:"none",color:"black"}}>
+              <Typography variant="h5" component="h2">
+                {props.data.storename}
+              </Typography>
+            </Link>
           </Grid>
+          
+
           <Grid item>
               <IconButton aria-label="add to favorites" onClick={() => setCheck(!check)} disabled={!user}>
                 { check ?
@@ -87,6 +107,7 @@ export default function OutlinedCard(props) {
                 }
               </IconButton>
             </Grid>
+
           <Grid item container>
             <Grid item>
               <StarIcon></StarIcon>

@@ -2,20 +2,17 @@ import axios from 'axios'
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
-import AppBar from '@material-ui/core/AppBar';
-import React, {useState , useContext,useEffect} from "react";
-import Toolbar from '@material-ui/core/Toolbar';
+import React, {useState, useContext, useEffect} from "react";
 import Random from './Random'
-import {Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper, Box, Typography} from '@material-ui/core';
-import './Navbar.css';
+import {Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper, Box} from '@material-ui/core';
 import userContext from '../userContext'
+import './Navbar.css';
 
-const instance = axios.create({ baseURL : "http://localhost:4000/stores" })
 
 const useStyles = makeStyles((theme)=>({
     root: {
         flexGrow: 1,
-        position: 'fixed',
+        // position: 'fixed',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
     },
@@ -85,9 +82,6 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
     return(
         <Grid container>
             <Paper className={classes.paper}>
-                {/* <Link className="navbar-brand" to="/">
-                    <img src={foodIcon}/>
-                </Link> */}
                 <Box className={classes.box2}>
                 <Grid item container>
                     <Grid item xs={4}>

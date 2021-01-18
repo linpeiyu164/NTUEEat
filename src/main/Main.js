@@ -1,7 +1,6 @@
 // import Button from '@material-ui/core/Button';
 import Navbar from './Navbar'
 import StoreList from "./StoreList"
-// import Store from "./Store"
 import { 
   BrowserRouter as Router,
   Switch,
