@@ -6,7 +6,8 @@ const Store = require('../model/Store');
 const functions = require('../core/functions')
 let cloudinary = require('cloudinary').v2;
 const { NextWeek } = require('@material-ui/icons');
-import User from '../model/User'
+const User = require('../model/User') 
+const Comment = require('../model/Comment')
 
 const { checkPrice , getRandom , checkInput, calculateAverageRating } = functions
 

@@ -24,19 +24,40 @@ const useStyles = makeStyles((theme) => ({
         
     }
 }));
+
+
+
+
+
 function Review (props) {
     const classes = useStyles();
     //let {user} = useContext(userContext)
     //const { rating, comments } = props.data;
-    function StarHeartBar () {
+    function CommentedBox (props) {
         return (
-            <div>
-                <div className="stars"></div>
-                <div className="heart"></div>
-            </div>
+            <ListItem key={Date.now() + Math.random()}>
+                <ListItemAvatar>
+                    <Avatar src=""/>
+                </ListItemAvatar>
+                    <ListItemText 
+                        primary={props.username}
+                        secondary={
+                            <React.Fragment>
+                                <Typography
+                                    component="span"
+                                    className={classes.inlineStar}
+                                    color="textPrimary"
+                                >
+                                    {props.rating}<StarIcon/>
+                                </Typography>
+                                {props.content}
+                            </React.Fragment>
+                        }
+                    />
+                
+            </ListItem>
         )
     }
-
     function TypeIn () {
         const [ rate, setRate ] = useState(0);
         const [ typeIn, setTypeIn ] = useState('');
@@ -88,29 +109,8 @@ function Review (props) {
     function Comments () {
         return (
             <List className={classes.commentList}>
-                {props.data&&props.data.comments.map(comment => (
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar src=""/>
-                                <ListItemText 
-                                    primary={comment.username}
-                                    secondary={
-                                        <React.Fragment>
-                                            <Typography
-                                                component="span"
-                                                className={classes.inlineStar}
-                                                color="textPrimary"
-                                            >
-                                                {comment.rating}<StarIcon/>
-                                            </Typography>
-                                            {comment.content}
-                                        </React.Fragment>
-                                    }
-                                />
-                            </ListItemAvatar>
-                        </ListItem>
-                    )
-                )}
+                {props.data&&
+                props.data.comments.map(comment => <CommentedBox username={comment.username} rating={comment.rating} content={comment.content} />)}
             </List>
         )
         
