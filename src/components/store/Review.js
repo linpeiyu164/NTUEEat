@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Review (props) {
     const classes = useStyles();
-    //let {user} = useContext(userContext)
+    let { user } = useContext(userContext);
     //const { rating, comments } = props.data;
     function CommentedBox (props) {
         return (
@@ -73,7 +73,7 @@ function Review (props) {
                 console.log('storeid: ', props.data.storeId)
                 const data = {
                     storename: props.data.storename,
-                    username: 'selina',
+                    username: user.username,
                     content: typeIn,
                     rating: rate,
                     storeid: props.data.storeId
@@ -86,11 +86,11 @@ function Review (props) {
             }
         }
         return (
-            <div className={classes.typeInComment}>
+            user? <div className={classes.typeInComment}>
                 <div style={{display: 'flex'}}>
                     <Avatar style={{right: '5px'}} src=""/>
                     <div>
-                        <span style={{display: 'block'}}>Selina</span>
+                        <span style={{display: 'block'}}>{user.username}</span>
                         <RateStar 
                             handleSelectRate={setRate}
                             style={{display: 'block'}}
@@ -102,7 +102,7 @@ function Review (props) {
                 <IconButton onClick={handleSubmit}>
                     <SendIcon />
                 </IconButton>
-            </div>
+            </div> : <div>先登入才可以評論ㄛ～</div>
         )
     }
     // remain: avatar

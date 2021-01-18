@@ -2,8 +2,16 @@ import { fetchStoreData } from '../routes/routes'
 import BasicInfo from '../components/store/BasicInfo';
 import Review from '../components/store/Review';
 import { useEffect, useState } from 'react';
-
+import {Paper, makeStyles} from '@material-ui/core'
+const useStyles = makeStyles(theme => ({
+    paper : {
+        marginTop : theme.spacing(15),
+        marginLeft : theme.spacing(2),
+        marginRight : theme.spacing(2)
+    }
+}))
 function StoreContainer () {
+    const classes = useStyles()
     let data;
     const [ basicInfo, setBasicInfo ] = useState(null)
     const [ review, setReview ] = useState(null)
@@ -30,8 +38,10 @@ function StoreContainer () {
         //console.log(basicInfo, review)
         return (
             <div>
-                <BasicInfo data={basicInfo&&basicInfo}/>
+               <Paper className={classes.paper}>
+               <BasicInfo data={basicInfo&&basicInfo}/>
                 <Review data={review&&review}/>
+               </Paper>
             </div>
         )
     }
