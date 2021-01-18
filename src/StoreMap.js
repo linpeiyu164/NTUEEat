@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import  { MapContainer, TileLayer, Popup, CircleMarker, Marker}  from 'react-leaflet'
+import React, { useState, useEffect } from 'react'
+import  { MapContainer, TileLayer, Popup, CircleMarker}  from 'react-leaflet'
 import './Map.css'
 import { makeStyles } from '@material-ui/core/styles';
 import {Typography, Card, CardContent} from '@material-ui/core'
@@ -20,11 +20,12 @@ const useStyles = makeStyles({
 function StoreMap({ calculateDistance, storename , userCoords, storeCoords, location, rating}){
         const classes = useStyles()
         let [distance, setDistance] = useState()
-        useEffect( () => {
-            const [userLat, userLng] = userCoords
-            // parseFloat
-            setDistance( calculateDistance(userLat, userLng, storeLat, storeLng) ) 
-        }, [])
+        // useEffect(() => {
+        //     const [userLat, userLng] = userCoords
+        //     const [storeLat, storeLng] = storeCoords
+        //     // parseFloat
+        //     setDistance(calculateDistance(userLat, userLng, storeLat, storeLng)) 
+        // }, [])
         return(
             <MapContainer center={storeCoords} zoom={13} scrollWheelZoom={false}>
                 <TileLayer

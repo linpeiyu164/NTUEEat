@@ -7,23 +7,24 @@ const ProfilePic = require('../model/ProfilePic')
 
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const { getRandom } = require('../core/functions')
+const { getRandom } = require('../core/functions');
 
 router.post('/register', async (req, res) => {
     let { username , password } = req.body
     try{
+        const pic = await getRandom(ProfilePic)
         const user = await User.findOne({ username : username })
         const hashed = await bcrypt.hash(password, 10)
         if(user){
             res.json({ isUnique : false })
         }else{
-            const pic = await getRandom(ProfilePic)
             let newUser = new User({
                 username : username,
                 password : hashed,
                 profilePic : pic.url
             })
             newUser.save() // not awaiting
+            console.log(newUser)
             res.json({ isUnique : true })
         }
     }catch(err){
@@ -51,9 +52,9 @@ router.post('/login', (req, res, next) => {
 
 router.post('/favorite', async (req,res) => {
     const user = await User.findOne({ _id : req.body.userID })
-    const store = await Store.find({ _id : req.body.storeID })
+    const store = await Store.findOne({ _id : req.body.storeID })
     store.favorites++;
-    user.favorites.push(store);
+    user.favorites.push(store._id);
     await store.save();
     await user.save()
     await user.populate('favorites')
@@ -89,6 +90,7 @@ router.get('/favorites/:id', async (req,res)=>{
     res.json(user.favorites)
 })
 
+//edit
 router.post('/comments', async (req, res) => {
     const comment = await Comment.findOne({ _id : req.body._id})
     comment.content = req.body.content
@@ -97,6 +99,7 @@ router.post('/comments', async (req, res) => {
     res.json(comment)
 })
 
+//delete
 router.delete(`/comments`, async(req,res) => {
     let user = await User.findOne({ _id : req.query.USERID }).populate('comments')
     let newcomments = user.comments.filter(comment => {

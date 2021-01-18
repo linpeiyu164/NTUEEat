@@ -70,6 +70,7 @@ class AddStore extends Component {
     }
 
     handleChange = event => {
+        this.setState({urls: []})
         if (event.target.files){
             const files = Array.from(event.target.files);
            files.forEach(file => {
@@ -89,7 +90,6 @@ class AddStore extends Component {
             const renew = new Object;
             renew[cap] = event.target.value;
             this.setState(renew);
-            console.log(this.state)
         }
         return handleChange;
     }
@@ -128,23 +128,20 @@ class AddStore extends Component {
                         break;
                 }
             }
-            console.log("data: ", parsedData)
             const res = await uploadStoreInfo(JSON.stringify(parsedData));
-            console.log(res)
             // res should either be success or the error message
             if(res === "success"){
                 this.setState({
                     success : true
                 })
-            }else if(res !== "success"){
+            } else if (res === 'client-side error') {
+                this.setState({
+                    errormessage: '系統出了一點問題QAQ 拜託再試一次Orz'
+                })
+            } else if(res !== "success"){
                 this.setState({
                     error: true,
                     errormessage : res
-                })
-            }
-            if (res == 'error') {
-                this.setState({
-                    errormessage: '系統出了一點問題QAQ 拜託再試一次Orz'
                 })
             }
         }
@@ -158,6 +155,7 @@ class AddStore extends Component {
     }
     render() {
         const { classes } = this.props;
+        console.log('success', this.state.success)
         return (
             <>
             {(!this.state.success) ? (

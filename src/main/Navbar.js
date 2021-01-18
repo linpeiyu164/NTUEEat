@@ -2,36 +2,35 @@ import axios from 'axios'
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
-import AppBar from '@material-ui/core/AppBar';
-import React, {useState , useContext,useEffect} from "react";
-import Toolbar from '@material-ui/core/Toolbar';
+import React, {useState, useContext, useEffect} from "react";
 import Random from './Random'
-import {Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper, Box, Typography} from '@material-ui/core';
-import './Navbar.css';
+import {Backdrop, FormControl, InputLabel, makeStyles, TextField, Grid, Paper, Box} from '@material-ui/core';
 import userContext from '../userContext'
+import './Navbar.css';
 
-const instance = axios.create({ baseURL : "http://localhost:4000/stores" })
 
 const useStyles = makeStyles((theme)=>({
     root: {
         flexGrow: 1,
-        position: 'fixed',
+        // position: 'fixed',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
     },
     FormControl:{
-        margin:theme.spacing(5),
-        minWidth:280,
-        minHeight:3,
-        alignSelf: 'flex-end',
-        flexGrow: 1,
-        
+        margin : theme.spacing(5),
+        minWidth : '20%',
+        minHeight : '10%',
+        alignSelf : 'flex-end',
+        flexGrow : 1,  
     },
     toolbar: {
         minHeight: 128,
         alignItems: 'fixed-end',
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
+    },
+    submit : {
+        margin : theme.spacing(5),
     },
     button:{
         marginLeft : theme.spacing(2),
@@ -56,53 +55,42 @@ const useStyles = makeStyles((theme)=>({
         borderRadius:20,
         padding : theme.spacing(2)
     },
+    select : {
+        minWidth : '40%'
+    }
 }))
 
-export default function Navbar(props){
+export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,handlesetSearch}){
     let {user} = useContext(userContext)
     const classes=useStyles();
-    // const[location,setLocal]=useState("");
-    // const[price,setPrice]=useState("");
-    // const[prefer,setPrefer]=useState("");
+   
     const[open, setOpen] = useState(false)
-    const[search, setSearch] = useState('')
-    const handleChangelocal=e=>{
-        props.Local(e.target.value)
+    // const[search, setSearch] = useState('')
+    const handleChangelocal= e =>{
+        Local(e.target.value)
     };
-    const handleChangeprice=e=>{
-        props.Price(e.target.value)
+    const handleChangeprice= e =>{
+        Price(e.target.value)
     };
-    const handleChangeprefer=e=>{
-        props.Prefer(e.target.value)
+    const handleChangeprefer= e =>{
+        Prefer(e.target.value)
     };
     const handleClose = () => {
         setOpen(false)
     }
     const handleSetSearch = (e) => {
-        setSearch(e.target.value)
+        handlesetSearch(e.target.value)
     }
-    const handleSearch = async () => {
-        const {data} = await instance.post(`/search/?QUERY=${search}`)
-    }
-    // useEffect(async ()=>{
-        
-    //     console.log(Local);
-    //     sole.log(Local);
-    //   },[])
+   
     
-    
+    {console.log("search",search);}
     return(
-        <Grid container>
+        <>
             <Paper className={classes.paper}>
-                {/* <Link className="navbar-brand" to="/">
-                    <img src={foodIcon}/>
-                </Link> */}
                 <Box className={classes.box2}>
-                <Grid item container>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl}>
                         <InputLabel>location</InputLabel>
-                        <Select className="select"
+                        <Select className={classes.select}
                         labeled="select-location"
                         id="location-select"
                         displayEmpty
@@ -114,8 +102,6 @@ export default function Navbar(props){
                             <MenuItem value={"公館"}>公館</MenuItem>
                         </Select>
                     </FormControl>
-                    </Grid>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl} >
                         <InputLabel>Price</InputLabel>
                         <Select className="select"
@@ -131,8 +117,6 @@ export default function Navbar(props){
                             <MenuItem value={"$$$"}>$$$</MenuItem>
                         </Select>
                     </FormControl>
-                    </Grid>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl} >
                         <InputLabel>Preference</InputLabel>
                         <Select className="select"
@@ -151,24 +135,20 @@ export default function Navbar(props){
                             <MenuItem value={"義大利麵"}>義大利麵</MenuItem>
                         </Select>
                         </FormControl>
-                    </Grid>
-                    <Grid item>
-                        <Button onClick={props.submit}>Submit</Button>
-                    </Grid>
-                </Grid>
-                </Box>
-                    <Grid item xs={4}>
-                        <Box className={classes.box2}>
-                            <TextField value={search} variant="outlined" label="Restaurant name" onChange={(e) => handleSetSearch(e)}></TextField>
-                            <Button className={classes.button} onClick={handleSearch}>Search</Button>
-                        </Box>
-                    </Grid>
+                        <FormControl className={classes.submit}>
+                            <Button onClick={Submit}>Submit</Button>
+                        </FormControl>
+                    </Box>
+                    <Box className={classes.box2} alignItems="center" justifyContent="center">
+                        <TextField className={classes.button} value={search} variant="outlined" label="Restaurant name" onChange={(e) => handleSetSearch(e)}></TextField>
+                        <Button className={classes.button} onClick={handleSearch}>Search</Button>
+                    </Box>
             </Paper>
             <Backdrop open={open} className={classes.backdrop}>
                 <Random CloseBackdrop={handleClose}/>
             </Backdrop>
-        </Grid>
-       
+        {/* // </Grid> */}
+       </>
     )
 }
 

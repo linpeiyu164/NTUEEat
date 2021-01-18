@@ -20,7 +20,7 @@ cloudinary.config({
 router.route('/')
 .get(async(req,res) => {
     try{
-        let allStores = await Store.find({}, 'storename rating _id');
+        let allStores = await Store.find({}, 'storename rating _id favorites');
         // return higher ranking restaurants at the front of the array
         allStores.sort((a, b) => {
             if(parseFloat(a.rating) > parseFloat(b.rating)){
@@ -79,6 +79,7 @@ router.post('/search', async (req, res) => {
         console.error(err)
     }
 })
+
 router.route('/store/:id')
 .get(async (req,res) => {
     //這邊我會給你單一一個店家的「詳細」資料
@@ -86,13 +87,6 @@ router.route('/store/:id')
     res.json(store);
 })
 .post(async(req, res) => {
-    /*
-    storename
-    username
-    content
-    rating
-    storeid
-    */
    try{
     let user = await User.findOne({ username : req.body.username }).populate('comments')
     const exist = user.comments.some(comment => {
@@ -105,13 +99,15 @@ router.route('/store/:id')
     }else{
         const comment =  new Comment({
             store : req.body.storeid,
+            profilePic : user.profilePic,
             storename : req.body.storename,
             username : req.body.username,
             content : req.body.content,
             rating : req.body.rating
         })
         await comment.save();
-        await user.comments.push(comment)
+        user.comments.push(comment)
+        await user.save()
         let store = await Store.findOne({ _id : req.body.storeid }).populate('comments')
         store.comments.push(comment)
         await store.save()
@@ -133,7 +129,7 @@ router
     const stores = await Store.find();
     const { Error } = await checkInput(stores, req)
     if(Error){
-        res.json({ error : Error })
+        res.json({ message : Error })
     }
     else{
         try{
@@ -163,10 +159,9 @@ router
                     res.status(500).json({message : 'image failed to upload from server side'})
                 }
             })
-            await newStore.save();  
-            res.status(200)
+            res.status(200).json({ message : "success" })
         }catch(err){
-            res.status(400)
+            res.status(500).json({message: 'fail to add a new store'})
             console.error(err)
         }
     }
@@ -174,7 +169,7 @@ router
 
 router.get('/random', async(req, res) => {
     const result = await getRandom(Store);
-    console.log(result)
+    // console.log(result)
     res.json(result)
 })
 
