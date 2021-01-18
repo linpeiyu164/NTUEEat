@@ -12,13 +12,16 @@ import HomeIcon from '@material-ui/icons/Home';
 import userContext from '../userContext'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import foodIcon from '../Image/foodicon.png'
+import { Avatar } from '@material-ui/core';
+
 // import instance from "../routes"
 import { Link } from 'react-router-dom'  
 
 const useStyles=makeStyles((theme)=>({
     appbar:{
-      padding : theme.spacing(3),
-      backgroundColor : "#D4E6F1"
+        display: 'flex',
+        padding : theme.spacing(3),
+        backgroundColor : "#D4E6F1"
     },
     Button:{
         margin:theme.spacing(2),
@@ -44,19 +47,20 @@ export default function Mainbar(){
         <>
         <Grid container>
         <AppBar className={classes.appbar}>
-            <Grid item container spacing={2} justify="space-between">
+            <Grid item container spacing={2} style={{display: "flex" , justifyContent: 'flex-end'}}>
                 {
                     (user) ? (
-                        <Grid item>
-                            <Link to='/' style={{ textDecoration : "none" }}><IconButton><HomeIcon></HomeIcon></IconButton></Link>
-                            <IconButton><ExitToAppIcon onClick={handleLogOut}></ExitToAppIcon></IconButton>
-                            <Link to="/profile" style={{ textDecoration : "none"}}><IconButton><FaceIcon></FaceIcon></IconButton></Link>
-                            <Link to="/addstore" style={{ textDecoration : "none"}}><IconButton><AddCircleIcon></AddCircleIcon></IconButton></Link>
-                            <IconButton onClick={() => setOpen(prev => !prev)}><EmojiObjectsIcon></EmojiObjectsIcon></IconButton>
-                        </Grid>
+                        <>
+                        <Grid item><Link to='/' style={{ textDecoration : "none" }}><IconButton><HomeIcon></HomeIcon></IconButton></Link></Grid>
+                        <Grid item><IconButton><ExitToAppIcon onClick={handleLogOut}></ExitToAppIcon></IconButton></Grid>
+                        <Grid item><Link to="/addstore" style={{ textDecoration : "none"}}><IconButton><AddCircleIcon></AddCircleIcon></IconButton></Link></Grid>
+                        <Grid item><IconButton onClick={() => setOpen(prev => !prev)}><EmojiObjectsIcon></EmojiObjectsIcon></IconButton></Grid>
+                        <Grid item><Link to="/profile" style={{ textDecoration : "none"}}><IconButton><Avatar src={user.profilePic} /></IconButton></Link></Grid>
+                        </>
                     ) : (
                         <Grid item>
                             <Link to="/login" style={{ textDecoration : "none"}}><Button className={classes.Button} variant="outlined" color="default" size="large">Login</Button></Link>
+                            <Link to='/' style={{ textDecoration : "none" }}><IconButton><HomeIcon></HomeIcon></IconButton></Link>
                             <IconButton onClick={() => setOpen(prev => !prev)}><EmojiObjectsIcon></EmojiObjectsIcon></IconButton>
                         </Grid>
                     )

@@ -32,7 +32,11 @@ function StoreContainer (props) {
             rating: data.rating,
             comments: data.comments
         })
+<<<<<<< HEAD
     },[ id ])
+=======
+    },[id])
+>>>>>>> bbebad7afbfd882381f5c960e8c6147c6ff0cf42
     //const data = await fetchStoreData('6002e4d7d31a19a31b19086f');
     //console.log("data: ", data)
     if (data !== "error"){

@@ -10,12 +10,15 @@ import Main from './main/Main'
 
 import userContext from './userContext'
 import Store from './containers/storeContainer'
-
+// import StoreMap from './StoreMap'
+// import Geolocator from './Geolocator'
 function App() {
   const [user, setUser] = useState(null);
-  
   return (
     <>
+    {/* <Geolocator /> */}
+    {
+      <>
       <Router>
         <userContext.Provider value={{user, setUser}}>
             <Mainbar />
@@ -31,6 +34,8 @@ function App() {
             <Route path="/addstore" exact component={AddStore} />
         </userContext.Provider>
       </Router>
+      </>
+    }
     </>
     
   )

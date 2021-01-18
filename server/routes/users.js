@@ -3,12 +3,16 @@ const router = express.Router();
 const User = require('../model/User')
 const Store = require('../model/Store')
 const Comment = require('../model/Comment')
+const ProfilePic = require('../model/ProfilePic')
+
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const { getRandom } = require('../core/functions');
 
 router.post('/register', async (req, res) => {
     let { username , password } = req.body
     try{
+        const pic = await getRandom(ProfilePic)
         const user = await User.findOne({ username : username })
         const hashed = await bcrypt.hash(password, 10)
         if(user){
@@ -16,9 +20,11 @@ router.post('/register', async (req, res) => {
         }else{
             let newUser = new User({
                 username : username,
-                password : hashed
+                password : hashed,
+                profilePic : pic.url
             })
             newUser.save() // not awaiting
+            console.log(newUser)
             res.json({ isUnique : true })
         }
     }catch(err){
@@ -47,9 +53,8 @@ router.post('/login', (req, res, next) => {
 router.post('/favorite', async (req,res) => {
     const user = await User.findOne({ _id : req.body.userID })
     const store = await Store.findOne({ _id : req.body.storeID })
-    console.log(store, user)
-    store.favorites+=1;
-    user.favorites.push(store);
+    store.favorites++;
+    user.favorites.push(store._id);
     await store.save();
     await user.save()
     await user.populate('favorites')
@@ -67,8 +72,8 @@ router.delete('/favorite', async(req,res)=> {
         user.favorites = [...newarray]
         await user.save()
         const store = await Store.findOne({ _id : req.query.STOREID })
-        store.favorites -= 1;
-        await store.save(); // not awaiting
+        store.favorites--;
+        store.save(); // not awaiting
         res.json(user.favorites)
     }catch(err){
         console.log(err)
@@ -85,6 +90,7 @@ router.get('/favorites/:id', async (req,res)=>{
     res.json(user.favorites)
 })
 
+//edit
 router.post('/comments', async (req, res) => {
     const comment = await Comment.findOne({ _id : req.body._id})
     comment.content = req.body.content
@@ -93,6 +99,7 @@ router.post('/comments', async (req, res) => {
     res.json(comment)
 })
 
+//delete
 router.delete(`/comments`, async(req,res) => {
     let user = await User.findOne({ _id : req.query.USERID }).populate('comments')
     let newcomments = user.comments.filter(comment => {

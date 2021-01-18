@@ -16,20 +16,18 @@ function checkPrice(low, high){
 function calculateAverageRating(store){
     let avg = 0
     store.comments.forEach(comment => {
+        console.log(typeof comment.rating)
         avg += comment.rating
     })
     avg = avg/(store.comments.length)
-    avg = toString(avg)
-    if(avg.length > 3){
-        avg = `${avg[0]}+${avg[1]}+${avg[2]}`
-    }
+    // avg = Math.round(avg, -1);
     return avg;
 }
 
-const getRandom = async (Store) => {
-    const total = await Store.countDocuments();
+const getRandom = async (Collection) => {
+    const total = await Collection.countDocuments();
     let random = Math.floor(Math.random() * total)
-    const result = await Store.findOne().skip(random)
+    const result = await Collection.findOne().skip(random)
     return result
 }
 

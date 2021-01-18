@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import StarIcon from '@material-ui/icons/Star';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { 
   BrowserRouter as Router,
   Switch,
@@ -21,7 +22,7 @@ const instance = axios.create({ baseURL : "http://localhost:4000/"});
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minWidth: 275,
+    maxWidth: '100%',
     margin : theme.spacing(2),
     padding : theme.spacing(2)
   },
@@ -31,6 +32,9 @@ const useStyles = makeStyles(theme => ({
   pos: {
     marginBottom: 12,
   },
+  typography : {
+    marginRight : theme.spacing(2)
+  }
 }));
 
 export default function OutlinedCard(props) {
@@ -97,7 +101,6 @@ export default function OutlinedCard(props) {
               </Typography>
             </Link>
           </Grid>
-
           <Grid item>
               <IconButton aria-label="add to favorites" onClick={() => setCheck(!check)} disabled={!user}>
                 { check ?
@@ -106,14 +109,21 @@ export default function OutlinedCard(props) {
                 }
               </IconButton>
             </Grid>
-
           <Grid item container>
             <Grid item>
               <StarIcon></StarIcon>
             </Grid>
             <Grid item>
-              <Typography>
-              {props.rating? (`${props.props.rating} : `): 0 }
+              <Typography className={classes.typography}>
+              {props.data.rating? (`${props.data.rating}`): 0 }
+              </Typography>
+            </Grid>
+            <Grid item>
+              <FavoriteBorderIcon></FavoriteBorderIcon>
+            </Grid>
+            <Grid item>
+              <Typography className={classes.typography}>
+              {props.data.favorites? (`${props.data.favorites}`): 0 }
               </Typography>
             </Grid>
           </Grid>

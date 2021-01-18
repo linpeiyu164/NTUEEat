@@ -17,18 +17,20 @@ const useStyles = makeStyles((theme)=>({
         right: theme.spacing(2),
     },
     FormControl:{
-        margin:theme.spacing(5),
-        minWidth:280,
-        minHeight:3,
-        alignSelf: 'flex-end',
-        flexGrow: 1,
-        
+        margin : theme.spacing(5),
+        minWidth : '20%',
+        minHeight : '10%',
+        alignSelf : 'flex-end',
+        flexGrow : 1,  
     },
     toolbar: {
         minHeight: 128,
         alignItems: 'fixed-end',
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
+    },
+    submit : {
+        margin : theme.spacing(5),
     },
     button:{
         marginLeft : theme.spacing(2),
@@ -53,6 +55,9 @@ const useStyles = makeStyles((theme)=>({
         borderRadius:20,
         padding : theme.spacing(2)
     },
+    select : {
+        minWidth : '40%'
+    }
 }))
 
 export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,handlesetSearch}){
@@ -80,14 +85,12 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
     
     {console.log("search",search);}
     return(
-        <Grid container>
+        <>
             <Paper className={classes.paper}>
                 <Box className={classes.box2}>
-                <Grid item container>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl}>
                         <InputLabel>location</InputLabel>
-                        <Select className="select"
+                        <Select className={classes.select}
                         labeled="select-location"
                         id="location-select"
                         displayEmpty
@@ -99,8 +102,6 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
                             <MenuItem value={"公館"}>公館</MenuItem>
                         </Select>
                     </FormControl>
-                    </Grid>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl} >
                         <InputLabel>Price</InputLabel>
                         <Select className="select"
@@ -116,8 +117,6 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
                             <MenuItem value={"$$$"}>$$$</MenuItem>
                         </Select>
                     </FormControl>
-                    </Grid>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl} >
                         <InputLabel>Preference</InputLabel>
                         <Select className="select"
@@ -136,25 +135,20 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
                             <MenuItem value={"義大利麵"}>義大利麵</MenuItem>
                         </Select>
                         </FormControl>
-                    </Grid>
-                    <Grid item>
-                        <Button onClick={Submit}>Submit</Button>
-                    </Grid>
-                </Grid>
-                </Box>
-                    <Grid item xs={4}>
-                        <Box className={classes.box2}>
-                            <TextField value={search} variant="outlined" label="Restaurant name" onChange={(e) => handleSetSearch(e)}></TextField>
-                            
-                            <Button className={classes.button} onClick={handleSearch}>Search</Button>
-                        </Box>
-                    </Grid>
+                        <FormControl className={classes.submit}>
+                            <Button onClick={Submit}>Submit</Button>
+                        </FormControl>
+                    </Box>
+                    <Box className={classes.box2} alignItems="center" justifyContent="center">
+                        <TextField className={classes.button} value={search} variant="outlined" label="Restaurant name" onChange={(e) => handleSetSearch(e)}></TextField>
+                        <Button className={classes.button} onClick={handleSearch}>Search</Button>
+                    </Box>
             </Paper>
             <Backdrop open={open} className={classes.backdrop}>
                 <Random CloseBackdrop={handleClose}/>
             </Backdrop>
-        </Grid>
-       
+        {/* // </Grid> */}
+       </>
     )
 }
 
