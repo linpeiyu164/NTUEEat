@@ -9,7 +9,7 @@ import Mainbar from './main/Mainbar'
 import Main from './main/Main'
 
 import userContext from './userContext'
-import Store from './containers/storeContainer'
+import StoreContainer from './containers/storeContainer'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -23,8 +23,9 @@ function App() {
             <Route exact path="/">
               <Main />
             </Route>
-            <Route path="/store/:id"> 
-              <Store />
+            <Route path={"/store/:id"}> 
+            {/* {console.log(id)} */}
+              <StoreContainer />
             </Route>
             <Route path="/login" exact component={Register} />
             <Route path="/random" exact component={Random} />

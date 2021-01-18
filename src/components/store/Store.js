@@ -1,3 +1,5 @@
+//// not in use
+
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -22,10 +24,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-
-
 function Store(props) {
+    console.log("store",props);
+    // console.log("hello");
     return(
         <>
             <BasicInfo />

@@ -87,7 +87,7 @@ function Random({ CloseBackdrop }){
                                 className={classes.innercard}
                             >
                                 <Typography variant="h5" style={{ display : "inline-block" }} className={classes.text}>{result.storename}</Typography>
-                                <Link to={`/${result._id}`}
+                                <Link to={`/store/${result._id}`}
                                     style={{paddingLeft: 13, 
                                         textDecoration: 'none', 
                                         display: "inline-block", 
@@ -96,6 +96,7 @@ function Random({ CloseBackdrop }){
                                     }}
                                 >
                                     <Button
+                                        onClick={()=>handleClose()}
                                         className={classes.buttonEat}
                                         style={{ 
                                             backgroundColor : "#3C3C3B",

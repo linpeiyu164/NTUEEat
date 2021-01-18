@@ -40,7 +40,7 @@ export default function OutlinedCard(props) {
   let {user, setUser} = useContext(userContext)
   
   const Favorite = async() => {
-  if(user && !firstcheck){
+  if( user ){
     const {data}= await instance.post("/users/favorite",{ 
       userID : user._id,
       storeID : props.data._id
@@ -59,7 +59,8 @@ export default function OutlinedCard(props) {
   const UnFavorite=async()=>{
     if(user){
       const {data}= await instance.delete(`/users/favorite?USERID=${user._id}&STOREID=${props.data._id}`)
-      console.log("userdata",data);
+      // console.log("userdata",data);
+      // setFirstcheck(false)
       const array = data.map(fav => fav._id)
       setUser(prev => {
         return {
@@ -71,27 +72,29 @@ export default function OutlinedCard(props) {
       console.log("Login ,please");
     }
   }
-  useEffect(async()=>{
+  useEffect(()=>{
     if(user){
       user.favorites.map(favor_id=>{if(props.data._id===favor_id){
         setCheck(true);
         setFirstcheck(true)}})
     }
   },[])
-  useEffect(async()=>{
+  useEffect(()=>{
     if(user){
       if(check !== null){
         check ? Favorite() : UnFavorite()
       }
-      console.log("check",check);
+      // console.log("check",check);
+    }else{
+      setCheck(false)
     }
-  },[check])
+  },[check,user])
 
     return (
     <Card className={classes.root} variant="outlined">
         <Grid container direction="row" alignItems="center" spacing={2} justify="space-between">
           <Grid item>
-            <Link to ={`/store/${props.data._id}`} style={{textDecoration:"none",color:"black"}}>
+            <Link to ={`/store/${props.data._id}`} style={{textDecoration:"none",color:"black"}} >
               <Typography variant="h5" component="h2">
                 {props.data.storename}
               </Typography>

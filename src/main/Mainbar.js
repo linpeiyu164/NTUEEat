@@ -49,7 +49,7 @@ export default function Mainbar(){
                     (user) ? (
                         <Grid item>
                             <Link to='/' style={{ textDecoration : "none" }}><IconButton><HomeIcon></HomeIcon></IconButton></Link>
-                            <IconButton><ExitToAppIcon onClick={handleLogOut}></ExitToAppIcon></IconButton>
+                            <IconButton><Link to="/" style={{ color : "inherit"}}><ExitToAppIcon onClick={handleLogOut}></ExitToAppIcon></Link></IconButton>
                             <Link to="/profile" style={{ textDecoration : "none"}}><IconButton><FaceIcon></FaceIcon></IconButton></Link>
                             <Link to="/addstore" style={{ textDecoration : "none"}}><IconButton><AddCircleIcon></AddCircleIcon></IconButton></Link>
                             <IconButton onClick={() => setOpen(prev => !prev)}><EmojiObjectsIcon></EmojiObjectsIcon></IconButton>

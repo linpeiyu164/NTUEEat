@@ -1,12 +1,6 @@
 // import Button from '@material-ui/core/Button';
 import Navbar from './Navbar'
 import StoreList from "./StoreList"
-import { 
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom'  
 import axios from "axios"
 import Alert from '@material-ui/lab/Alert';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
