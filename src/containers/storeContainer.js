@@ -2,13 +2,23 @@ import { fetchStoreData } from '../routes/routes'
 import BasicInfo from '../components/store/BasicInfo';
 import Review from '../components/store/Review';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import {Paper, makeStyles} from '@material-ui/core'
+import {Paper, makeStyles, Grid} from '@material-ui/core'
+import {
+    BrowserRouter as Router,
+    useParams
+  } from "react-router-dom";
 const useStyles = makeStyles(theme => ({
     paper : {
-        marginTop : theme.spacing(15),
-        marginLeft : theme.spacing(2),
-        marginRight : theme.spacing(2)
+        marginTop : theme.spacing(20),
+        marginLeft : theme.spacing(5),
+        marginRight : theme.spacing(2),
+        marginButtom: theme.spacing(3)
+    },
+    info : {
+        marginLeft : theme.spacing(0),
+        marginRight : theme.spacing(0),
+        maxWidth: 360,
+        width: '100%',
     }
 }))
 function StoreContainer (props) {
@@ -17,8 +27,11 @@ function StoreContainer (props) {
     let data;
     const [ basicInfo, setBasicInfo ] = useState(null)
     const [ review, setReview ] = useState(null)
+    
+    console.log("slug",id);
+
     useEffect(async () => {
-        data = await fetchStoreData(id);
+        const data = await fetchStoreData(id);
         console.log("id: ", data._id)
         setBasicInfo({
             storeName: data.storename,
@@ -32,23 +45,31 @@ function StoreContainer (props) {
             rating: data.rating,
             comments: data.comments
         })
-<<<<<<< HEAD
     },[ id ])
-=======
-    },[id])
->>>>>>> bbebad7afbfd882381f5c960e8c6147c6ff0cf42
     //const data = await fetchStoreData('6002e4d7d31a19a31b19086f');
     //console.log("data: ", data)
     if (data !== "error"){
         //console.log(basicInfo, review)
         return (
-            (basicInfo && review)?
-            (<div>
-               <Paper className={classes.paper}>
-               <BasicInfo data={basicInfo}/>
-                <Review data={review}/>
-               </Paper>
-            </div>):null
+        <div>
+            <Grid container>
+                <Grid item className={classes.info}>
+                    <Paper className={classes.paper}>
+                        <BasicInfo data={basicInfo && basicInfo}/>
+                        <Review data={review&&review}/>
+                    </Paper>
+                </Grid>
+
+                ////map
+                <Grid item >
+                    
+                </Grid>
+
+            </Grid>
+            
+                
+                
+        </div>
         )
     }
     

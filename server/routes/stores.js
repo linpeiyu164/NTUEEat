@@ -35,7 +35,7 @@ router.route('/')
     }
 })
 .post(async (req, res) => {
-    // console.log(req.body)
+    console.log(req.body)
     try{
         let price = [];
         switch(req.body.pricing){
@@ -52,7 +52,9 @@ router.route('/')
         let filteredArray = await Store.find({ 
             location : req.body.location, 
             pricing : price
-        }, 'storename rating _id')
+        }, 'storename rating _id type')
+        console.log(filteredArray);
+
         const array = filteredArray.filter(store => {
             if(store.type.some(e => e === req.body.preferences)){
                 return store
@@ -103,7 +105,7 @@ router.route('/store/:id')
             storename : req.body.storename,
             username : req.body.username,
             content : req.body.content,
-            rating : req.body.rating
+            rating : parseInt(req.body.rating,10)
         })
         await comment.save();
         user.comments.push(comment)

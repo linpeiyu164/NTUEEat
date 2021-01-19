@@ -101,6 +101,7 @@ function Random({ CloseBackdrop }){
                                     }}
                                 >
                                     <Button
+                                        onClick={()=>handleClose()}
                                         className={classes.buttonEat}
                                         style={{ 
                                             backgroundColor : "#3C3C3B",

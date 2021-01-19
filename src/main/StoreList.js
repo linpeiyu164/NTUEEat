@@ -3,16 +3,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import OutlinedCard from "./OutlinedCard"
 import { Grid, Paper } from '@material-ui/core';
-import  { uploadStoreInfo, fetchStoreData } from "../routes/routes";
-import axios from "axios";
-import { 
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom' 
+// import  { uploadStoreInfo, fetchStoreData } from "../routes/routes";
+// import axios from "axios";
+// import { 
+//   BrowserRouter as Router,
+//   Switch,
+//   Route,
+//   Link
+// } from 'react-router-dom' 
 
-const instance = axios.create({baseURL : "http://localhost:4000"});
+// const instance = axios.create({baseURL : "http://localhost:4000"});
 
 const useStyles = makeStyles((theme)=>({
     list : {

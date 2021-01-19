@@ -1,12 +1,6 @@
 // import Button from '@material-ui/core/Button';
 import Navbar from './Navbar'
 import StoreList from "./StoreList"
-import { 
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom'  
 import axios from "axios"
 import Alert from '@material-ui/lab/Alert';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
@@ -43,7 +37,7 @@ export default function Main() {
   const handleSetPrefer = (e) => {
     setPrefer(e)
   }
-  const handleClose = (e) => {
+  const handleClose = () => {
     setError(false)
   }
   const handleError = () => {
@@ -70,6 +64,7 @@ export default function Main() {
       location:location,
       preferences:prefer
     });
+    console.log("data",data)
     if(data.msg){
       setContents(null)
     }else if(data.Error){
