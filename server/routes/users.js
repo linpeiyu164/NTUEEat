@@ -98,6 +98,7 @@ router.get('/favorites/:id', async (req,res)=>{
 
 //edit
 router.post('/comments', async (req, res) => {
+    console.log(req.body)
     const comment = await Comment.findOne({ _id : req.body._id})
     comment.content = req.body.content
     comment.rating = req.body.rating

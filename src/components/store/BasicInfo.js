@@ -62,7 +62,7 @@ function TogglePic() {
 function BasicInfo (props) {
     const classes = useStyles();
     function MenuGrid (props) {
-        console.log(props.data)
+        // console.log(props.data)
         return (
             <div className={classes.menuGrid}>
                 {props.data && props.data.menus.map(menu => {

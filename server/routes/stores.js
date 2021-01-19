@@ -8,6 +8,7 @@ let cloudinary = require('cloudinary').v2;
 const { NextWeek } = require('@material-ui/icons');
 const User = require('../model/User')
 const Comment = require('../model/Comment')
+const findCoord = require('../child_process/findCoord')
 
 const { checkPrice , getRandom , checkInput, calculateAverageRating } = functions
 
@@ -52,9 +53,8 @@ router.route('/')
         let filteredArray = await Store.find({ 
             location : req.body.location, 
             pricing : price
-        }, 'storename rating _id type')
-        console.log(filteredArray);
-
+        }, 'storename rating _id')
+        
         const array = filteredArray.filter(store => {
             if(store.type.some(e => e === req.body.preferences)){
                 return store
@@ -97,26 +97,31 @@ router.route('/store/:id')
         }
     })
     if(exist){
-        res.json({ Error : "You have already given a review"})
+        res.status(400).json({ Error : "You have already given a review"})
     }else{
-        const comment =  new Comment({
-            store : req.body.storeid,
-            profilePic : user.profilePic,
-            storename : req.body.storename,
-            username : req.body.username,
-            content : req.body.content,
-            rating : parseInt(req.body.rating,10)
-        })
-        await comment.save();
-        user.comments.push(comment)
-        await user.save()
-        let store = await Store.findOne({ _id : req.body.storeid }).populate('comments')
-        store.comments.push(comment)
-        await store.save()
-        let newRating = calculateAverageRating(store)
-        store.rating = newRating
-        await store.save()
-        res.status(200).json(comment)
+        console.log(req.body)
+        if(req.body.content && req.body.rating){
+            const comment =  new Comment({
+                store : req.body.storeid,
+                profilePic : user.profilePic,
+                storename : req.body.storename,
+                username : req.body.username,
+                content : req.body.content,
+                rating : parseInt(req.body.rating,10)
+            })
+            await comment.save();
+            user.comments.push(comment)
+            await user.save()
+            let store = await Store.findOne({ _id : req.body.storeid }).populate('comments')
+            store.comments.push(comment)
+            await store.save()
+            let newRating = calculateAverageRating(store)
+            store.rating = newRating
+            await store.save()
+            res.status(200).json(comment)
+        }else{
+            res.status(400).json({ Error : "Content or Rating is empty" })
+        }
     }
    }catch(err){
        console.error(err)
@@ -173,6 +178,13 @@ router.get('/random', async(req, res) => {
     const result = await getRandom(Store);
     // console.log(result)
     res.json(result)
+})
+
+router.post('/geo', async(req, res) => {
+    console.log('req: ', req.body)
+    const coord = await findCoord(req.body.addr);
+    console.log('coord: ', coord)
+    res.json(JSON.parse(coord))
 })
 
 module.exports = router;

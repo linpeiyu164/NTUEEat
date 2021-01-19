@@ -2,6 +2,7 @@
 import requests
 import sys
 import time
+import json
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
@@ -25,9 +26,10 @@ def get_coordinate(addr):
     lat = coor[-1].split("：")[-1]
     log = coor[0].split("：")[-1]
     browser.quit()
-    return str((lat, log))
+    #return str((lat, log))
+    return json.dumps({"lat": lat, "log": log})
 
-try: 
+try:
     print(get_coordinate(sys.argv[1]))
 except:
-    print('Too slow')
+    print('error')

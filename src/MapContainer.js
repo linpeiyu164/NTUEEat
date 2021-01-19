@@ -1,16 +1,57 @@
 import { CodeSharp } from "@material-ui/icons"
-import { useEffect } from "react"
+import { useEffect , useContext, useState} from "react"
+import { getCoord } from './routes/routes'
 import StoreMap from "./StoreMap"
-
+import userCommentContext from './components/store/userCommentContext'
+// import findCoord from './child_process/findCoord'
 function MapContainer({
-        coords,
-        isGeolocationAvailable, // boolean flag indicating that the browser supports the Geolocation API
-        isGeolocationEnabled, // boolean flag indicating that the user has allowed the use of the Geolocation API
-        positionError, // object with the error returned from the Geolocation API call
-    }){
-    
+    coords,
+    isGeolocationAvailable, // boolean flag indicating that the browser supports the Geolocation API
+    isGeolocationEnabled, // boolean flag indicating that the user has allowed the use of the Geolocation API
+    positionError, // object with the error returned from the Geolocation API call
+}){
+    const [storeCoordination, setStoreCoordination] = useState();
+    const {address} = useContext(userCommentContext) 
+    //console.log(address)
+    console.log('flag2: ', coords)
     let { latitude, longitude } = coords
-
+    console.log('flag')
+    useEffect(async() => {
+        const loc = await getCoord(address)
+        if (loc !== 'error'){
+            console.log('loc: ', loc)
+            // const data = JSON.parse(loc)
+            const data = loc
+            let lat = data.lat;
+            let log = data.log;
+            lat = parseFloat(lat)
+            log = parseFloat(log)
+            setStoreCoordination({ lat : lat, log : log})
+            console.log(lat, log)
+        } 
+        // setStoreCoordination(loc)
+    },[])
+    //const storeCoordination = await getCoord(address)
+    //console.log('storeCoordi', storeCoordination)
+    // let lat, log;
+    // if (storeCoordination !== 'error'){
+    //     const data = JSON.parse(storeCoordination)
+    //     lat = data.lat;
+    //     log = data.log;
+    //     lat = parseFloat(lat)
+    //     log = parseFloat(log)
+    //     console.log(lat, log)
+    // } 
+    // useEffect(() => {
+    //     if (storeCoordination !== 'error'){
+    //         const data = JSON.parse(storeCoordination)
+    //         lat = data.lat;
+    //         log = data.log;
+    //         lat = parseFloat(lat)
+    //         log = parseFloat(log)
+    //         console.log(lat, log)
+    //     } 
+    // }, [storeCoordination])
     const calculateDistance = (lat1, lng1, lat2, lng2) => {
         // spherical coordinates dl = ( dr , r * dtheta + r^2 , r * sintheta * dphi)
         const EARTH_RADIUS = 6371
@@ -27,8 +68,8 @@ function MapContainer({
                     <div>Your browser does not support Geolocation</div>
                 ) : (!isGeolocationEnabled) ? (
                     <div>Geolocation is not enabled, if using Safari, please switch to Chrome</div>
-                ) :  coords? (
-                    <StoreMap calculateDistance={calculateDistance} storename="storename" userCoords={[latitude, longitude]} location="taipei" rating={4.3} />
+                ) :  (coords && storeCoordination)? (
+                    <StoreMap calculateDistance={calculateDistance} storename="storename" userCoords={[latitude, longitude]} storeCoords={storeCoordination&&[storeCoordination.lat, storeCoordination.log]} location="taipei" rating={4.3} />
                 ) : (
                     <div>Loading</div>
                 )
@@ -37,3 +78,11 @@ function MapContainer({
     )
 }
 export default MapContainer
+/*
+{
+        coords,
+        isGeolocationAvailable, // boolean flag indicating that the browser supports the Geolocation API
+        isGeolocationEnabled, // boolean flag indicating that the user has allowed the use of the Geolocation API
+        positionError, // object with the error returned from the Geolocation API call
+    }
+*/

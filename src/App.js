@@ -7,7 +7,6 @@ import Profile from './Profile'
 import AddStore from './containers/AddStore';
 import Mainbar from './main/Mainbar'
 import Main from './main/Main'
-
 import userContext from './userContext'
 import Store from './containers/storeContainer'
 // import StoreMap from './StoreMap'

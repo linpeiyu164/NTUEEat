@@ -23,19 +23,6 @@ const uploadStoreInfo = async (encodedFiles) => {
         console.log('i fail')
         response = 'client-side error'
     }
-    // .then(res => {
-    //     console.log("response", res.data)
-    //     if(res.data){
-    //         response = res.data.message
-    //         console.log(response)
-    //     }else{
-    //         response = 'success'
-    //     }
-    // })
-    // .catch(err => {
-    //     console.log('clientside error')
-    //     response = 'client-side error'
-    // });
     return response;
 }
 
@@ -70,9 +57,24 @@ const reviseComment = async (data) => {
     await instance.post('/users/comments', data)
     .then(res => response = res)
     .catch(err => {
-        throw err
+        console.log(err)
     })
     return response
 }
 
-export { uploadStoreInfo, fetchStoreData, sendComment, reviseComment };
+const getCoord = async (addr) => {
+    let response;
+    response = await instance.post('/stores/geo', {addr: addr})
+    .then(res => {
+        //console.log('data: ', res)
+        return res.data
+    })
+    .catch(err => {
+        response = 'error'
+        console.log('error: ', err)
+    })
+    //console.log('response: ', response)
+    return response
+}
+
+export { uploadStoreInfo, fetchStoreData, sendComment, reviseComment, getCoord };

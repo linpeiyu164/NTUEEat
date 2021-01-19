@@ -8,7 +8,7 @@ import { blue } from "@material-ui/core/colors";
 import { Link } from 'react-router-dom'
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import axios from 'axios'
-import RateStar from './components/store/boxes/Ratestar'
+import RateStar from './components/store/Ratestar'
 import DeleteIcon from '@material-ui/icons/Delete';
 
 const instance = axios.create({ baseURL : "http://localhost:4000/users" })

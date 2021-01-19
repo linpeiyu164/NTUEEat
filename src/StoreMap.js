@@ -18,6 +18,7 @@ const useStyles = makeStyles({
 });
   
 function StoreMap({ calculateDistance, storename , userCoords, storeCoords, location, rating}){
+        console.log(storename, userCoords, storeCoords, location, rating)
         const classes = useStyles()
         let [distance, setDistance] = useState()
         // useEffect(() => {

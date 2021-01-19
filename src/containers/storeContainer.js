@@ -2,11 +2,13 @@ import { fetchStoreData } from '../routes/routes'
 import BasicInfo from '../components/store/BasicInfo';
 import Review from '../components/store/Review';
 import { useEffect, useState } from 'react';
-import {Paper, makeStyles, Grid} from '@material-ui/core'
-import {
-    BrowserRouter as Router,
-    useParams
-  } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import {Paper, makeStyles} from '@material-ui/core';
+import Map from '../Geolocator'
+
+//import userRateContext from '../components/store/userCommentContext'
+import userCommentContext from '../components/store/userCommentContext'
+
 const useStyles = makeStyles(theme => ({
     paper : {
         marginTop : theme.spacing(20),
@@ -27,12 +29,14 @@ function StoreContainer (props) {
     let data;
     const [ basicInfo, setBasicInfo ] = useState(null)
     const [ review, setReview ] = useState(null)
-    
-    console.log("slug",id);
-
+    const [ userComment, setUserComment] = useState(null);
+    const [ userRate, setUserRate] = useState(null);
+    const [commented, setCommented] = useState()
+    const [userCommentId, setUserCommentId] = useState(null)
+    const [ edit, setEdit ] = useState()
+    const [address, setAddress] = useState()
     useEffect(async () => {
-        const data = await fetchStoreData(id);
-        console.log("id: ", data._id)
+        data = await fetchStoreData(id);
         setBasicInfo({
             storeName: data.storename,
             address: data.address,
@@ -45,31 +49,22 @@ function StoreContainer (props) {
             rating: data.rating,
             comments: data.comments
         })
+        setAddress(data.address)
     },[ id ])
     //const data = await fetchStoreData('6002e4d7d31a19a31b19086f');
     //console.log("data: ", data)
     if (data !== "error"){
         //console.log(basicInfo, review)
         return (
-        <div>
-            <Grid container>
-                <Grid item className={classes.info}>
+            <div>
+                <userCommentContext.Provider value={{userComment, setUserComment , userRate , setUserRate, commented, setCommented, userCommentId, setUserCommentId, edit, setEdit, address, setAddress}}>
                     <Paper className={classes.paper}>
-                        <BasicInfo data={basicInfo && basicInfo}/>
-                        <Review data={review&&review}/>
+                    <BasicInfo data={basicInfo&&basicInfo}/>
+                    <Review data={review&&review}/>
                     </Paper>
-                </Grid>
-
-                ////map
-                <Grid item >
-                    
-                </Grid>
-
-            </Grid>
-            
-                
-                
-        </div>
+                    {address&&<Map />}
+                </userCommentContext.Provider>
+            </div>
         )
     }
     
