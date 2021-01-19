@@ -9,7 +9,7 @@ import RateStar from './Ratestar'
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import userRateContext from './userRateContext'
+// import userRateContext from './userRateContext'
 import userCommentContext from './userCommentContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,15 +31,22 @@ function Review (props) {
     //props.data
     const classes = useStyles();
     let { user } = useContext(userContext)
-    let { userComment , setUserComment } = useContext(userCommentContext)
-    let { userRate , setUserRate } = useContext(userRateContext)
-    const [ edit, setEdit ] = useState()
+    // const [commented, setCommented] = useState()
+    let { userComment , userRate, setUserRate, setUserComment, commented, setCommented, userCommentId, setUserCommentId,  edit, setEdit} = useContext(userCommentContext)
     // const handleUpdateComment = (newComment) => {
     //     setUserComment(newComment)
     // }
     // const handleUpdateStar = (newRate) => {
     //     setUserRate(newRate)
     // }
+    useEffect(() => {
+        if(userComment){
+            setCommented(true)
+        }
+    }, [])
+    useEffect(() => {
+
+    }, [])
     function CommentedBox (props) {
         //username rating content profilePic
         return (
@@ -67,28 +74,15 @@ function Review (props) {
         )
     }
 
-    function TypeIn ({edit}) {
-        // const [newRate, setNewRate] = useState()
-        // const [newComment, setNewComment] = useState()
-        // useEffect(() => {
-        //     if(userComment !== newComment){
-        //         handleUpdateComment(newComment)
-        //     }
-        //     if(userRate !== newRate){
-        //         handleUpdateStar(newRate)
-        //     }
-        //     console.log(userComment)
-        //     console.log(userRate)
-        // }, [newComment, newRate])
-        const {userComment, setUserComment} = useContext(userCommentContext)
-        const {userRate, setUserRate} = useContext(userRateContext)
+    function TypeIn () {
+        let { userComment , userRate, setUserRate, setUserComment, commented, setCommented, userCommentId, setUserCommentId,  edit, setEdit} = useContext(userCommentContext)
         const handleSubmit = async () => {
             if (userRate === 0) {
                 alert('請給至少一顆星星的評價ㄛ');
             } else if(userComment === 0) {
                 alert('請至少輸入一個字的評論ㄛ');
             } else {
-                const data = {
+                let data = {
                     storename: props.data.storename,
                     username: user.username,        
                     content: userComment,
@@ -97,11 +91,23 @@ function Review (props) {
                 }
                 try {
                     if(edit){
+                        data = {
+                            ...data,
+                            _id : userCommentId
+                        }
                         const response = await reviseComment(data)
-                        console.log('response: ', response)
+                        console.log('response: ', response.data)
+                        if(response){
+                            setCommented(true)
+                            setEdit(false)
+                        }
                     }else{
                         const response = await sendComment(data);
-                        console.log('response: ', response)
+                        console.log('response: ', response.data)
+                        if(response){
+                            setCommented(true)
+                            setUserCommentId(response.data._id)
+                        }
                     }
                 } catch (e) {
                     throw e
@@ -110,7 +116,7 @@ function Review (props) {
         }
         return (
             user ? 
-            ((userComment && !edit) ? (
+            ((!edit && userComment && commented) ? (
                     <CommentedBox username={user.username} rating={userRate} content={userComment} user={user.profilePic} />
                 ): <div className={classes.typeInComment}>
                     <div style={{display: 'flex'}}>
@@ -123,26 +129,26 @@ function Review (props) {
                             />
                         </div>
                     </div>
-                    <TextField onChange={(e)=>{setUserComment(e.target.value)}} value={userComment}/>
+                    <TextField autoFocus onChange={(e)=>{setUserComment(e.target.value)}} value={userComment}/>
                     <IconButton onClick={handleSubmit}>
                         <SendIcon />
                     </IconButton>
                 </div>) : <div>先登入才可以評論ㄛ～</div>
         )
     }
-    // useEffect(() => {
-    //     console.log(userComment)
-    // },[userComment])
-    // remain: avatar
+    
     function Comments (props) {
+        const { userComment, setUserComment, userRate, setUserRate} = useContext(userCommentContext)
         let comments = []
         if (props.comments) {
             if (user) {//console.log("comments: ", props)
                 props.comments.forEach(comment => {
                     if (comment.username !== user.username){
-                        comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} profilePic={comment.profilePic}/>)
+                        comments.push(<CommentedBox key={comment._id} username={comment.username} rating={comment.rating} content={comment.content} profilePic={comment.profilePic}/>)
                         // console.log('comments: ', comments)
                     } else {
+                        console.log(comment)
+                        setUserCommentId(comment._id)
                         setUserComment(comment.content)
                         setUserRate(comment.rating)
                     }
@@ -164,7 +170,7 @@ function Review (props) {
     return ( 
         <div className={classes.root}>
             <TypeIn edit={edit} />
-            {userComment ? (<Button onClick={ () => setEdit(true) }>修改</Button>) : null}
+            {commented ? (<Button onClick={ () => setEdit(true) }>修改</Button>) : null}
             <Comments comments={props.data&&props.data.comments}/>
         </div>
     )

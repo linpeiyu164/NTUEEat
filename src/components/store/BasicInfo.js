@@ -49,12 +49,12 @@ function TogglePic() {
 function BasicInfo (props) {
     const classes = useStyles();
     function MenuGrid (props) {
-        console.log(props.data)
+        // console.log(props.data)
         return (
             <div className={classes.menuGrid}>
                 {props.data&&props.data.menus.map(menu => {
                     const [ open, setOpen ] = TogglePic();
-                    console.log(menu)
+                    // console.log(menu)
                     return (
                         <div key={Date.now()+Math.random()}>
                             <ButtonBase

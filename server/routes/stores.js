@@ -53,6 +53,7 @@ router.route('/')
             location : req.body.location, 
             pricing : price
         }, 'storename rating _id')
+        
         const array = filteredArray.filter(store => {
             if(store.type.some(e => e === req.body.preferences)){
                 return store
@@ -95,9 +96,9 @@ router.route('/store/:id')
         }
     })
     if(exist){
-        res.json({ Error : "You have already given a review"})
+        res.status(400).json({ Error : "You have already given a review"})
     }else{
-        console.log(typeof req.body.rating)
+        console.log(req.body)
         if(req.body.content && req.body.rating){
             const comment =  new Comment({
                 store : req.body.storeid,
@@ -105,7 +106,7 @@ router.route('/store/:id')
                 storename : req.body.storename,
                 username : req.body.username,
                 content : req.body.content,
-                rating : req.body.rating
+                rating : parseInt(req.body.rating,10)
             })
             await comment.save();
             user.comments.push(comment)

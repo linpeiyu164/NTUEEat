@@ -23,6 +23,9 @@ function StoreContainer (props) {
     const [ review, setReview ] = useState(null)
     const [ userComment, setUserComment] = useState(null);
     const [ userRate, setUserRate] = useState(null);
+    const [commented, setCommented] = useState()
+    const [userCommentId, setUserCommentId] = useState(null)
+    const [ edit, setEdit ] = useState()
     useEffect(async () => {
         data = await fetchStoreData(id);
         setBasicInfo({
@@ -44,13 +47,11 @@ function StoreContainer (props) {
         //console.log(basicInfo, review)
         return (
             <div>
-                <userCommentContext.Provider value={{userComment, setUserComment}}>
-                <userRateContext.Provider value={{userRate, setUserRate}}>
+                <userCommentContext.Provider value={{userComment, setUserComment , userRate , setUserRate, commented, setCommented, userCommentId, setUserCommentId, edit, setEdit}}>
                     <Paper className={classes.paper}>
                     <BasicInfo data={basicInfo&&basicInfo}/>
                     <Review data={review&&review}/>
                     </Paper>
-                </userRateContext.Provider>
                 </userCommentContext.Provider>
             </div>
         )
