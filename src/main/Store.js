@@ -31,8 +31,6 @@ export default function Store(props){
                     <div className="info">
                         {/* ////把自己傳過來 */}
                     {/* <Typography></Typography> */}
-
-
                     </div>
                     
                     <div>

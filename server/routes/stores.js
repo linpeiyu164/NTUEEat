@@ -97,24 +97,29 @@ router.route('/store/:id')
     if(exist){
         res.json({ Error : "You have already given a review"})
     }else{
-        const comment =  new Comment({
-            store : req.body.storeid,
-            profilePic : user.profilePic,
-            storename : req.body.storename,
-            username : req.body.username,
-            content : req.body.content,
-            rating : req.body.rating
-        })
-        await comment.save();
-        user.comments.push(comment)
-        await user.save()
-        let store = await Store.findOne({ _id : req.body.storeid }).populate('comments')
-        store.comments.push(comment)
-        await store.save()
-        let newRating = calculateAverageRating(store)
-        store.rating = newRating
-        await store.save()
-        res.status(200).json(comment)
+        console.log(typeof req.body.rating)
+        if(req.body.content && req.body.rating){
+            const comment =  new Comment({
+                store : req.body.storeid,
+                profilePic : user.profilePic,
+                storename : req.body.storename,
+                username : req.body.username,
+                content : req.body.content,
+                rating : req.body.rating
+            })
+            await comment.save();
+            user.comments.push(comment)
+            await user.save()
+            let store = await Store.findOne({ _id : req.body.storeid }).populate('comments')
+            store.comments.push(comment)
+            await store.save()
+            let newRating = calculateAverageRating(store)
+            store.rating = newRating
+            await store.save()
+            res.status(200).json(comment)
+        }else{
+            res.status(400).json({ Error : "Content or Rating is empty" })
+        }
     }
    }catch(err){
        console.error(err)

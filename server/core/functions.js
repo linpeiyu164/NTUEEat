@@ -20,7 +20,6 @@ function calculateAverageRating(store){
         avg += comment.rating
     })
     avg = avg/(store.comments.length)
-    // avg = Math.round(avg, -1);
     return avg;
 }
 

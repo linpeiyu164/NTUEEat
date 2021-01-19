@@ -27,7 +27,6 @@ export default function Main() {
   let {user} = useContext(userContext)
   const classes = useStyles()
   const [content,setContents]=useState("") 
-  
   const[location,setLocal] = useState("");
   const[price,setPrice] = useState("");
   const[prefer,setPrefer] = useState("");
@@ -87,7 +86,6 @@ export default function Main() {
     }else{
       setContents(data);
     }
-    // console.log(content);
   }
   return (
       <div className="main">

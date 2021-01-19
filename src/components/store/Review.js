@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import userContext from '../../userContext';
-import { sendComment } from '../../routes/routes';
-import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { sendComment , reviseComment} from '../../routes/routes';
+import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography , Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import StarIcon from '@material-ui/icons/Star';
@@ -9,6 +9,8 @@ import RateStar from './Ratestar'
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import userRateContext from './userRateContext'
+import userCommentContext from './userCommentContext'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,21 +27,25 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
-
-
-
 function Review (props) {
+    //props.data
     const classes = useStyles();
-    let { user } = useContext(userContext);
-    const [ userComment, setUserComment ] = useState(null)
-    const [ userRate, setUserRate ] = useState(0);
-    //const { rating, comments } = props.data;
+    let { user } = useContext(userContext)
+    let { userComment , setUserComment } = useContext(userCommentContext)
+    let { userRate , setUserRate } = useContext(userRateContext)
+    const [ edit, setEdit ] = useState()
+    // const handleUpdateComment = (newComment) => {
+    //     setUserComment(newComment)
+    // }
+    // const handleUpdateStar = (newRate) => {
+    //     setUserRate(newRate)
+    // }
     function CommentedBox (props) {
+        //username rating content profilePic
         return (
             <ListItem key={Date.now() + Math.random()}>
                 <ListItemAvatar>
-                    <Avatar src=""/>
+                    <Avatar src={props.profilePic} />
                 </ListItemAvatar>
                     <ListItemText 
                         primary={props.username}
@@ -60,57 +66,73 @@ function Review (props) {
             </ListItem>
         )
     }
-    function TypeIn () {
-        const [ rate, setRate ] = useState(0);
-        const [ typeIn, setTypeIn ] = useState('');
-        const handleChange = event => {
-            setTypeIn(event.target.value);
-        }
+
+    function TypeIn ({edit}) {
+        // const [newRate, setNewRate] = useState()
+        // const [newComment, setNewComment] = useState()
+        // useEffect(() => {
+        //     if(userComment !== newComment){
+        //         handleUpdateComment(newComment)
+        //     }
+        //     if(userRate !== newRate){
+        //         handleUpdateStar(newRate)
+        //     }
+        //     console.log(userComment)
+        //     console.log(userRate)
+        // }, [newComment, newRate])
+        const {userComment, setUserComment} = useContext(userCommentContext)
+        const {userRate, setUserRate} = useContext(userRateContext)
         const handleSubmit = async () => {
-            if (rate === 0) {
+            if (userRate === 0) {
                 alert('請給至少一顆星星的評價ㄛ');
-            } else if(typeIn.length === 0) {
+            } else if(userComment === 0) {
                 alert('請至少輸入一個字的評論ㄛ');
             } else {
-                console.log('storeid: ', props.data.storeId)
                 const data = {
                     storename: props.data.storename,
-                    username: user.username,
-                    content: typeIn,
-                    rating: rate,
+                    username: user.username,        
+                    content: userComment,
+                    rating: userRate,
                     storeid: props.data.storeId
                 }
                 try {
-                    const response = await sendComment(data);
-                    console.log('response: ', response)
+                    if(edit){
+                        const response = await reviseComment(data)
+                        console.log('response: ', response)
+                    }else{
+                        const response = await sendComment(data);
+                        console.log('response: ', response)
+                    }
                 } catch (e) {
                     throw e
                 }
             }
         }
         return (
-            user? 
-            ( userComment?
-                <CommentedBox username={user.username} rating={userRate} content={userComment}/>
-                : <div className={classes.typeInComment}>
+            user ? 
+            ((userComment && !edit) ? (
+                    <CommentedBox username={user.username} rating={userRate} content={userComment} user={user.profilePic} />
+                ): <div className={classes.typeInComment}>
                     <div style={{display: 'flex'}}>
                         <Avatar style={{right: '5px'}} src=""/>
                         <div>
                             <span style={{display: 'block'}}>{user.username}</span>
                             <RateStar 
-                                handleSelectRate={setRate}
+                                handleSelectRate={setUserRate}
                                 style={{display: 'block'}}
                             />
                         </div>
                     </div>
-                    
-                    <TextField onChange={handleChange} value={typeIn}/>
+                    <TextField onChange={(e)=>{setUserComment(e.target.value)}} value={userComment}/>
                     <IconButton onClick={handleSubmit}>
                         <SendIcon />
                     </IconButton>
                 </div>) : <div>先登入才可以評論ㄛ～</div>
         )
     }
+    // useEffect(() => {
+    //     console.log(userComment)
+    // },[userComment])
     // remain: avatar
     function Comments (props) {
         let comments = []
@@ -118,10 +140,8 @@ function Review (props) {
             if (user) {//console.log("comments: ", props)
                 props.comments.forEach(comment => {
                     if (comment.username !== user.username){
-                        
-                        comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} />)
-                        
-                        console.log('comments: ', comments)
+                        comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} profilePic={comment.profilePic}/>)
+                        // console.log('comments: ', comments)
                     } else {
                         setUserComment(comment.content)
                         setUserRate(comment.rating)
@@ -129,8 +149,7 @@ function Review (props) {
                 })
             } else {
             props.comments.forEach(comment => {
-                comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} />)
-                
+                comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} profilePic={comment.profilePic}/>)
                 console.log('comments: ', comments)
             })
         }
@@ -144,8 +163,8 @@ function Review (props) {
     }
     return ( 
         <div className={classes.root}>
-            
-            <TypeIn />
+            <TypeIn edit={edit} />
+            {userComment ? (<Button onClick={ () => setEdit(true) }>修改</Button>) : null}
             <Comments comments={props.data&&props.data.comments}/>
         </div>
     )
