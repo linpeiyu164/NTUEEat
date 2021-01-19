@@ -1,7 +1,7 @@
 import { fetchStoreData } from '../routes/routes'
 import BasicInfo from '../components/store/BasicInfo';
 import Review from '../components/store/Review';
-import { useEffect, useState ,useContext} from 'react';
+import { useEffect, useState } from 'react';
 import {Paper, makeStyles, Grid} from '@material-ui/core'
 import {
     BrowserRouter as Router,
@@ -17,8 +17,6 @@ const useStyles = makeStyles(theme => ({
     info : {
         marginLeft : theme.spacing(0),
         marginRight : theme.spacing(0),
-        backgroundSize: 'cover', 
-        minWidth : 500,
         maxWidth: 360,
         width: '100%',
     }
