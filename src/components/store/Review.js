@@ -32,6 +32,8 @@ const useStyles = makeStyles((theme) => ({
 function Review (props) {
     const classes = useStyles();
     let { user } = useContext(userContext);
+    const [ userComment, setUserComment ] = useState(null)
+    const [ userRate, setUserRate ] = useState(0);
     //const { rating, comments } = props.data;
     function CommentedBox (props) {
         return (
@@ -48,7 +50,7 @@ function Review (props) {
                                     className={classes.inlineStar}
                                     color="textPrimary"
                                 >
-                                    {props.rating}<StarIcon/>
+                                    {props.rating} <StarIcon/>
                                 </Typography>
                                 {props.content}
                             </React.Fragment>
@@ -79,38 +81,63 @@ function Review (props) {
                     storeid: props.data.storeId
                 }
                 try {
-                    await sendComment(data)
+                    const response = await sendComment(data);
+                    console.log('response: ', response)
                 } catch (e) {
                     throw e
                 }
             }
         }
         return (
-            user? <div className={classes.typeInComment}>
-                <div style={{display: 'flex'}}>
-                    <Avatar style={{right: '5px'}} src=""/>
-                    <div>
-                        <span style={{display: 'block'}}>{user.username}</span>
-                        <RateStar 
-                            handleSelectRate={setRate}
-                            style={{display: 'block'}}
-                        />
+            user? 
+            ( userComment?
+                <CommentedBox username={user.username} rating={userRate} content={userComment}/>
+                : <div className={classes.typeInComment}>
+                    <div style={{display: 'flex'}}>
+                        <Avatar style={{right: '5px'}} src=""/>
+                        <div>
+                            <span style={{display: 'block'}}>{user.username}</span>
+                            <RateStar 
+                                handleSelectRate={setRate}
+                                style={{display: 'block'}}
+                            />
+                        </div>
                     </div>
-                </div>
-                
-                <TextField onChange={handleChange} value={typeIn}/>
-                <IconButton onClick={handleSubmit}>
-                    <SendIcon />
-                </IconButton>
-            </div> : <div>先登入才可以評論ㄛ～</div>
+                    
+                    <TextField onChange={handleChange} value={typeIn}/>
+                    <IconButton onClick={handleSubmit}>
+                        <SendIcon />
+                    </IconButton>
+                </div>) : <div>先登入才可以評論ㄛ～</div>
         )
     }
     // remain: avatar
-    function Comments () {
+    function Comments (props) {
+        let comments = []
+        if (props.comments) {
+            if (user) {//console.log("comments: ", props)
+                props.comments.forEach(comment => {
+                    if (comment.username !== user.username){
+                        
+                        comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} />)
+                        
+                        console.log('comments: ', comments)
+                    } else {
+                        setUserComment(comment.content)
+                        setUserRate(comment.rating)
+                    }
+                })
+            } else {
+            props.comments.forEach(comment => {
+                comments.push(<CommentedBox username={comment.username} rating={comment.rating} content={comment.content} />)
+                
+                console.log('comments: ', comments)
+            })
+        }
+        } 
         return (
-            <List className={classes.commentList}>
-                {props.data&&
-                props.data.comments.map(comment => <CommentedBox username={comment.username} rating={comment.rating} content={comment.content} />)}
+            <List className={classes.commentList} >
+                {comments}
             </List>
         )
         
@@ -119,7 +146,7 @@ function Review (props) {
         <div className={classes.root}>
             
             <TypeIn />
-            <Comments />
+            <Comments comments={props.data&&props.data.comments}/>
         </div>
     )
 }

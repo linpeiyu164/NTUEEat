@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import  { MapContainer, TileLayer, Popup, CircleMarker}  from 'react-leaflet'
 import './Map.css'
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,20 +17,27 @@ const useStyles = makeStyles({
     }
 });
   
-function StoreMap({storename , coordinates, location, rating}){
+function StoreMap({ calculateDistance, storename , userCoords, storeCoords, location, rating}){
         const classes = useStyles()
+        let [distance, setDistance] = useState()
+        // useEffect(() => {
+        //     const [userLat, userLng] = userCoords
+        //     const [storeLat, storeLng] = storeCoords
+        //     // parseFloat
+        //     setDistance(calculateDistance(userLat, userLng, storeLat, storeLng)) 
+        // }, [])
         return(
-            <MapContainer center={coordinates} zoom={13} scrollWheelZoom={false}>
+            <MapContainer center={storeCoords} zoom={13} scrollWheelZoom={false}>
                 <TileLayer
                     draggable="true"
                     attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
                     url="https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=98cqmbPl7vgPxrspXRdI"
                 />
                 <CircleMarker 
-                    center={coordinates}
+                    center={storeCoords}
                     radius={10}
                 >
-                <Popup position={coordinates}>
+                <Popup position={storeCoords}>
                     <Card>
                         <CardContent>
                             <Typography variant="h4">{storename}</Typography>
@@ -39,6 +46,7 @@ function StoreMap({storename , coordinates, location, rating}){
                                 {` ${rating}`}
                             </Typography>
                             <Typography className={classes.rating}>{location}</Typography>
+                            <Typography className={classes.rating}>{`Distance : ${distance} KM`}</Typography>
                         </CardContent>
                     </Card>
                 </Popup>

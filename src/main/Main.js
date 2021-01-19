@@ -4,14 +4,14 @@ import StoreList from "./StoreList"
 import axios from "axios"
 import Alert from '@material-ui/lab/Alert';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { makeStyles, Snackbar , IconButton} from '@material-ui/core'
+import { makeStyles, Snackbar , IconButton, Grid} from '@material-ui/core'
 import { useState ,useEffect , useContext} from 'react'
 import userContext from '../userContext'
 
 const useStyles = makeStyles(theme => ({
   snackbar : {
     padding : theme.spacing(1)
-  }
+  },
 }))
 
 
@@ -37,7 +37,7 @@ export default function Main() {
   const handleSetPrefer = (e) => {
     setPrefer(e)
   }
-  const handleClose = (e) => {
+  const handleClose = () => {
     setError(false)
   }
   const handleError = () => {
@@ -58,12 +58,13 @@ export default function Main() {
    
   },[])
 
-  const Submit=async()=>{
+  const Submit = async() => {
     const {data} = await instance.post("/",{
       pricing:price,
       location:location,
       preferences:prefer
     });
+    console.log("data",data)
     if(data.msg){
       setContents(null)
     }else if(data.Error){
@@ -71,9 +72,8 @@ export default function Main() {
     }else{
       setContents(data);
     }
-    // console.log(content);
   }
-  const handleSearch=async()=>{
+  const handleSearch = async()=>{
     const {data} = await instance.post(`/search/?QUERY=${search}`)
     if(data.msg){
       setContents(null)
@@ -86,10 +86,9 @@ export default function Main() {
   }
   return (
       <div className="main">
-      
         <Navbar Local={handleSetLocal} Price={handleSetPrice} Prefer={handleSetPrefer} Submit={Submit} search={search} handleSearch={handleSearch} handlesetSearch={handlesetSearch}/>
         <div className="stores">
-          <StoreList className="storeList" data={content}/>
+              <StoreList className="storeList" data={content}/>
         </div>
         <Snackbar className={classes.snackbar}
                   anchorOrigin={{ vertical : 'top', horizontal : 'right' }}

@@ -1,13 +1,10 @@
 import { fetchStoreData } from '../routes/routes'
 import BasicInfo from '../components/store/BasicInfo';
 import Review from '../components/store/Review';
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,useContext} from 'react';
 import {Paper, makeStyles, Grid} from '@material-ui/core'
 import {
     BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
     useParams
   } from "react-router-dom";
 const useStyles = makeStyles(theme => ({
@@ -17,19 +14,22 @@ const useStyles = makeStyles(theme => ({
         marginRight : theme.spacing(2),
         marginButtom: theme.spacing(3)
     },
-    grid : {
+    info : {
         marginLeft : theme.spacing(0),
         marginRight : theme.spacing(0),
+        backgroundSize: 'cover', 
+        minWidth : 500,
         maxWidth: 360,
         width: '100%',
     }
 }))
-function StoreContainer () {
-    const classes = useStyles()
+function StoreContainer (props) {
+    const classes = useStyles();
+    const { id } = useParams();
     let data;
     const [ basicInfo, setBasicInfo ] = useState(null)
     const [ review, setReview ] = useState(null)
-    const { id } = useParams();
+    
     console.log("slug",id);
 
     useEffect(async () => {
@@ -56,7 +56,7 @@ function StoreContainer () {
         return (
         <div>
             <Grid container>
-                <Grid item className={classes.grid}>
+                <Grid item className={classes.info}>
                     <Paper className={classes.paper}>
                         <BasicInfo data={basicInfo && basicInfo}/>
                         <Review data={review&&review}/>

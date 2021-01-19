@@ -9,23 +9,24 @@ import Mainbar from './main/Mainbar'
 import Main from './main/Main'
 
 import userContext from './userContext'
-import StoreContainer from './containers/storeContainer'
-
+import Store from './containers/storeContainer'
+// import StoreMap from './StoreMap'
+// import Geolocator from './Geolocator'
 function App() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   return (
-  
-    
     <>
+    {/* <Geolocator /> */}
+    {
+      <>
       <Router>
         <userContext.Provider value={{user, setUser}}>
             <Mainbar />
             <Route exact path="/">
               <Main />
             </Route>
-            <Route path={"/store/:id"}> 
-            {/* {console.log(id)} */}
-              <StoreContainer />
+            <Route path="/store/:id"> 
+              <Store/>
             </Route>
             <Route path="/login" exact component={Register} />
             <Route path="/random" exact component={Random} />
@@ -33,6 +34,8 @@ function App() {
             <Route path="/addstore" exact component={AddStore} />
         </userContext.Provider>
       </Router>
+      </>
+    }
     </>
     
   )

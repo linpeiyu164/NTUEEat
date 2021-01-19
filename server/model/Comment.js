@@ -5,6 +5,7 @@ const commentSchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : 'Store'
     },
+    profilePic : String,
     storename : String,
     username : String,
     content : String,

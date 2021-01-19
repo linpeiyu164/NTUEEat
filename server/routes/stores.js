@@ -20,7 +20,7 @@ cloudinary.config({
 router.route('/')
 .get(async(req,res) => {
     try{
-        let allStores = await Store.find({}, 'storename rating _id');
+        let allStores = await Store.find({}, 'storename rating _id favorites');
         // return higher ranking restaurants at the front of the array
         allStores.sort((a, b) => {
             if(parseFloat(a.rating) > parseFloat(b.rating)){
@@ -35,7 +35,7 @@ router.route('/')
     }
 })
 .post(async (req, res) => {
-    // console.log(req.body)
+    console.log(req.body)
     try{
         let price = [];
         switch(req.body.pricing){
@@ -52,7 +52,9 @@ router.route('/')
         let filteredArray = await Store.find({ 
             location : req.body.location, 
             pricing : price
-        }, 'storename rating _id')
+        }, 'storename rating _id type')
+        console.log(filteredArray);
+
         const array = filteredArray.filter(store => {
             if(store.type.some(e => e === req.body.preferences)){
                 return store
@@ -79,6 +81,7 @@ router.post('/search', async (req, res) => {
         console.error(err)
     }
 })
+
 router.route('/store/:id')
 .get(async (req,res) => {
     //這邊我會給你單一一個店家的「詳細」資料
@@ -86,13 +89,6 @@ router.route('/store/:id')
     res.json(store);
 })
 .post(async(req, res) => {
-    /*
-    storename
-    username
-    content
-    rating
-    storeid
-    */
    try{
     let user = await User.findOne({ username : req.body.username }).populate('comments')
     const exist = user.comments.some(comment => {
@@ -105,14 +101,16 @@ router.route('/store/:id')
     }else{
         const comment =  new Comment({
             store : req.body.storeid,
+            profilePic : user.profilePic,
             storename : req.body.storename,
             username : req.body.username,
             content : req.body.content,
-            rating : req.body.rating
+            rating : parseInt(req.body.rating,10)
         })
         await comment.save();
-        await user.comments.push(comment)
-        let store = await Store.findOne({ _id : req.body.storeid })
+        user.comments.push(comment)
+        await user.save()
+        let store = await Store.findOne({ _id : req.body.storeid }).populate('comments')
         store.comments.push(comment)
         await store.save()
         let newRating = calculateAverageRating(store)
@@ -133,7 +131,7 @@ router
     const stores = await Store.find();
     const { Error } = await checkInput(stores, req)
     if(Error){
-        res.json({ error : Error })
+        res.json({ message : Error })
     }
     else{
         try{
@@ -163,9 +161,9 @@ router
                     res.status(500).json({message : 'image failed to upload from server side'})
                 }
             })
-            res.status(200)
+            res.status(200).json({ message : "success" })
         }catch(err){
-            res.status(400)
+            res.status(500).json({message: 'fail to add a new store'})
             console.error(err)
         }
     }
@@ -173,7 +171,7 @@ router
 
 router.get('/random', async(req, res) => {
     const result = await getRandom(Store);
-    console.log(result)
+    // console.log(result)
     res.json(result)
 })
 

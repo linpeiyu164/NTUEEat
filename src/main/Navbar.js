@@ -12,23 +12,30 @@ import './Navbar.css';
 const useStyles = makeStyles((theme)=>({
     root: {
         flexGrow: 1,
+        display : 'flex',
         // position: 'fixed',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
     },
     FormControl:{
-        margin:theme.spacing(5),
-        minWidth:280,
-        minHeight:3,
-        alignSelf: 'flex-end',
-        flexGrow: 1,
-        
+        marginRight : theme.spacing(7),
+        marginLeft : theme.spacing(7),
+        marginTop : theme.spacing(2),
+        marginBottom : theme.spacing(2),
+        // display : 'flex', 
+        minWidth : '20%',
+        minHeight : '10%',
+        alignSelf : 'flex-end',
+        flexGrow : 1,  
     },
     toolbar: {
         minHeight: 128,
         alignItems: 'fixed-end',
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
+    },
+    submit : {
+        margin : theme.spacing(5),
     },
     button:{
         marginLeft : theme.spacing(2),
@@ -49,10 +56,14 @@ const useStyles = makeStyles((theme)=>({
     },
     box2 : {
         margin : theme.spacing(2),
+        // display : 'flex',
         backgroundColor: "#D4E6F1",
         borderRadius:20,
         padding : theme.spacing(2)
     },
+    select : {
+        minWidth : '40%'
+    }
 }))
 
 export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,handlesetSearch}){
@@ -80,14 +91,12 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
     
     {console.log("search",search);}
     return(
-        <Grid container>
+        <>
             <Paper className={classes.paper}>
                 <Box className={classes.box2}>
-                <Grid item container>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl}>
                         <InputLabel>location</InputLabel>
-                        <Select className="select"
+                        <Select className={classes.select}
                         labeled="select-location"
                         id="location-select"
                         displayEmpty
@@ -95,12 +104,12 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
                         onChange={handleChangelocal}
                         >
                             {/* <MenuItem value="">Empty</MenuItem> */}
-                            <MenuItem value={"118"}>118</MenuItem>
+                            <MenuItem value={"118"}>118巷</MenuItem>
                             <MenuItem value={"公館"}>公館</MenuItem>
+                            <MenuItem value={"溫州街"}>溫州街</MenuItem>
+
                         </Select>
                     </FormControl>
-                    </Grid>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl} >
                         <InputLabel>Price</InputLabel>
                         <Select className="select"
@@ -116,8 +125,6 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
                             <MenuItem value={"$$$"}>$$$</MenuItem>
                         </Select>
                     </FormControl>
-                    </Grid>
-                    <Grid item xs={4}>
                         <FormControl className={classes.FormControl} >
                         <InputLabel>Preference</InputLabel>
                         <Select className="select"
@@ -128,33 +135,29 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
                         onChange={handleChangeprefer}
                         >
                             {/* <MenuItem value={""}>Empty</MenuItem> */}
+                            <MenuItem value={"台式"}>台式</MenuItem>
+                            <MenuItem value={"中式"}>中式</MenuItem>
                             <MenuItem value={"韓式"} >韓式</MenuItem>
-                            <MenuItem value={"壽司"}>壽司</MenuItem>
-                            <MenuItem value={"牛肉麵"}>牛肉麵</MenuItem>
-                            <MenuItem value={"泰式"}>泰式</MenuItem>
-                            <MenuItem value={"咖哩"}>咖哩</MenuItem>
-                            <MenuItem value={"義大利麵"}>義大利麵</MenuItem>
+                            <MenuItem value={"日式"}>日式</MenuItem>
+                            <MenuItem value={"美式"}>美式</MenuItem>
+                            <MenuItem value={"南洋"}>南洋</MenuItem>
+                            <MenuItem value={"其他"}>其他</MenuItem>
                         </Select>
                         </FormControl>
-                    </Grid>
-                    <Grid item>
-                        <Button onClick={Submit}>Submit</Button>
-                    </Grid>
-                </Grid>
-                </Box>
-                    <Grid item xs={4}>
-                        <Box className={classes.box2}>
-                            <TextField value={search} variant="outlined" label="Restaurant name" onChange={(e) => handleSetSearch(e)}></TextField>
-                            
-                            <Button className={classes.button} onClick={handleSearch}>Search</Button>
-                        </Box>
-                    </Grid>
+                        <FormControl className={classes.submit}>
+                            <Button onClick={Submit}>Submit</Button>
+                        </FormControl>
+                    </Box>
+                    <Box className={classes.box2} alignItems="center" justifyContent="center">
+                        <TextField className={classes.button} value={search} variant="outlined" label="Restaurant name" onChange={(e) => handleSetSearch(e)}></TextField>
+                        <Button className={classes.button} onClick={handleSearch}>Search</Button>
+                    </Box>
             </Paper>
             <Backdrop open={open} className={classes.backdrop}>
                 <Random CloseBackdrop={handleClose}/>
             </Backdrop>
-        </Grid>
-       
+        {/* // </Grid> */}
+       </>
     )
 }
 

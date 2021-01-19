@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Button, Grid, Typography, Card, Dialog} from '@material-ui/core'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
@@ -54,12 +54,16 @@ function Random({ CloseBackdrop }){
     const [result, setResult] = useState(null)
     const getResult = async () => {
         const res = await instance.get('/stores/random')
+        // console.log(res.data)
         setResult(res.data)
     }
     const handleClose = () => {
         CloseBackdrop()
         setResult(null)
     }
+    useEffect( () => {
+        console.log(result)
+    }, [result])
     return(
         <>
             <Grid container
@@ -81,7 +85,8 @@ function Random({ CloseBackdrop }){
                         <Typography className={classes.header} variant="h2">今天吃什麼</Typography>
                     </Grid>
                     <Grid item>
-                        {(result) ? (
+                        {
+                        (result) ? (
                             <Card 
                                 alignItems="center"
                                 className={classes.innercard}
