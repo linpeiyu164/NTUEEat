@@ -11,15 +11,17 @@ function MapContainer({
     positionError, // object with the error returned from the Geolocation API call
 }){
     const [storeCoordination, setStoreCoordination] = useState();
-    const {address} = useContext(userCommentContext) 
+    const {address, storename, rating} = useContext(userCommentContext) 
+    // const {storename} = useContext(userCommentContext)
     //console.log(address)
     console.log('flag2: ', coords)
     let { latitude, longitude } = coords
     console.log('flag')
     useEffect(async() => {
         const loc = await getCoord(address)
+        console.log('loc: ', loc)
         if (loc !== 'error'){
-            console.log('loc: ', loc)
+            
             // const data = JSON.parse(loc)
             const data = loc
             let lat = data.lat;
@@ -69,7 +71,7 @@ function MapContainer({
                 ) : (!isGeolocationEnabled) ? (
                     <div>Geolocation is not enabled, if using Safari, please switch to Chrome</div>
                 ) :  (coords && storeCoordination)? (
-                    <StoreMap calculateDistance={calculateDistance} storename="storename" userCoords={[latitude, longitude]} storeCoords={storeCoordination&&[storeCoordination.lat, storeCoordination.log]} location="taipei" rating={4.3} />
+                    <StoreMap calculateDistance={calculateDistance} storename={storename} userCoords={[latitude, longitude]} storeCoords={storeCoordination&&[storeCoordination.lat, storeCoordination.log]} location={address} rating={rating} />
                 ) : (
                     <div>Loading</div>
                 )

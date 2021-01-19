@@ -16,9 +16,13 @@ const useStyles = makeStyles(theme => (
             backgroundColor: theme.palette.background.paper,
         },
         menuGrid: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            width: '100%'
+            display: 'block',
+            width: '100%',
+            overflowX: 'auto',
+            whiteSpace: 'nowrap'
+        },
+        grid: {
+            display: 'inline'
         },
         imageContainer: {
             position: 'relative',
@@ -69,7 +73,7 @@ function BasicInfo (props) {
                     const [ open, setOpen ] = TogglePic();
                     // console.log(menu)
                     return (
-                        <div key={Date.now()+ Math.random()}>
+                        <div key={Date.now()+ Math.random()} className={classes.grid}>
                             <ButtonBase
                                 onClick={() => setOpen(true)}
                             >

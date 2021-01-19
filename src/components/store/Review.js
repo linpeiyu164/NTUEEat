@@ -17,7 +17,8 @@ const useStyles = makeStyles((theme) => ({
         margin: '10px',
     },
     commentList: {
-        overflow: 'scroll'
+        height: '40%',
+        overflowY: 'scroll'
     },
     inlineStar: {
         display: 'inline'
