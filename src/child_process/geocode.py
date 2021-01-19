@@ -1,5 +1,6 @@
 # coding=utf-8
 import requests
+import sys
 import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -24,6 +25,9 @@ def get_coordinate(addr):
     lat = coor[-1].split("：")[-1]
     log = coor[0].split("：")[-1]
     browser.quit()
-    return (lat, log)
+    return str((lat, log))
 
-print(get_coordinate("台北市大安區羅斯福路四段1號"))
+try: 
+    print(get_coordinate(sys.argv[1]))
+except:
+    print('Too slow')

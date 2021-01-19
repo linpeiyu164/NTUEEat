@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.0",
+    "child_process": "^1.0.2",
     "cookie-parser": "^1.4.5",
     "leaflet": "^1.7.1",
     "mongoose": "^5.11.12",
