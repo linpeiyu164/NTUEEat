@@ -4,7 +4,7 @@ const findCoord = (addr) => {
     let coord;
     console.log('env: ', process.cwd());
     const execute = new Promise((resolve, reject) => {
-        exec(`python3 geocode.py ${addr}`, {cwd: './child_process'}, async (error, stdout, stderr) => {
+        exec(`python3 geocode.py ${addr}`, {cwd: './server/child_process'}, async (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
                 reject('error')
