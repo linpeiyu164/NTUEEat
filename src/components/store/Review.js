@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     },
     typeInComment: {
         
+    },
+    notLogin: {
+
     }
 }));
 
@@ -134,7 +137,7 @@ function Review (props) {
                     <IconButton onClick={handleSubmit}>
                         <SendIcon />
                     </IconButton>
-                </div>) : <div>先登入才可以評論ㄛ～</div>
+                </div>) : <Paper className={classes.notLogin}><div>先登入才可以評論ㄛ～</div></Paper>
         )
     }
     
