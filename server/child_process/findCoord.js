@@ -7,13 +7,13 @@ const findCoord = (addr) => {
         exec(`python3 geocode.py ${addr}`, {cwd: './server/child_process'}, async (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error.message}`);
-                reject('error')
+                reject('{"error":"error"}')
                 return;
             }
 
             if (stderr) {
                 console.error(`stderr: ${stderr}`);
-                reject('stderr')
+                reject('{"error":"stderr"}')
                 return;
             }
             console.log(`stdout:\n${stdout}`);
@@ -47,9 +47,5 @@ const findCoord = (addr) => {
         });
     }
     */
-    
 }
-
-//findCoord('dsgds')
-
 module.exports = findCoord;

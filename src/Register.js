@@ -11,9 +11,6 @@ import userContext from './userContext'
 import { Redirect } from 'react-router-dom'
 
 
-const instance = axios.create( { 
-    baseURL : "http://localhost:4000/users"
-})
 const useStyle = makeStyles( theme => ({
     root : {
         minWidth: 275,
@@ -56,7 +53,7 @@ function Register(){
         if(username && password){
             setUsernameError(null)
             setPasswordError(null)
-            let res = await instance.post('/register', {
+            let res = await axios.post('/users/register', {
                 username : username,
                 password : password
             })
@@ -85,7 +82,7 @@ function Register(){
         if(username && password){
             setUsernameError('')
             setPasswordError('')
-            let res = await instance.post('/login', {
+            let res = await axios.post('/users/login', {
                 username : username,
                 password : password
             })

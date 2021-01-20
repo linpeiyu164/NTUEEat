@@ -1,0 +1,11 @@
+1611150474202	geckodriver	INFO	Listening on 127.0.0.1:57495
+1611150475201	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileH9bmuZ"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1611150479583	Marionette	INFO	Listening on port 44817
+1611150479659	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: http://www.map.com.tw/Scripts/jquery-1.9.1.min.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
+JavaScript warning: http://www.map.com.tw/Scripts/jquery-1.9.1.min.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
+1611150515605	Marionette	INFO	Stopped listening on port 44817
+1611150521436	geckodriver	INFO	Listening on 127.0.0.1:49743
+1611150522448	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "headless" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilemATSGU"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /run/user/1000/gdm/Xauthority which is owned by yuarmy.)

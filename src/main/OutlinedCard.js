@@ -18,7 +18,7 @@ import {
 import axios from "axios"
 import userContext from '../userContext'
 // import { Box } from '@material-ui/core';
-const instance = axios.create({ baseURL : "http://localhost:4000/"});
+const instance = axios
 
 const useStyles = makeStyles(theme => ({
   root: {

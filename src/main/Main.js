@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const instance = axios.create({baseURL : "http://localhost:4000/stores"});
+// const axios = axios.create({baseURL : "/stores"});
 export default function Main() {
   
   let {user} = useContext(userContext)
@@ -46,7 +46,7 @@ export default function Main() {
     setSearch(e)
   } 
   useEffect(async ()=>{
-    const {data} = await instance.get("/");
+    const {data} = await axios.get("/stores");
     if(data.msg){
       setContents(null)
     }else if(data.Error){
@@ -58,7 +58,7 @@ export default function Main() {
   },[])
 
   const Submit = async() => {
-    const {data} = await instance.post("/",{
+    const {data} = await axios.post("/stores",{
       pricing:price,
       location:location,
       preferences:prefer
@@ -73,7 +73,7 @@ export default function Main() {
     }
   }
   const handleSearch = async()=>{
-    const {data} = await instance.post(`/search/?QUERY=${search}`)
+    const {data} = await axios.post(`/stores/search/?QUERY=${search}`)
     if(data.msg){
       setContents(null)
     }else if(data.Error){

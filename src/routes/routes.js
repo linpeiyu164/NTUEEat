@@ -1,12 +1,10 @@
 const axios = require('axios');
 
-const instance = axios.create({baseURL : "http://localhost:4000"});
-
 // AddStore
 const uploadStoreInfo = async (encodedFiles) => {
     let response;
     try{
-        const { data } = await instance.post('/stores/addstore', 
+        const { data } = await axios.post('/stores/addstore', 
             encodedFiles,
             { headers : {'Content-Type' : 'application/json'} }
         )
@@ -29,7 +27,7 @@ const uploadStoreInfo = async (encodedFiles) => {
 // Store
 const fetchStoreData = async (storeId) => {
     let response;
-    await instance.get(`/stores/store/${storeId}`)
+    await axios.get(`/stores/store/${storeId}`)
     .then(res => {
         response = res.data;
     })
@@ -44,7 +42,7 @@ const fetchStoreData = async (storeId) => {
 
 const sendComment = async (data) => {
     let response;
-    await instance.post(`/stores/store/${data.storeid}`, data)
+    await axios.post(`/stores/store/${data.storeid}`, data)
     .then(res => {response = res})
     .catch(err => {
         throw err
@@ -54,7 +52,7 @@ const sendComment = async (data) => {
 
 const reviseComment = async (data) => {
     let response;
-    await instance.post('/users/comments', data)
+    await axios.post('/users/comments', data)
     .then(res => response = res)
     .catch(err => {
         console.log(err)
@@ -64,7 +62,7 @@ const reviseComment = async (data) => {
 
 const getCoord = async (addr) => {
     let response;
-    response = await instance.post('/stores/geo', {addr: addr})
+    response = await axios.post('/stores/geo', {addr: addr})
     .then(res => {
         //console.log('data: ', res)
         return res.data

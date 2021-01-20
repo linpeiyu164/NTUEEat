@@ -26,6 +26,18 @@ const server = http.createServer(app)
 const path = require('path');
 const port = process.env.PORT || 80;
 
+//middleware
+app.use(cors())
+app.use(bodyParser.json({limit: '10mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
+app.use(cookieParser('secret'))
+app.use(passport.initialize()) // initialize passport
+app.use(passport.session()) // uses persistent login sessions
+
+app.use('/stores', storeRouter)
+app.use('/users', userRouter)
+
+///
 app.use(express.static(path.join(__dirname, '../build')));
 app.get('/ping', function (req, res) {
   return res.send('pong');
@@ -47,21 +59,12 @@ mongoose.connect(process.env.MONGO_URL,{
     poolSize: 10
 });
 
-//middleware
-app.use(cors())
-app.use(bodyParser.json({limit: '10mb', extended: true}))
-app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
-app.use(cookieParser('secret'))
-app.use(passport.initialize()) // initialize passport
-app.use(passport.session()) // uses persistent login sessions
 
-app.use('/stores', storeRouter)
-app.use('/users', userRouter)
 
 server.listen(port, () => console.log(`listening on port ${port}`))
 
 const db = mongoose.connection;
 db.on('open', () => {
-    console.log('database connected!')
+    console.log('database connected!!')
 })
 

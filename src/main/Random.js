@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 
-const instance = axios.create({ baseURL : "http://localhost:4000"})
+const instance = axios
 
 const useStyle = makeStyles( theme => ({
     root : {

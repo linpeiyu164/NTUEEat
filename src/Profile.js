@@ -11,7 +11,7 @@ import axios from 'axios'
 import RateStar from './components/store/Ratestar'
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const instance = axios.create({ baseURL : "http://localhost:4000/users" })
+//const instance = axios.create({ baseURL : "/users" })
 
 const useStyle = makeStyles(theme => ({
     AppBar : {
@@ -110,7 +110,7 @@ function User() {
     };
     const getComments = async () => {
       // returns entire user with comments populated
-      const {data} = await instance.get(`/comments/${user._id}`)
+      const {data} = await axios.get(`/users/comments/${user._id}`)
       setComments([...data])
       const array = data.map(comment => comment._id)
       setUser(prev => {
@@ -122,7 +122,7 @@ function User() {
     }
     const getFavorites = async () => {
       // returns entire user with favorites populated
-      const {data} = await instance.get(`/favorites/${user._id}`)
+      const {data} = await axios.get(`/users/favorites/${user._id}`)
       setFavorites([...data])
       const array = data.map(fav => fav._id)
       setUser(prev => {
@@ -134,7 +134,7 @@ function User() {
     }
     const handleRemoveFavorite = async (e) => {
       // returns entire user with favorites populated
-      const {data} = await instance.delete(`/favorite?USERID=${user._id}&STOREID=${e.target.id}`)
+      const {data} = await axios.delete(`/users/favorite?USERID=${user._id}&STOREID=${e.target.id}`)
       setFavorites([...data])
       const array = data.map(fav => fav._id)
       setUser(prev => {
@@ -148,7 +148,7 @@ function User() {
       setEditComment(e.target.id)
     }
     const handleDeleteComment = async (e) => {
-      const {data} = await instance.delete(`/comments?USERID=${user._id}&COMMENTID=${e.target.id}`)
+      const {data} = await axios.delete(`/users/comments?USERID=${user._id}&COMMENTID=${e.target.id}`)
       setComments([...data])
       const array = data.map(comment => comment._id)
       setUser(prev => {
@@ -162,7 +162,7 @@ function User() {
       // renew the comment
       if(updatedStar && updatedContent){
         // use the setEditComment to send the comment back
-        const {data} = await instance.post('/comments', {
+        const {data} = await axios.post('/users/comments', {
           _id : editComment,
           content : updatedContent,
           rating : updatedStar

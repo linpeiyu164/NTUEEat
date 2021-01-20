@@ -21,7 +21,6 @@ function MapContainer({
         const loc = await getCoord(address)
         console.log('loc: ', loc)
         if (loc !== 'error'){
-            
             // const data = JSON.parse(loc)
             const data = loc
             let lat = data.lat;

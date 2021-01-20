@@ -8,9 +8,10 @@ from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
 options = webdriver.ChromeOptions()
 options.add_argument("headless")
+options.add_argument("--no-sandbox")
 
 def get_coordinate(addr):
-    browser = webdriver.Chrome(executable_path='chromedriver',options=options)
+    browser = webdriver.Chrome(options=options)
     browser.get("http://www.map.com.tw/")
     search = browser.find_element_by_id("searchWord")
     search.clear()
@@ -32,4 +33,4 @@ def get_coordinate(addr):
 try:
     print(get_coordinate(sys.argv[1]))
 except:
-    print('error')
+    print('error:))))))))))))))')
