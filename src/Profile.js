@@ -10,14 +10,15 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import axios from 'axios'
 import RateStar from './components/store/Ratestar'
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import { Redirect } from 'react-router-dom'
 //const instance = axios.create({ baseURL : "/users" })
 
 const useStyle = makeStyles(theme => ({
     AppBar : {
         marginTop : theme.spacing(15),
         marginLeft : theme.spacing(2),
-        marginRight : theme.spacing(2)
+        marginRight : theme.spacing(2),
+        padding : theme.spacing(2)
     },
     Tab : {
         padding : theme.spacing(3),
@@ -25,8 +26,7 @@ const useStyle = makeStyles(theme => ({
         paddingRight : theme.spacing(4),
     },
     Avatar : {
-        margin : theme.spacing(5),
-        padding : theme.spacing(15)
+      margin : theme.spacing(2),
     },
     username : {
       paddingLeft : theme.spacing(4),
@@ -75,7 +75,6 @@ const theme = createMuiTheme({
         root: {
         },
         selected: {
-          backgroundColor: blue[700],
           color: blue[700],
         }
       }
@@ -183,13 +182,13 @@ function User() {
       setUpdatedStar(null)
     }
     return(
-        <MuiThemeProvider theme={theme}>
+          <MuiThemeProvider theme={theme}>
             <Paper 
             className={classes.AppBar}
             indicatorColor="secondary"
             style={{ background : "#D4E6F1", color : "#000000" }}
             position="static">
-            {/* <Avatar className={classes.Avatar}>P</Avatar> */}
+            <Avatar className={classes.Avatar} style={{ height: '20%', width: '20%' }} src={user.profilePic}/> 
             <Typography className={classes.username} variant="h3" style={{color : "#000000"}}>{user.username}</Typography>
             <Tabs value={selectedTab} onChange={handleChange}>
                 <Tab className={classes.Tab} value={0} label="Favorites" onClick={getFavorites}/>
@@ -252,7 +251,7 @@ function User() {
                   </Card>
                 )
               })
-            ) : null}
+            ) : null})
         </MuiThemeProvider>
     )
 }

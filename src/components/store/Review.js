@@ -124,7 +124,7 @@ function Review (props) {
                     <CommentedBox username={user.username} rating={userRate} content={userComment} user={user.profilePic} />
                 ): <div className={classes.typeInComment}>
                     <div style={{display: 'flex'}}>
-                        <Avatar style={{right: '5px'}} src=""/>
+                        <Avatar style={{right: '5px'}} src={user.profilePic}/>
                         <div>
                             <span style={{display: 'block'}}>{user.username}</span>
                             <RateStar 
