@@ -84,7 +84,7 @@ function StoreContainer (props) {
                         <BasicInfo data={basicInfo&&basicInfo}/>
                         <Review data={review&&review}/>
                     </Paper></div>
-                    
+                    <div className={classes.map}>{(address&&storename&&rating)&&<Map />}</div>
                 </userCommentContext.Provider>
             </div>
         )
