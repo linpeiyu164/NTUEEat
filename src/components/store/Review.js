@@ -137,7 +137,7 @@ function Review (props) {
                     <IconButton onClick={handleSubmit}>
                         <SendIcon />
                     </IconButton>
-                </div>) : <Paper className={classes.notLogin}><div>先登入才可以評論ㄛ～</div></Paper>
+                </div>) : <div>先登入才可以評論ㄛ～</div>
         )
     }
     
