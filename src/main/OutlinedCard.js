@@ -78,6 +78,12 @@ export default function OutlinedCard(props) {
       console.log("1Login ,please");
     }
   },[])
+
+  useEffect(()=>{
+    if(!user){
+      setCheck(false)
+    }
+  },[user])
   
     return (
     <Card className={classes.root} variant="outlined">
@@ -91,7 +97,7 @@ export default function OutlinedCard(props) {
           </Grid>
           <Grid item>
               <IconButton aria-label="add to favorites" onClick={()=>setCheck(()=>{
-                if(check){UnFavorite();}else{Favorite();} console.log("check1",check); return !check})} disabled={!user}>
+                if(check){ UnFavorite(); }else{ Favorite(); } console.log("check1",check); return !check})} disabled={!user}>
                 { check ?
                   <FavoriteIcon id={props.data._id} color='error'/> :
                   <FavoriteIcon />
@@ -104,7 +110,7 @@ export default function OutlinedCard(props) {
             </Grid>
             <Grid item>
               <Typography className={classes.typography}>
-              {props.data.rating? (`${props.data.rating}`): 0 }
+              {props.data.rating? (`${(props.data.rating).toFixed(1)}`): 0 }
               </Typography>
             </Grid>
             <Grid item>

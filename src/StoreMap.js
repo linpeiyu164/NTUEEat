@@ -4,6 +4,7 @@ import './Map.css'
 import { makeStyles } from '@material-ui/core/styles';
 import {Typography, Card, CardContent} from '@material-ui/core'
 import StarRoundedIcon from '@material-ui/icons/StarRounded';
+import userCommentContext from './components/store/userCommentContext';
 
 const useStyles = makeStyles({
     root: {
@@ -21,12 +22,12 @@ function StoreMap({ calculateDistance, storename , userCoords, storeCoords, loca
         console.log(storename, userCoords, storeCoords, location, rating)
         const classes = useStyles()
         let [distance, setDistance] = useState()
-        // useEffect(() => {
-        //     const [userLat, userLng] = userCoords
-        //     const [storeLat, storeLng] = storeCoords
-        //     // parseFloat
-        //     setDistance(calculateDistance(userLat, userLng, storeLat, storeLng)) 
-        // }, [])
+        useEffect(() => {
+            console.log(userCoords, storeCoords)
+            const [userLat, userLng] = userCoords
+            const [storeLat, storeLng] = storeCoords
+            setDistance(calculateDistance(userLat, userLng, storeLat, storeLng)) 
+        }, [])
         return(
             <MapContainer center={storeCoords} zoom={13} scrollWheelZoom={false}>
                 <TileLayer
@@ -43,8 +44,8 @@ function StoreMap({ calculateDistance, storename , userCoords, storeCoords, loca
                         <CardContent>
                             <Typography variant="h4">{storename}</Typography>
                             <Typography className={classes.rating} color="textSecondary">
-                                <StarRoundedIcon className={classes.rating}/>
-                                {` ${rating}`}
+                                <StarRoundedIcon className={classes.rating} />
+                                {rating ? ((rating).toFixed(1)) : 0 }
                             </Typography>
                             <Typography className={classes.rating}>{location}</Typography>
                             <Typography className={classes.rating}>{`Distance : ${distance} KM`}</Typography>

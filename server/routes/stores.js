@@ -36,8 +36,6 @@ router.route('/')
     }
 })
 .post(async (req, res) => {
-    // console.log(req.body)
-    // { pricing: '$$$', location: '118', preferences: '台式' }
     try{
         let price = [];
         switch(req.body.pricing){
@@ -51,22 +49,19 @@ router.route('/')
                 price = [0, 0, 1]
                 break;
         }
-        // console.log(price)
+        
         // add type to returned filtered array
         let filteredArray = await Store.find({
             location : req.body.location,
             pricing : price
         }, 'storename rating _id type')
 
-        // console.log(filteredArray)
         const array = filteredArray.filter(store => {
             if(store.type.some(e => e === req.body.preferences)){
-                // console.log('exists')
                 return store
             }
         })
         filteredArray = [...array]
-        // console.log(filteredArray)
         if(filteredArray.length !== 0){
             res.json(filteredArray)
         }else{ 

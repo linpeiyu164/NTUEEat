@@ -3,6 +3,7 @@ import { useEffect , useContext, useState} from "react"
 import { getCoord } from './routes/routes'
 import StoreMap from "./StoreMap"
 import userCommentContext from './components/store/userCommentContext'
+import { Paper } from "@material-ui/core"
 // import findCoord from './child_process/findCoord'
 function MapContainer({
     coords,
@@ -12,8 +13,7 @@ function MapContainer({
 }){
     const [storeCoordination, setStoreCoordination] = useState();
     const {address, storename, rating} = useContext(userCommentContext) 
-    // const {storename} = useContext(userCommentContext)
-    //console.log(address)
+
     console.log('flag2: ', coords)
     let { latitude, longitude } = coords
     console.log('flag')
@@ -21,7 +21,6 @@ function MapContainer({
         const loc = await getCoord(address)
         console.log('loc: ', loc)
         if (loc !== 'error'){
-            // const data = JSON.parse(loc)
             const data = loc
             let lat = data.lat;
             let log = data.log;
@@ -32,35 +31,18 @@ function MapContainer({
         } 
         // setStoreCoordination(loc)
     },[])
-    //const storeCoordination = await getCoord(address)
-    //console.log('storeCoordi', storeCoordination)
-    // let lat, log;
-    // if (storeCoordination !== 'error'){
-    //     const data = JSON.parse(storeCoordination)
-    //     lat = data.lat;
-    //     log = data.log;
-    //     lat = parseFloat(lat)
-    //     log = parseFloat(log)
-    //     console.log(lat, log)
-    // } 
-    // useEffect(() => {
-    //     if (storeCoordination !== 'error'){
-    //         const data = JSON.parse(storeCoordination)
-    //         lat = data.lat;
-    //         log = data.log;
-    //         lat = parseFloat(lat)
-    //         log = parseFloat(log)
-    //         console.log(lat, log)
-    //     } 
-    // }, [storeCoordination])
+
     const calculateDistance = (lat1, lng1, lat2, lng2) => {
-        // spherical coordinates dl = ( dr , r * dtheta + r^2 , r * sintheta * dphi)
+        console.log(lat1, lng1, lat2, lng2)
         const EARTH_RADIUS = 6371
-        let Squared = Math.sin((lat2-lat1)*Math.PI/180) * Math.sin((lat2-lat1)*Math.PI/180) + 
-        Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180) * 
-        Math.sin((lng2-lng1)*Math.PI/2*180)*Math.sin((lng2-lng1)*Math.PI/2*180)
+        let dlat = ((lat2-lat1)*Math.PI)/180
+        let dlng = ((lng2-lng1)*Math.PI)/180
+        let Squared = Math.sin(dlat) * Math.sin(dlat) + 
+        Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * 
+        Math.sin(dlng/2) * Math.sin(dlng/2)
         let d = 2 * EARTH_RADIUS * Math.asin(Math.sqrt(Squared))
-        return d
+        // console.log(coords, storeCoordination)
+        return d.toFixed(3)
     }
 
     return(
@@ -70,9 +52,9 @@ function MapContainer({
                 ) : (!isGeolocationEnabled) ? (
                     <div>Geolocation is not enabled, if using Safari, please switch to Chrome</div>
                 ) :  (coords && storeCoordination)? (
-                    <StoreMap calculateDistance={calculateDistance} storename={storename} userCoords={[latitude, longitude]} storeCoords={storeCoordination&&[storeCoordination.lat, storeCoordination.log]} location={address} rating={rating} />
+                    <StoreMap calculateDistance={calculateDistance} storename={storename} userCoords={[latitude, longitude]} storeCoords={storeCoordination&&[storeCoordination.lat, storeCoordination.log]} location={address} rating={rating&&rating} />
                 ) : (
-                    <div>Loading</div>
+                    <h5>Loading</h5>
                 )
             }
         </>

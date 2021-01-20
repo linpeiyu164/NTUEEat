@@ -87,7 +87,6 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
         handlesetSearch(e.target.value)
     }
    
-    
     {console.log("search",search);}
     return(
         <>
@@ -106,7 +105,6 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
                             <MenuItem value={"118巷"}>118巷</MenuItem>
                             <MenuItem value={"公館"}>公館</MenuItem>
                             <MenuItem value={"溫州街"}>溫州街</MenuItem>
-
                         </Select>
                     </FormControl>
                         <FormControl className={classes.FormControl} >

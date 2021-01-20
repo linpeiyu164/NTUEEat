@@ -155,7 +155,6 @@ class AddStore extends Component {
     }
     render() {
         const { classes } = this.props;
-        console.log('success', this.state.success)
         return (
             <>
             {(!this.state.success) ? (
@@ -165,10 +164,8 @@ class AddStore extends Component {
             <Grid container spacing={3} justify="center">
                 <Grid item xs={6}><Box className={classes.box3}><TextField label="餐廳名稱" variant="outlined" autoFocus={true} onChange={this.handleValueChange('restaurant')} required/></Box></Grid>
                 <Grid item xs={6}><Box className={classes.box3}><TextField label="電話" variant="outlined" onChange={this.handleValueChange('phone')}/></Box></Grid>
-                
                 <Grid item xs={6}><Box className={classes.box4}><TextField label="區域" variant="outlined" onChange={this.handleValueChange('dist')} select>{regions.map(region => <MenuItem key={region} value={region}>{region}</MenuItem>)}</TextField></Box></Grid>
                 <Grid item xs={6}><Box className={classes.box4}><TextField label="地址" variant="outlined" onChange={this.handleValueChange('address')} required/></Box></Grid>
-                
                 <Grid item xs={6}><Box className={classes.box3}><TextField label="最低品項單價" variant="outlined" onChange={this.handleValueChange('min')}/></Box></Grid>
                 <Grid item xs={6}><Box className={classes.box3}><TextField label="最高品項單價" variant="outlined" onChange={this.handleValueChange('max')}/></Box></Grid>
                 <Grid item xs={6}><Box className={classes.box4}><TextField label="平均價位" variant="outlined" onChange={this.handleValueChange('avg')} select required>{avgPrice.map(price => <MenuItem key={price} value={price}>{price}</MenuItem>)}</TextField></Box></Grid>
@@ -193,9 +190,9 @@ class AddStore extends Component {
             </form>
             <Snackbar 
                 anchorOrigin={{ vertical : 'top', horizontal : 'right' }}
-                open={this.state.error} 
+                open={this.state.error}
                 onClose={this.handleSnackbarClose}
-                autoHideDuration={2000} 
+                autoHideDuration={2000}
                 action={
                     <IconButton size="small" aria-label="close" color="inherit" onClick={this.handleSnackbarClose} >
                         <HighlightOffIcon fontSize="small"/>
