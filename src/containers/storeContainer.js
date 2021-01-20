@@ -34,7 +34,8 @@ const useStyles = makeStyles(theme => ({
         height: '60%'
     },
     map: {
-        marginTop: '15%',
+        display: 'absolute',
+        marginTop: '260px',
         display: 'inline',
         width: '60%',
         marginRight: '5px'
