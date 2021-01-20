@@ -103,7 +103,7 @@ export default function Navbar({Local,Price,Prefer,Submit,search,handleSearch,ha
                         onChange={handleChangelocal}
                         >
                             {/* <MenuItem value="">Empty</MenuItem> */}
-                            <MenuItem value={"118"}>118巷</MenuItem>
+                            <MenuItem value={"118巷"}>118巷</MenuItem>
                             <MenuItem value={"公館"}>公館</MenuItem>
                             <MenuItem value={"溫州街"}>溫州街</MenuItem>
 
