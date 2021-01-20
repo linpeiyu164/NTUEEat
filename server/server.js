@@ -5,10 +5,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const Websocket = require('ws')
 const cookieParser = require('cookie-parser')
 const functions = require('./core/functions')
-const {calculateAverageRating} = functions
 
 const passport = require('passport')
 const initialize = require('./passport-config')
@@ -22,8 +20,21 @@ const Comment = require('./model/Comment')
 
 const app = express();
 const server = http.createServer(app)
-const wss = new Websocket.Server({server})
 
+///////////
+
+const path = require('path');
+const port = process.env.PORT || 80;
+
+app.use(express.static(path.join(__dirname, '../build')));
+app.get('/ping', function (req, res) {
+  return res.send('pong');
+});
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+});
+
+///////////
 //initializing passport config
 initialize(passport)
 
@@ -47,7 +58,6 @@ app.use(passport.session()) // uses persistent login sessions
 app.use('/stores', storeRouter)
 app.use('/users', userRouter)
 
-const port = process.env.PORT || 4000
 server.listen(port, () => console.log(`listening on port ${port}`))
 
 const db = mongoose.connection;
@@ -55,43 +65,3 @@ db.on('open', () => {
     console.log('database connected!')
 })
 
-// websockets for comments
-wss.on('connection', ws => {
-    ws.on('message', async (data) => {
-        const { username, content, rating, storeId } = JSON.parse(data);
-        try{
-            let user = await User.find({ username : username }).populate('comments')
-            let previousComment = null
-            user.comments.forEach(comment => {
-                if(comment.store === storeId){
-                    previousComment = comment
-                }
-            })
-            if(!previousComment){
-                let store = await Store.find({ _id : storeId })
-                const newComment = {
-                    store : storeId,
-                    storename : store.storename,
-                    username : username,
-                    content : content, 
-                    rating : rating
-                }
-                await newComment.save()
-                store.comments.push(newComment)
-                await store.save()
-                let newRating = calculateAverageRating(store)
-                store.rating = newRating
-                await store.save()
-            }else{
-                ws.send(JSON.stringify({ data : previousComment, 
-                msg : "You've already reviewed this restaurant before"}))
-            }
-            // broadcasting comments to all users connected
-            wss.clients.forEach(client => {
-                client.send(JSON.stringify(store.comments))
-            })
-        }catch(error){
-            ws.send(JSON.stringify({ msg : errror }))
-        }
-    })
-})
