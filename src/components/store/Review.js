@@ -15,22 +15,24 @@ import userCommentContext from './userCommentContext'
 const useStyles = makeStyles((theme) => ({
     root: {
         margin: '10px',
+        overflow: 'hidden'
     },
     commentsContainer: {
         marginRight: '10%',
         width: '40%',
         display: 'absolute',
-        overflowY: 'scroll',
-        marginTop : theme.spacing(2),
-        marginLeft : theme.spacing(2),
+        overflowY: 'hidden',
+        marginTop : 2,
+        marginLeft : 2,
         //marginRight : theme.spacing(2),
-        marginButtom: theme.spacing(3),
+        marginButtom: 6,
     },
     commentList: {
         height: '40%',
         position: 'absolute',
         overflowY: 'auto',
-        width: '38%'
+        width: '38%',
+        marginRight: '5%'
     },
     inlineStar: {
         display: 'inline'
@@ -186,11 +188,11 @@ function Review (props) {
         }
         } 
         return (
-            <Paper className={classes.commentsContainer}>
+            <div className={classes.commentsContainer}>
                 <List className={classes.commentList} >
                 {comments}
                 </List>
-            </Paper>
+            </div>
             
         )
         

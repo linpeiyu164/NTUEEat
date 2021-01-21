@@ -3,10 +3,10 @@
 ### `專題名稱 : (Group 47) NTUEEat` 
 ### `作者： 林郁敏 陳柏如 林霈瑀`
 ### `deploy link`
-* link : 
+* link : 不公開
 
 ### `demo link`
-* link : 
+* link : https://youtu.be/vNMHx2NRR-8
 
 ### `服務內容` 
 

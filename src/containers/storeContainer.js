@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     leftBar: {
         height: '90vh',
         width: '40%',
-        marginBottom: '10vh'
+        overflow: 'hidden'
     },
     paper : {
         display: 'absolute',
