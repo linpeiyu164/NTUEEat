@@ -3,7 +3,7 @@
 ### `專題名稱 : (Group 47) NTUEEat` 
 ### `作者： 林郁敏 陳柏如 林霈瑀`
 ### `deploy link`
-* link : 不公開
+* link : https://ntueeat.herokuapp.com/
 
 ### `demo link`
 * link : https://youtu.be/vNMHx2NRR-8
@@ -13,7 +13,7 @@
 這個服務是一個台大附近的食物的評價網，比起直接在google搜尋，我們希望完成一個主要由台大學生新增及評論的美食地圖，除了評論較貼近學生們的想法外，一些google地圖上搜尋不到的小店家也能被包括進來，提供學生更多用餐選擇。主要功能有：
 * 新增店家進入資料庫
 * 在店家留下評價
-* 瀏覽店家資訊、位置
+* 瀏覽店家資訊、位置（店家會按照評價高低排列）
 * 計算店家與目前位置的距離
 * 篩選與搜尋想要瀏覽的範圍
 * 新增喜愛的店家
@@ -66,14 +66,13 @@ temporarily No
 
 ***npm packages***
 * bcrpyt : 加密
-* passport/passport-local/express-session/express-flash : authentication
+* passport/passport-local/express-flash : authentication
 * react-leaflet/react-geolocated : 地圖與定位處理
 * mongoose-fuzzy-searching : 增加fuzzy-search店家名稱的功能
 * cloudinary : 額外的database來存放照片（空間較大）
 
 
 ***參考開源程式碼***
-* child-process 資料夾 : 使用開源程式碼
 * RankStar.js : 使用開源程式碼  github Link :https://github.com/mykurisu/mykurisu-demo/blob/master/evaluation/WKRateStar.js
 * selenium + beautifulsoup4 爬蟲： https://medium.com/hybrid-maker/ubuntu-%E5%AE%89%E8%A3%9D%E6%9C%80%E6%96%B0%E7%89%88node-npm-%E4%BB%A5%E5%8F%8A%E4%BF%AE%E6%94%B9npm-sudo%E6%AC%8A%E9%99%90-4404d1c4b039
 
