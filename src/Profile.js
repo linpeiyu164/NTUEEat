@@ -188,7 +188,7 @@ function User() {
             indicatorColor="secondary"
             style={{ background : "#D4E6F1", color : "#000000" }}
             position="static">
-            <Avatar className={classes.Avatar} style={{ height: '20%', width: '20%' }} src={user.profilePic}/> 
+            <Avatar className={classes.Avatar} style={{ height: '100px', width: '100px' }} src={user.profilePic}/> 
             <Typography className={classes.username} variant="h3" style={{color : "#000000"}}>{user.username}</Typography>
             <Tabs value={selectedTab} onChange={handleChange}>
                 <Tab className={classes.Tab} value={0} label="Favorites" onClick={getFavorites}/>
@@ -251,7 +251,7 @@ function User() {
                   </Card>
                 )
               })
-            ) : null})
+            ) : null}
         </MuiThemeProvider>
     )
 }

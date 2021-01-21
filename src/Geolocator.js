@@ -23,7 +23,7 @@ class Geolocator extends React.Component {
                 isGeolocationAvailable={this.props.isGeolocationAvailable}
                 isGeolocationEnabled={this.props.isGeolocationEnabled}
                 positionError={this.props.positionError}
-            />) : <h5>Getting coordinates...</h5>
+            />) : <h5 style={{ textAlign : "right" }}>Getting coordinates...</h5>
         )
     }
 }

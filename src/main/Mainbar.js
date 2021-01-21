@@ -13,7 +13,7 @@ import userContext from '../userContext'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import foodIcon from '../Image/foodicon.png'
 import { Avatar } from '@material-ui/core';
-
+import icon from '../Image/icon.jpg'
 // import instance from "../routes"
 import { Link } from 'react-router-dom'  
 
@@ -52,7 +52,7 @@ export default function Mainbar(){
                     (user) ? (
                         <>
                         <Grid item><Link to='/' style={{ textDecoration : "none" }}><IconButton><HomeIcon></HomeIcon></IconButton></Link></Grid>
-                        <Grid item><IconButton><Link to='/' style={{ color : "none" }}><ExitToAppIcon onClick={handleLogOut}></ExitToAppIcon></Link></IconButton></Grid>
+                        <Grid item><IconButton><Link to='/' color='default' style={{textDecoration : "none" , color : "inherit" }}><ExitToAppIcon onClick={handleLogOut}></ExitToAppIcon></Link></IconButton></Grid>
                         <Grid item><Link to="/addstore" style={{ textDecoration : "none"}}><IconButton><AddCircleIcon></AddCircleIcon></IconButton></Link></Grid>
                         <Grid item><IconButton onClick={() => setOpen(prev => !prev)}><EmojiObjectsIcon></EmojiObjectsIcon></IconButton></Grid>
                         <Grid item><Link to="/profile" style={{ textDecoration : "none"}}><IconButton><Avatar src={user.profilePic} /></IconButton></Link></Grid>

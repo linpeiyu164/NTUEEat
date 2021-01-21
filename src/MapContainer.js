@@ -54,7 +54,7 @@ function MapContainer({
                 ) :  (coords && storeCoordination)? (
                     <StoreMap calculateDistance={calculateDistance} storename={storename} userCoords={[latitude, longitude]} storeCoords={storeCoordination&&[storeCoordination.lat, storeCoordination.log]} location={address} rating={rating&&rating} />
                 ) : (
-                    <h5>Loading</h5>
+                    <h5 style={{ textAlign : "right" }}>Loading...</h5>
                 )
             }
         </>

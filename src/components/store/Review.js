@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import userContext from '../../userContext';
 import { sendComment , reviseComment} from '../../routes/routes';
-import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography , Button} from '@material-ui/core';
+import { TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography ,Button, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import StarIcon from '@material-ui/icons/Star';
@@ -16,18 +16,39 @@ const useStyles = makeStyles((theme) => ({
     root: {
         margin: '10px',
     },
+    commentsContainer: {
+        marginRight: '10%',
+        width: '40%',
+        display: 'absolute',
+        overflowY: 'scroll',
+        marginTop : theme.spacing(2),
+        marginLeft : theme.spacing(2),
+        //marginRight : theme.spacing(2),
+        marginButtom: theme.spacing(3),
+    },
     commentList: {
         height: '40%',
-        overflowY: 'scroll'
+        position: 'absolute',
+        overflowY: 'auto',
+        width: '38%'
     },
     inlineStar: {
         display: 'inline'
     },
     typeInComment: {
-        
+        margin: '3%'
     },
     notLogin: {
-
+        textAlign: 'center',
+        margin: 0
+    },
+    commentedBox: {
+        display: 'flex'
+    },
+    box2 : {
+        backgroundColor : "#D4E6F1",
+        borderRadius : 20,
+        padding : theme.spacing(2)
     }
 }));
 
@@ -121,7 +142,7 @@ function Review (props) {
         return (
             user ? 
             ((!edit && userComment && commented) ? (
-                    <CommentedBox username={user.username} rating={userRate} content={userComment} user={user.profilePic} />
+                    <CommentedBox username={user.username} rating={userRate} content={userComment} profilePic={user.profilePic} />
                 ): <div className={classes.typeInComment}>
                     <div style={{display: 'flex'}}>
                         <Avatar style={{right: '5px'}} src={user.profilePic}/>
@@ -137,7 +158,7 @@ function Review (props) {
                     <IconButton onClick={handleSubmit}>
                         <SendIcon />
                     </IconButton>
-                </div>) : <div>先登入才可以評論ㄛ～</div>
+                </div>) : <Box className={classes.box2}><div className={classes.notLogin}>先登入才可以評論ㄛ～</div></Box>
         )
     }
     
@@ -165,17 +186,23 @@ function Review (props) {
         }
         } 
         return (
-            <List className={classes.commentList} >
+            <Paper className={classes.commentsContainer}>
+                <List className={classes.commentList} >
                 {comments}
-            </List>
+                </List>
+            </Paper>
+            
         )
         
     }
     return ( 
         <div className={classes.root}>
-            <TypeIn edit={edit} />
-            {commented ? (<Button onClick={ () => setEdit(true) }>修改</Button>) : null}
-            <Comments comments={props.data&&props.data.comments}/>
+            <div className={classes.commentedBox}>
+                 <TypeIn edit={edit} />
+                {commented ? (<Button onClick={ () => setEdit(true) }>修改</Button>) : null}
+                
+            </div>
+           <Comments comments={props.data&&props.data.comments}/>
         </div>
     )
 }

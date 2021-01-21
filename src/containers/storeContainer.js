@@ -13,10 +13,12 @@ const useStyles = makeStyles(theme => ({
     root: {
         overflow: 'visible',
         display: 'flex',
-        
+        height: '100vh'
     },
     leftBar: {
-        width: '40%'
+        height: '90vh',
+        width: '40%',
+        marginBottom: '10vh'
     },
     paper : {
         display: 'absolute',
@@ -24,7 +26,8 @@ const useStyles = makeStyles(theme => ({
         marginLeft : theme.spacing(5),
         marginRight : theme.spacing(2),
         marginButtom: theme.spacing(3),
-        height: '100%'
+        height: '100%',
+        width: '100%'
     },
     info : {
         marginLeft : theme.spacing(0),
@@ -38,7 +41,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: '260px',
         display: 'inline',
         width: '60%',
-        marginRight: '5px'
+        marginRight: '5px',
     }
 }))
 function StoreContainer (props) {
@@ -80,10 +83,12 @@ function StoreContainer (props) {
         return (
             <div className={classes.root}>
                 <userCommentContext.Provider value={{userComment, setUserComment , userRate , setUserRate, commented, setCommented, userCommentId, setUserCommentId, edit, setEdit, address, setAddress, storename, rating}}>
-                    <div className={classes.leftBar}><Paper className={classes.paper}>
-                        <BasicInfo data={basicInfo&&basicInfo}/>
-                        <Review data={review&&review}/>
-                    </Paper></div>
+                    <div className={classes.leftBar}>
+                        <Paper className={classes.paper}>
+                            <BasicInfo data={basicInfo&&basicInfo}/>
+                            <Review data={review&&review}/>
+                        </Paper>
+                    </div>
                     <div className={classes.map}>{(address&&storename)&&<Map />}</div>
                 </userCommentContext.Provider>
             </div>

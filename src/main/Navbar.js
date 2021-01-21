@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme)=>({
         right: theme.spacing(2),
     },
     FormControl:{
-        marginRight : theme.spacing(7),
-        marginLeft : theme.spacing(7),
+        marginRight : theme.spacing(6),
+        marginLeft : theme.spacing(6),
         marginTop : theme.spacing(2),
         marginBottom : theme.spacing(2),
         // display : 'flex', 

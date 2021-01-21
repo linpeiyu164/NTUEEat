@@ -2,7 +2,8 @@ import React,{useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import OutlinedCard from "./OutlinedCard"
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Paper} from '@material-ui/core';
+import  datanotfound  from '../Image/data-not-found.jpg'
 // import  { uploadStoreInfo, fetchStoreData } from "../routes/routes";
 // import axios from "axios";
 // import { 
@@ -32,7 +33,7 @@ export default function StoreList(props){
                   <Grid item xs={8}>
                     <OutlinedCard data={item} key={item._id} />
                   </Grid>
-                )}) : null
+                )}) : <img src={datanotfound} />
             }          
         </Grid>
       </>
